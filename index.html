@@ -1,1 +1,1523 @@
 
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>心屿 · 抑郁情绪自我觉察</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.1.0/style.css">
+<style>
+  :root{
+    --paper:#F5F0E6; --ink:#2E2A24; --ink-soft:#6E6656;
+    --accent:#C2683B; --accent-soft:#F3E2D3;
+    --green:#33544A; --card:#FFFDF8; --line:#E4DCCB;
+    --night:#0F1620; --starlight:#FFD98E;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{font-family:"LXGW WenKai Screen","LXGW WenKai","Noto Serif SC","Songti SC",serif;
+    background:var(--paper);color:var(--ink);overflow:hidden}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.4 0 0 0 0 0.36 0 0 0 0 0.28 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E")}
+  #journey{position:fixed;top:0;left:0;right:0;height:3px;background:rgba(0,0,0,.06);z-index:60}
+  #journey i{display:block;height:100%;width:0;background:var(--accent);transition:width .9s cubic-bezier(.22,.9,.3,1)}
+  header{position:fixed;top:3px;left:0;right:0;z-index:50;display:flex;justify-content:space-between;
+    align-items:center;padding:14px 22px;pointer-events:none;color:var(--ink);transition:color .6s}
+  body.on-dark header{color:rgba(245,240,230,.75)}
+  header .logo{font-size:15px;letter-spacing:4px}
+  header .step{font-size:12px;letter-spacing:2px;opacity:.7}
+
+  main{position:relative;height:100dvh;z-index:1}
+  .scene{position:absolute;inset:0;overflow-y:auto;display:flex;flex-direction:column;
+    opacity:0;visibility:hidden;transform:translateY(16px);
+    transition:opacity .55s ease,transform .55s ease,visibility .55s}
+  .scene.active{opacity:1;visibility:visible;transform:none}
+  .scene .wrap{margin:auto;width:min(680px,92vw);padding:70px 0 40px}
+  .scene.dark{background:var(--night);color:#EDE6D6}
+
+  .kicker{font-size:13px;letter-spacing:6px;color:var(--accent);margin-bottom:14px}
+  h1{font-size:clamp(30px,5.4vw,46px);line-height:1.3;letter-spacing:2px;font-weight:700}
+  h2{font-size:clamp(22px,3.6vw,30px);letter-spacing:2px;line-height:1.4}
+  .sub{color:var(--ink-soft);margin-top:14px;line-height:2;font-size:16px}
+  .btn{font-family:inherit;cursor:pointer;border:none;border-radius:999px;padding:15px 38px;
+    font-size:17px;letter-spacing:3px;background:var(--ink);color:var(--paper);
+    transition:transform .25s,box-shadow .25s;box-shadow:0 6px 18px rgba(46,42,36,.18)}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(46,42,36,.25)}
+  .btn.accent{background:var(--accent)}
+  .btn.ghost{background:transparent;color:var(--ink);box-shadow:none;border:1.5px solid var(--line)}
+  .btn.ghost:hover{border-color:var(--ink)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:20px;
+    padding:26px 28px;box-shadow:0 14px 34px rgba(80,66,40,.08)}
+  .link{background:none;border:none;font-family:inherit;color:var(--ink-soft);cursor:pointer;
+    font-size:14px;letter-spacing:2px;text-decoration:underline;text-underline-offset:5px}
+  .link:hover{color:var(--accent)}
+
+  /* 封面 */
+  #scene-intro .hero-rule{width:52px;height:2px;background:var(--accent);margin:22px 0}
+  .intro-cards{display:flex;gap:14px;margin:30px 0 34px;flex-wrap:wrap}
+  .intro-cards .card{flex:1;min-width:130px;padding:18px 16px;text-align:center}
+  .intro-cards .num{font-size:26px;color:var(--accent)}
+  .intro-cards .lab{font-size:13px;color:var(--ink-soft);margin-top:6px;letter-spacing:2px}
+  .privacy{font-size:12.5px;color:var(--ink-soft);line-height:1.9;margin-top:26px;
+    padding-left:12px;border-left:2px solid var(--line)}
+
+  /* 呼吸 */
+  #scene-breath .wrap{text-align:center}
+  .breath-stage{height:240px;display:flex;align-items:center;justify-content:center;margin:34px 0}
+  .breath-circle{width:130px;height:130px;border-radius:50%;
+    background:radial-gradient(circle at 38% 34%, #E8DCC6, #CBB894);
+    box-shadow:0 18px 50px rgba(120,98,60,.28);transform:scale(1);
+    display:flex;align-items:center;justify-content:center}
+  .breath-circle span{color:#5C4E33;font-size:16px;letter-spacing:4px}
+  .breath-tip{font-size:13px;color:var(--ink-soft);letter-spacing:2px}
+
+  /* 游戏一：寻光 */
+  #starCanvas{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair}
+  .g1-hud{position:fixed;top:52px;right:26px;z-index:5;font-size:15px;letter-spacing:3px;
+    color:var(--starlight);opacity:.9;display:none}
+  .night-panel{width:min(460px,90vw);text-align:center;background:rgba(20,28,40,.72);
+    border:1px solid rgba(255,217,142,.22);border-radius:22px;padding:38px 32px;
+    backdrop-filter:blur(6px)}
+  .night-panel h2{color:#F2E9D4}
+  .night-panel p{color:rgba(237,230,214,.72);line-height:2;margin:16px 0 24px;font-size:15px}
+  .night-panel .tag{font-size:12.5px;letter-spacing:5px;color:rgba(255,217,142,.7);margin-bottom:12px}
+  .overlay-center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;z-index:3}
+  .g1-count{font-size:64px;color:var(--starlight);line-height:1.1}
+  .g1-stats{display:flex;justify-content:center;gap:34px;margin:20px 0 26px}
+  .g1-stats b{display:block;font-size:26px;color:var(--starlight)}
+  .g1-stats i{font-style:normal;font-size:12.5px;color:rgba(237,230,214,.6);letter-spacing:2px}
+  #g1Countdown{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-size:110px;color:var(--starlight);pointer-events:none;display:none}
+
+  /* 游戏二：词语共鸣 */
+  #scene-game2 .wrap{text-align:center}
+  .word-stage{min-height:220px;display:flex;align-items:center;justify-content:center;margin:26px 0}
+  .word-card{animation:wordIn .5s ease both}
+  .word-card .w{font-size:clamp(42px,8vw,62px);letter-spacing:8px}
+  .word-card .idx{font-size:12.5px;color:var(--ink-soft);letter-spacing:3px;margin-bottom:16px}
+  @keyframes wordIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .word-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .g2-stats{display:flex;justify-content:center;gap:30px;margin:22px 0 26px}
+  .g2-stats b{display:block;font-size:28px;color:var(--accent)}
+  .g2-stats i{font-style:normal;font-size:12.5px;color:var(--ink-soft);letter-spacing:2px}
+
+  /* 问卷 */
+  #scene-quiz .wrap{width:min(600px,92vw)}
+  .q-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+  .q-no{font-size:13px;letter-spacing:3px;color:var(--accent)}
+  .q-title{font-size:clamp(20px,3.2vw,26px);line-height:1.7;margin:14px 0 26px;min-height:2.6em}
+  .q-opts{display:flex;flex-direction:column;gap:12px}
+  .opt{text-align:left;font-family:inherit;font-size:16.5px;cursor:pointer;background:var(--card);
+    border:1.5px solid var(--line);border-radius:14px;padding:15px 20px;color:var(--ink);
+    letter-spacing:1px;display:flex;justify-content:space-between;align-items:center;
+    transition:border-color .2s,background .2s,transform .2s}
+  .opt:hover{border-color:var(--accent);transform:translateX(4px)}
+  .opt.picked{border-color:var(--accent);background:var(--accent-soft)}
+  .opt .score{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);
+    display:inline-flex;align-items:center;justify-content:center;font-size:13px;color:var(--ink-soft);flex:none}
+  .opt.picked .score{background:var(--accent);border-color:var(--accent);color:#fff}
+  .q-foot{display:flex;justify-content:space-between;align-items:center;margin-top:24px}
+  .dots{display:flex;gap:7px}
+  .dots span{width:8px;height:8px;border-radius:50%;background:var(--line);transition:.3s}
+  .dots span.done{background:var(--accent)}
+  .dots span.cur{background:var(--ink);transform:scale(1.35)}
+  .q-care{font-size:13px;color:var(--green);margin-top:16px;line-height:1.8;
+    padding:12px 16px;background:rgba(51,84,74,.07);border-radius:12px}
+  .q-anim{animation:qIn .45s ease both}
+  @keyframes qIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+  /* 结果页 */
+  #scene-result .wrap{width:min(640px,92vw)}
+  .result-hero{display:flex;gap:30px;align-items:center;flex-wrap:wrap;justify-content:center;text-align:left}
+  .ring-wrap{position:relative;width:170px;height:170px;flex:none}
+  .ring-wrap svg{transform:rotate(-90deg)}
+  .ring-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .ring-num b{font-size:44px;line-height:1;color:var(--accent)}
+  .ring-num span{font-size:12px;color:var(--ink-soft);letter-spacing:2px;margin-top:6px}
+  .hero-txt{flex:1;min-width:240px}
+  .level-tag{display:inline-block;background:var(--accent);color:#fff;border-radius:999px;
+    padding:6px 18px;font-size:14px;letter-spacing:3px;margin-bottom:12px}
+  .motto{font-size:19px;line-height:1.9;margin-top:10px}
+  .result-sec{margin-top:18px}
+  .result-sec h3{font-size:16px;letter-spacing:3px;color:var(--green);margin-bottom:12px}
+  .result-sec p{line-height:2.05;font-size:15.5px;color:#4A443A}
+  .result-sec ul{list-style:none}
+  .result-sec li{line-height:2;padding-left:20px;position:relative;font-size:15.5px;color:#4A443A}
+  .result-sec li::before{content:"";position:absolute;left:2px;top:14px;width:7px;height:7px;
+    border-radius:50%;background:var(--accent)}
+  .crisis{border-left:4px solid var(--accent);background:var(--accent-soft)}
+  .crisis h3{color:#A04E24 !important}
+  .hotline{display:flex;align-items:baseline;gap:14px;padding:12px 0;border-bottom:1px dashed var(--line)}
+  .hotline:last-child{border-bottom:none}
+  .hotline b{font-size:20px;letter-spacing:1px}
+  .hotline span{font-size:13.5px;color:var(--ink-soft)}
+  .result-btns{display:flex;gap:14px;justify-content:center;margin:30px 0 10px;flex-wrap:wrap}
+  .echo-invite{text-align:center;font-size:14.5px;color:var(--ink-soft);margin-top:16px;letter-spacing:1px}
+  .disclaimer{font-size:12px;color:var(--ink-soft);line-height:1.9;text-align:center;margin-top:18px}
+
+  /* ============ 解忧回声室 ============ */
+  #scene-echo .wrap{width:min(640px,92vw)}
+  .letter-paper{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    overflow:hidden;box-shadow:0 14px 34px rgba(80,66,40,.08);margin-top:24px}
+  .letter-paper textarea{width:100%;border:none;outline:none;resize:vertical;display:block;
+    background:repeating-linear-gradient(transparent,transparent 35px,var(--line) 35px,var(--line) 36px);
+    background-attachment:local;padding:16px 22px;font-family:inherit;font-size:16.5px;
+    line-height:36px;color:var(--ink);min-height:222px;letter-spacing:1px}
+  .paper-foot{display:flex;justify-content:space-between;padding:8px 16px;border-top:1px solid var(--line);
+    font-size:12px;color:var(--ink-soft);letter-spacing:2px}
+  .starter-chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+  .starter-chips button{font-family:inherit;font-size:13px;color:var(--ink-soft);background:transparent;
+    border:1px dashed var(--line);border-radius:999px;padding:7px 14px;cursor:pointer;letter-spacing:1px}
+  .starter-chips button:hover{border-color:var(--accent);color:var(--accent)}
+  .scan-box{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:22px 24px;font-size:17px;line-height:2.1;letter-spacing:1px;overflow:hidden;margin-top:24px}
+  .scan-box .ch{opacity:.16;transition:opacity .18s}
+  .scan-box .ch.on{opacity:1}
+  .scan-box .ch.emo{text-decoration:underline wavy var(--accent) 1.5px;text-underline-offset:5px}
+  .scan-box .ch.dis{background:var(--accent-soft);border-radius:4px;border-bottom:2px solid var(--accent)}
+  .scan-box .ch.risk{background:rgba(181,65,43,.16);border-radius:4px;border-bottom:2px solid #B5412B}
+  .scan-cursor{position:absolute;top:0;bottom:0;width:2px;
+    background:linear-gradient(180deg,transparent,var(--accent),transparent);
+    animation:sweep var(--scan-dur,2.4s) linear forwards}
+  @keyframes sweep{from{left:2%}to{left:98%}}
+  .found-chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;min-height:36px}
+  .chip{font-size:13.5px;letter-spacing:1.5px;padding:7px 14px;border-radius:999px;
+    border:1px solid var(--line);background:var(--card);opacity:0;transform:translateY(8px);transition:.45s}
+  .chip.show{opacity:1;transform:none}
+  .chip b{color:var(--accent)}
+  .letter{margin-top:20px;animation:qIn .5s ease both}
+  .letter-head{font-size:12.5px;letter-spacing:3px;color:var(--ink-soft);margin-bottom:12px;
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+  .letter-head .acts{display:flex;gap:16px}
+  .letter-body{white-space:pre-wrap;line-height:2.15;font-size:16.5px;
+    max-height:48vh;overflow-y:auto;padding-right:6px;color:#3E382E}
+  .letter-body.typing::after{content:'';display:inline-block;width:2px;height:1em;
+    background:var(--accent);margin-left:2px;vertical-align:-2px;animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .magnifier{margin-top:18px;border-left:4px solid var(--accent);background:var(--accent-soft);
+    border-radius:14px;padding:18px 22px;animation:qIn .5s ease both}
+  .magnifier h4{font-size:14.5px;letter-spacing:2px;color:#A04E24;margin-bottom:8px}
+  .magnifier p{font-size:14.5px;line-height:2;color:#5C4433}
+  .magnifier .ask{margin-top:8px;font-weight:700;color:var(--accent)}
+  .rx{margin-top:18px;position:relative;border:1.5px solid #C9BFA8;background:#FFFEFA;
+    border-radius:14px;padding:24px 26px;animation:qIn .5s ease both}
+  .rx-head{display:flex;justify-content:space-between;align-items:baseline;
+    border-bottom:1.5px solid #C9BFA8;padding-bottom:12px;margin-bottom:14px}
+  .rx-title{font-size:17px;letter-spacing:4px;font-weight:700}
+  .rx-no{font-size:12px;color:var(--ink-soft);letter-spacing:1px}
+  .rx-row{display:flex;gap:16px;margin:10px 0;align-items:baseline}
+  .rx-row>span{flex:none;font-size:13px;letter-spacing:2px;color:var(--green);font-weight:700}
+  .rx-row p,.rx-row li{font-size:15px;line-height:1.95;color:#4A443A}
+  .rx ol{margin-left:2px;list-style:none}
+  .rx ol li{padding-left:34px;position:relative}
+  .rx ol li::before{content:counter(rx,cjk-ideographic) "、";counter-increment:rx;
+    position:absolute;left:0;color:var(--accent);font-size:13.5px;top:4px}
+  .rx ol{counter-reset:rx}
+  .rx-sign{display:flex;justify-content:flex-end;align-items:center;margin-top:14px;
+    padding-top:12px;border-top:1px dashed var(--line);font-size:13px;color:var(--ink-soft)}
+  .seal{position:absolute;right:22px;bottom:58px;width:76px;height:76px;border-radius:50%;
+    border:3px solid rgba(181,65,43,.75);color:rgba(181,65,43,.85);display:flex;
+    align-items:center;justify-content:center;font-size:19px;letter-spacing:3px;
+    font-weight:700;transform:rotate(-12deg) scale(1.6);opacity:0;
+    box-shadow:inset 0 0 0 2px rgba(181,65,43,.3);transition:all .5s cubic-bezier(.2,1.4,.4,1)}
+  .seal.on{transform:rotate(-12deg) scale(1);opacity:.92}
+
+  /* ============ 化萤仪式 ============ */
+  #ffCanvas{position:absolute;inset:0;width:100%;height:100%}
+  .ff-ui{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;padding:20px}
+  .ff-textarea{width:100%;border:1px solid rgba(255,217,142,.28);outline:none;resize:none;
+    background:rgba(10,16,26,.5);border-radius:14px;padding:18px 20px;font-family:inherit;
+    font-size:16.5px;line-height:1.9;color:#F2E9D4;min-height:130px;letter-spacing:1px}
+  .ff-textarea::placeholder{color:rgba(237,230,214,.4)}
+  .ff-warn{font-size:13px;color:#F0B48A;margin-top:10px;min-height:1.4em;letter-spacing:1px}
+  .hold-wrap{position:relative;width:132px;height:132px;margin:26px auto 8px;touch-action:none;user-select:none}
+  .hold-wrap svg{position:absolute;inset:0;transform:rotate(-90deg)}
+  .hold-wrap .ring-bg{fill:none;stroke:rgba(255,217,142,.18);stroke-width:5}
+  #holdRing{fill:none;stroke:var(--starlight);stroke-width:5;stroke-linecap:round;
+    stroke-dasharray:377;stroke-dashoffset:377}
+  #holdBtn{position:absolute;inset:12px;border-radius:50%;border:none;cursor:pointer;
+    background:radial-gradient(circle at 38% 34%, #FFE9B8, #E8B96A);color:#3A2E14;
+    font-family:inherit;font-size:17px;letter-spacing:3px;font-weight:700;
+    box-shadow:0 10px 30px rgba(255,217,142,.25)}
+  .hold-hint{text-align:center;font-size:12.5px;color:rgba(237,230,214,.55);letter-spacing:2px}
+  .ff-caption{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    pointer-events:none;font-size:26px;letter-spacing:8px;color:var(--starlight);
+    opacity:0;transition:opacity 1.2s;z-index:4}
+  .ff-caption.show{opacity:1}
+  .fortune{width:min(340px,86vw);background:linear-gradient(160deg,#FBF3DF,#F3E4C2);
+    color:#4A3B22;border-radius:6px;padding:30px 26px 24px;text-align:center;
+    box-shadow:0 20px 50px rgba(0,0,0,.45),0 0 0 6px rgba(255,217,142,.12);
+    animation:fDrop .8s cubic-bezier(.2,1.3,.4,1) both;position:relative;margin:0 auto}
+  @keyframes fDrop{from{opacity:0;transform:translateY(-36px) rotate(-4deg)}
+    to{opacity:1;transform:none}}
+  .fortune::before{content:"";position:absolute;top:12px;left:50%;transform:translateX(-50%);
+    width:10px;height:10px;border-radius:50%;background:#B5412B;box-shadow:0 0 0 3px rgba(181,65,43,.25)}
+  .f-no{font-size:12.5px;letter-spacing:4px;color:#8A6B3A;margin:8px 0 14px}
+  .f-text{font-size:22px;line-height:2;letter-spacing:2px;font-weight:700}
+  .f-sub{font-size:12px;color:#8A6B3A;letter-spacing:2px;margin-top:16px;
+    border-top:1px dashed #D8C295;padding-top:12px}
+  .scatter-ch{position:fixed;z-index:40;display:inline-block;will-change:transform,opacity;
+    color:#F2E9D4;font-size:16.5px;letter-spacing:1px;white-space:pre}
+
+  /* 终点 */
+  #scene-end .wrap{text-align:center}
+  .end-quote{font-size:19px;line-height:2.1;margin:18px 0 6px;color:#4A443A}
+  .end-rule{width:52px;height:2px;background:var(--accent);margin:22px auto}
+
+  @media (max-width:520px){
+    header{padding:12px 16px}
+    .g1-hud{top:46px;right:16px}
+    .result-hero{text-align:center}
+    .rx{padding:20px 18px}
+  }
+</style>
+</head>
+<body>
+<div id="journey"><i></i></div>
+<header>
+  <div class="logo">心 屿</div>
+  <div class="step" id="stepLabel">自我觉察之旅</div>
+</header>
+
+<main>
+  <!-- ① 封面 -->
+  <section class="scene active" id="scene-intro">
+    <div class="wrap">
+      <div class="kicker">SELF · CHECK · IN</div>
+      <h1>这一阵子，<br>你的心过得好吗？</h1>
+      <div class="hero-rule"></div>
+      <p class="sub">这是一场大约八分钟的自我觉察之旅：两个安静的小游戏，一份国际通用的 PHQ-9 抑郁筛查问卷，一间会逐字读你文字的解忧回声室，和一场把心事交给夜空的化萤仪式。它不评判你，只陪你诚实地看一看此刻的内心天气。</p>
+      <div class="intro-cards">
+        <div class="card"><div class="num">2</div><div class="lab">个小游戏</div></div>
+        <div class="card"><div class="num">9</div><div class="lab">道专业题目</div></div>
+        <div class="card"><div class="num">1</div><div class="lab">间回声室</div></div>
+        <div class="card"><div class="num">1</div><div class="lab">场化萤仪式</div></div>
+      </div>
+      <button class="btn accent" id="btnStart">开 始 觉 察</button>
+      <p class="privacy">· 问卷部分参考国际通用抑郁自评量表 PHQ-9（患者健康问卷）<br>· 回声室的分析与回应全部在你的浏览器本地完成，不会被上传或保存<br>· 本工具仅供自我觉察参考，不能替代精神科医生或心理咨询师的诊断</p>
+    </div>
+  </section>
+
+  <!-- ② 呼吸 -->
+  <section class="scene" id="scene-breath">
+    <div class="wrap">
+      <div class="kicker">BEFORE · WE · START</div>
+      <h2>开始之前，先深呼吸</h2>
+      <div class="breath-stage">
+        <div class="breath-circle" id="breathCircle"><span id="breathText">准备</span></div>
+      </div>
+      <p class="breath-tip">跟着圆的大小，吸气——停留——呼气</p>
+      <div style="margin-top:34px"><button class="link" id="btnSkipBreath">跳过，直接开始 →</button></div>
+    </div>
+  </section>
+
+  <!-- ③ 游戏一：寻光 -->
+  <section class="scene dark" id="scene-game1">
+    <canvas id="starCanvas"></canvas>
+    <div class="g1-hud" id="g1Hud"></div>
+    <div id="g1Countdown"></div>
+    <div class="overlay-center" id="g1Intro">
+      <div class="night-panel">
+        <div class="tag">小游戏 · 一</div>
+        <h2>寻 光</h2>
+        <p>夜色里漂浮着一些暗淡的星。<br>在 30 秒内，点击它们，把光一颗一颗点亮。<br>没有对错，也没有输赢——只是去看看，<br>当你说「去点亮」的时候，你的手和心会怎么做。</p>
+        <button class="btn" style="background:var(--starlight);color:#3A2E14" id="btnG1Start">进入夜色</button>
+      </div>
+    </div>
+    <div class="overlay-center" id="g1End" style="display:none">
+      <div class="night-panel">
+        <div class="tag">这一夜，你点亮了</div>
+        <div class="g1-count"><span id="g1Stars">0</span> 颗星</div>
+        <div class="g1-stats">
+          <div><b id="g1Pace">--</b><i>秒 / 颗</i></div>
+          <div><b id="g1Acc">--</b><i>指尖命中率</i></div>
+        </div>
+        <p style="margin:0 0 24px">无论多与少，行动本身就已经是光了。</p>
+        <button class="btn" style="background:var(--starlight);color:#3A2E14" id="btnG1Next">继续旅程</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ④ 游戏二：词语共鸣 -->
+  <section class="scene" id="scene-game2">
+    <div class="wrap">
+      <div id="g2Intro">
+        <div class="kicker">小游戏 · 二</div>
+        <h2>词语共鸣</h2>
+        <p class="sub">接下来会有一些词，一个一个地浮现。<br>有的也许像今天的你，有的只是路过。<br>凭直觉选择就好——这是内心寄来的信。</p>
+        <div style="margin-top:30px"><button class="btn accent" id="btnG2Start">让第一个词浮现</button></div>
+      </div>
+      <div id="g2Play" style="display:none">
+        <div class="word-stage" id="wordStage"></div>
+        <div class="word-btns">
+          <button class="btn accent" id="btnEcho">与我共鸣</button>
+          <button class="btn ghost" id="btnPass">先放一放</button>
+        </div>
+      </div>
+      <div id="g2End" style="display:none">
+        <div class="kicker">词 都 看 过 了</div>
+        <h2>谢谢你的诚实</h2>
+        <div class="g2-stats">
+          <div><b id="g2Pos">0</b><i>共鸣的暖词</i></div>
+          <div><b id="g2Neg">0</b><i>共鸣的沉词</i></div>
+        </div>
+        <p class="sub" id="g2WordList"></p>
+        <div style="margin-top:28px"><button class="btn accent" id="btnG2Next">进入问卷 →</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑤ PHQ-9 -->
+  <section class="scene" id="scene-quiz">
+    <div class="wrap">
+      <div id="quizIntro" class="card" style="text-align:center;padding:36px 30px">
+        <div class="kicker">中间部分 · PHQ-9</div>
+        <h2>九个安静的问题</h2>
+        <p class="sub" style="text-align:left;margin-top:20px">下面的问题来自国际通用的 PHQ-9 抑郁筛查量表。<br>请回想<b>最近两周</b>的状态，凭真实感受作答——<br>答案没有对错，诚实就是最好的回答。</p>
+        <div style="margin-top:26px"><button class="btn accent" id="btnQuizStart">开始作答</button></div>
+      </div>
+      <div id="quizPlay" style="display:none">
+        <div class="q-head">
+          <span class="q-no" id="qNo">问题 1 / 9</span>
+          <span style="font-size:12.5px;color:var(--ink-soft);letter-spacing:2px">最近两周内</span>
+        </div>
+        <div class="dots" id="qDots"></div>
+        <div id="qBody"></div>
+        <div class="q-foot">
+          <button class="link" id="btnPrev">← 上一题</button>
+          <span style="font-size:12px;color:var(--ink-soft)">点击选项即作答</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑥ 结果 -->
+  <section class="scene" id="scene-result">
+    <div class="wrap">
+      <div class="kicker">YOUR · REPORT</div>
+      <h2>你的觉察报告</h2>
+      <p class="sub" style="margin-bottom:22px">感谢你走完了前半程，并把答案诚实地交给了自己。</p>
+      <div class="card result-hero">
+        <div class="ring-wrap">
+          <svg width="170" height="170" viewBox="0 0 170 170">
+            <circle cx="85" cy="85" r="72" fill="none" stroke="var(--line)" stroke-width="10"/>
+            <circle id="ring" cx="85" cy="85" r="72" fill="none" stroke="var(--accent)"
+              stroke-width="10" stroke-linecap="round" stroke-dasharray="452.4" stroke-dashoffset="452.4"
+              style="transition:stroke-dashoffset 1.6s cubic-bezier(.22,.9,.3,1)"/>
+          </svg>
+          <div class="ring-num"><b id="rScore">0</b><span>PHQ-9 得分</span></div>
+        </div>
+        <div class="hero-txt">
+          <div class="level-tag" id="rLevel">--</div>
+          <p class="motto" id="rMotto"></p>
+        </div>
+      </div>
+      <div class="card result-sec"><h3>这个分数在说什么</h3><p id="rDesc"></p></div>
+      <div class="card result-sec"><h3>两个小游戏里的你</h3><p id="rGame"></p></div>
+      <div class="card result-sec"><h3>接下来，可以试着做</h3><ul id="rTips"></ul></div>
+      <div class="card result-sec crisis" id="crisisBox" style="display:none">
+        <h3>想认真地对你说</h3>
+        <p>你刚才的回答里，出现了关于伤害自己的念头。请郑重地对待它：现在就告诉一位你信任的人，并拨打下面的热线。这样的念头是痛苦发出的信号，而不是事实——专业帮助真的有效，你值得被稳稳接住。</p>
+      </div>
+      <div class="card result-sec">
+        <h3>如果需要，这些声音随时都在</h3>
+        <div class="hotline"><b>12356</b><span>全国统一心理援助热线 · 24 小时</span></div>
+        <div class="hotline"><b>400-161-9995</b><span>希望24热线 · 24 小时</span></div>
+        <div class="hotline"><b>医院精神科 / 心理科</b><span>带上这份报告，会很有帮助</span></div>
+      </div>
+      <p class="echo-invite">如果心里还有一句话，堵着不好受——<br>下一站有一间回声室，它会逐字读你的文字，认真回应你。</p>
+      <div class="result-btns">
+        <button class="btn accent" id="btnToEcho">去解忧回声室 →</button>
+        <button class="btn" id="btnCopy">复制文字报告</button>
+        <button class="btn ghost" id="btnRestart1">重新觉察一遍</button>
+      </div>
+      <p class="disclaimer">本工具参考 PHQ-9 量表编制，仅供自我觉察参考，不构成任何医学诊断或治疗建议。<br>所有数据仅在本地浏览器计算，不会上传。</p>
+    </div>
+  </section>
+
+  <!-- ⑦ 解忧回声室 -->
+  <section class="scene" id="scene-echo">
+    <div class="wrap">
+      <div id="echoIntro">
+        <div class="kicker">解 忧 回 声 室</div>
+        <h2>把心事说给它听</h2>
+        <p class="sub">在下面的信纸上写下最近困扰你的事——有多少，说多少。<br>回声室会逐字读你的文字：听出情绪的轻重、句子里的时间与人、身体的信号、<br>没说完的省略号，还有藏在话里的思维陷阱——<br>然后为你写一封只属于这封信的回信。同样的心事，每次的回应都不一样。</p>
+        <div class="starter-chips" id="starterChips">
+          <button>我最近总是睡不好，心里很乱，感觉自己什么都做不好……</button>
+          <button>工作压力太大了，老板天天催，我真的快撑不住了！</button>
+          <button>和爸妈吵架了，他们从来都不听我说话，好委屈</button>
+          <button>分手一个月了，还是每天都会想她，是不是我特别失败？</button>
+          <button>心里空空的，对什么都提不起劲，这样下去还有意义吗……</button>
+        </div>
+        <div class="letter-paper">
+          <textarea id="echoText" placeholder="写下最近的困扰。这里是回声室——你说的每一个字，都会被认真接住。"></textarea>
+          <div class="paper-foot"><span>心屿信纸 · 甲辰年</span><span id="echoCount">0 字</span></div>
+        </div>
+        <div style="margin-top:24px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+          <button class="btn accent" id="btnEchoSend">封 好 信 · 寄 出</button>
+          <button class="link" id="btnEchoSkip">今晚不想说，先去下一站 →</button>
+        </div>
+      </div>
+
+      <div id="echoScan" style="display:none">
+        <div class="kicker">回 声 室 · 正 在 倾 听</div>
+        <h2>你的信，正在被逐字读过</h2>
+        <div class="scan-box" id="scanBox"></div>
+        <div class="found-chips" id="foundChips"></div>
+      </div>
+
+      <div id="echoLetter" style="display:none">
+        <div class="letter">
+          <div class="letter-head">
+            <span>来自回声室的回信 · 慢慢读</span>
+            <span class="acts">
+              <button class="link" id="btnLetterRetype">换一种回应 ↻</button>
+              <button class="link" id="btnLetterSkip">跳过打字 →</button>
+            </span>
+          </div>
+          <div class="card"><div class="letter-body" id="letterBody"></div></div>
+        </div>
+        <div id="echoInsight"></div>
+        <div id="rxHolder"></div>
+        <div style="margin-top:26px;display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+          <button class="btn accent" id="btnToFirefly">带它去「化萤」释放 →</button>
+          <button class="btn ghost" id="btnEchoAgain">再写一件心事</button>
+          <button class="btn ghost" id="btnCopyRx">复制回信与处方</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑧ 化萤仪式 -->
+  <section class="scene dark" id="scene-firefly">
+    <canvas id="ffCanvas"></canvas>
+    <div class="ff-caption" id="ffCaption">交 给 夜 空 了</div>
+    <div class="ff-ui" id="ffIntro">
+      <div class="night-panel">
+        <div class="tag">化 萤 · 释 放 仪 式</div>
+        <h2>把最堵的那句话，交给夜空</h2>
+        <p>把最近压着你的一句话写下来——<br>可以是没说出口的委屈，也可以是骂自己的那句狠话。<br>然后按住下方的圆钮，蓄满光，<br>看着它碎成漫天萤火，升上夜空。</p>
+        <button class="btn" style="background:var(--starlight);color:#3A2E14" id="btnFFStart">开始化萤</button>
+        <div style="margin-top:14px"><button class="link" style="color:rgba(237,230,214,.55)" id="btnFFSkip">今晚先不写，直接抽一支签 →</button></div>
+      </div>
+    </div>
+    <div class="ff-ui" id="ffWrite" style="display:none">
+      <div class="night-panel" style="width:min(520px,92vw)">
+        <div class="tag">写 下 它</div>
+        <textarea class="ff-textarea" id="ffText" placeholder="例如：「我怎么这么没用」「都怪我」「反正没人在乎」……把它原样写下来，别修饰。"></textarea>
+        <div class="ff-warn" id="ffWarn"></div>
+        <div class="hold-wrap" id="holdWrap">
+          <svg width="132" height="132">
+            <circle class="ring-bg" cx="66" cy="66" r="60"/>
+            <circle id="holdRing" cx="66" cy="66" r="60"/>
+          </svg>
+          <button id="holdBtn">按住</button>
+        </div>
+        <div class="hold-hint">长按圆钮，直到圆环填满——手松开前，它还属于你</div>
+      </div>
+    </div>
+    <div class="ff-ui" id="ffFortune" style="display:none">
+      <div style="text-align:center;width:min(420px,92vw)">
+        <div class="night-panel" style="padding:26px 26px 22px;margin-bottom:22px">
+          <div class="tag">萤 火 签</div>
+          <p style="margin:10px 0 0">夜空收下了你的话，回赠你一支签。<br>把它当作今晚的睡前护身符。</p>
+        </div>
+        <div class="fortune" id="fortuneCard">
+          <div class="f-no" id="fNo"></div>
+          <div class="f-text" id="fText"></div>
+          <div class="f-sub">—— 萤火签 · 心屿夜空发放</div>
+        </div>
+        <div style="margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <button class="btn ghost" style="color:#F2E9D4;border-color:rgba(255,217,142,.4)" id="btnFFAgain">再抽一支</button>
+          <button class="btn" style="background:var(--starlight);color:#3A2E14" id="btnToEnd">走向旅程终点 →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑨ 终点 -->
+  <section class="scene" id="scene-end">
+    <div class="wrap">
+      <div class="kicker">JOURNEY · COMPLETE</div>
+      <h2>今晚，就到这里</h2>
+      <div class="end-rule"></div>
+      <p class="end-quote" id="endQuote"></p>
+      <p class="sub" id="endSummary" style="text-align:left"></p>
+      <div class="card result-sec" style="margin-top:24px;text-align:left">
+        <h3>这些声音，一直都在</h3>
+        <div class="hotline"><b>12356</b><span>全国统一心理援助热线 · 24 小时</span></div>
+        <div class="hotline"><b>400-161-9995</b><span>希望24热线 · 24 小时</span></div>
+      </div>
+      <div class="result-btns" style="margin-top:26px">
+        <button class="btn accent" id="btnCopyAll">复制完整旅程报告</button>
+        <button class="btn ghost" id="btnRestart2">再走一遍</button>
+      </div>
+      <p class="disclaimer">情绪是天气，不是气候。<br>—— 心屿，一直都在。</p>
+    </div>
+  </section>
+</main>
+
+<script>
+/* ================= 全局状态 ================= */
+const S = {
+  g1:{stars:0,gaps:[],hits:0,clicks:0},
+  g2:{answers:[],pos:0,neg:0,linger:0},
+  quiz:{answers:[null,null,null,null,null,null,null,null,null], idx:0},
+  echo:{logs:[], last:null},
+  ff:{fortune:null, released:false},
+  ac:null
+};
+const rnd = arr => arr[Math.floor(Math.random()*arr.length)];
+
+/* ================= 场景切换 ================= */
+const scenes = document.querySelectorAll('.scene');
+function goScene(id, progress, label){
+  scenes.forEach(s=>s.classList.toggle('active', s.id===id));
+  document.getElementById('journey').firstElementChild.style.width = progress+'%';
+  if(label) document.getElementById('stepLabel').textContent = label;
+  document.body.classList.toggle('on-dark', id==='scene-game1' || id==='scene-firefly');
+  document.getElementById(id).scrollTop = 0;
+}
+document.getElementById('btnStart').onclick = ()=>{ goScene('scene-breath', 8, '第 0 站 · 深呼吸'); startBreath(); };
+
+/* ================= 呼吸 ================= */
+let breathTimers = [];
+function startBreath(){
+  breathTimers.forEach(clearTimeout); breathTimers=[];
+  const c=document.getElementById('breathCircle'), t=document.getElementById('breathText');
+  const seq=[
+    [0,   ()=>{t.textContent='吸气'; c.style.transition='transform 2.5s ease-in-out'; c.style.transform='scale(1.55)';}],
+    [2500,()=>{t.textContent='停留';}],
+    [3300,()=>{c.style.transition='transform 3s ease-in-out'; c.style.transform='scale(1)'; t.textContent='呼气';}],
+    [6500,()=>{t.textContent='…';}],
+    [7300,()=>{t.textContent='吸气'; c.style.transition='transform 2.5s ease-in-out'; c.style.transform='scale(1.55)';}],
+    [9800,()=>{t.textContent='停留';}],
+    [10600,()=>{c.style.transition='transform 3s ease-in-out'; c.style.transform='scale(1)'; t.textContent='呼气';}],
+    [13900,()=>{t.textContent='好，我们开始';}],
+    [15200,enterGame1]
+  ];
+  seq.forEach(([d,fn])=>breathTimers.push(setTimeout(fn,d)));
+}
+document.getElementById('btnSkipBreath').onclick = ()=>{ breathTimers.forEach(clearTimeout); enterGame1(); };
+
+/* ================= 游戏一：寻光 ================= */
+const cv=document.getElementById('starCanvas'), ctx=cv.getContext('2d');
+let stars=[], ripples=[], dust=[], running=false, g1Timer=null, litOrder=[], g1LastLit=0, g1EndCb=null;
+let W=0,H=0,DPR=1;
+function fitCanvas(){ DPR=window.devicePixelRatio||1; W=cv.clientWidth; H=cv.clientHeight;
+  cv.width=W*DPR; cv.height=H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0); }
+window.addEventListener('resize', ()=>{ if(document.getElementById('scene-game1').classList.contains('active')) fitCanvas(); });
+function spawnStar(){
+  for(let k=0;k<24;k++){
+    const x=40+Math.random()*(W-80), y=70+Math.random()*(H-140);
+    if(stars.every(s=>Math.hypot(s.x-x,s.y-y)>70)){
+      stars.push({x,y,r:3.2+Math.random()*1.6,phase:Math.random()*6.28,
+        vx:(Math.random()-.5)*.14,vy:(Math.random()-.5)*.12,lit:false});
+      return;
+    }
+  }
+}
+function makeDust(){ dust=Array.from({length:70},()=>({x:Math.random()*W,y:Math.random()*H,
+  r:Math.random()*1.1+.3,a:Math.random()*.4+.1})); }
+function drawStar(t){
+  ctx.clearRect(0,0,W,H);
+  const bg=ctx.createRadialGradient(W/2,H*.42,60,W/2,H*.5,Math.max(W,H)*.75);
+  bg.addColorStop(0,'#141E2B'); bg.addColorStop(1,'#0C1219');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+  dust.forEach(d=>{ ctx.globalAlpha=d.a; ctx.fillStyle='#A9B7C9';
+    ctx.beginPath(); ctx.arc(d.x,d.y,d.r,0,7); ctx.fill(); });
+  ctx.globalAlpha=1;
+  stars.forEach(s=>{
+    const breathe=Math.sin(t/700+s.phase)*.5+.5;
+    s.x+=s.vx; s.y+=s.vy;
+    if(s.x<30||s.x>W-30)s.vx*=-1; if(s.y<60||s.y>H-60)s.vy*=-1;
+    if(s.lit){ ctx.fillStyle='#FFD98E'; ctx.shadowColor='rgba(255,217,142,.9)';
+      ctx.shadowBlur=14+breathe*10; ctx.beginPath(); ctx.arc(s.x,s.y,4.4,0,7); ctx.fill();
+      ctx.globalAlpha=.25+breathe*.2; ctx.beginPath(); ctx.arc(s.x,s.y,10,0,7); ctx.fill();
+    }else{ ctx.shadowBlur=0; ctx.globalAlpha=.18+breathe*.25; ctx.fillStyle='#93A3B8';
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,7); ctx.fill();
+      ctx.globalAlpha=.1; ctx.beginPath(); ctx.arc(s.x,s.y,s.r+5,0,7); ctx.fill(); }
+    ctx.globalAlpha=1; ctx.shadowBlur=0;
+  });
+  ripples=ripples.filter(r=>t-r.t<900);
+  ripples.forEach(r=>{ const p=(t-r.t)/900; ctx.globalAlpha=(1-p)*.55;
+    ctx.strokeStyle='#FFD98E'; ctx.lineWidth=1.4;
+    ctx.beginPath(); ctx.arc(r.x,r.y,6+p*44,0,7); ctx.stroke(); ctx.globalAlpha=1; });
+  if(g1EndCb){
+    const p=Math.min(1,(t-g1EndCb.t)/1400), pts=litOrder;
+    if(pts.length>1){
+      const total=pts.length-1, upto=p*total;
+      ctx.strokeStyle='rgba(255,217,142,.4)'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(pts[0].x,pts[0].y);
+      for(let i=1;i<=Math.floor(upto);i++) ctx.lineTo(pts[i].x,pts[i].y);
+      if(upto<total){ const f=upto-Math.floor(upto),a=pts[Math.floor(upto)],b=pts[Math.floor(upto)+1];
+        ctx.lineTo(a.x+(b.x-a.x)*f, a.y+(b.y-a.y)*f); }
+      ctx.stroke();
+    }
+  }
+}
+function loop(){ if(!running&&!g1EndCb)return; drawStar(performance.now()); requestAnimationFrame(loop); }
+function enterGame1(){
+  goScene('scene-game1', 12, '小游戏 · 一 · 寻光');
+  fitCanvas(); makeDust(); stars=[]; ripples=[]; litOrder=[];
+  requestAnimationFrame(loop);
+}
+document.getElementById('btnG1Start').onclick = ()=>{
+  document.getElementById('g1Intro').style.display='none';
+  const cd=document.getElementById('g1Countdown'); cd.style.display='flex';
+  let n=3; const tick=()=>{ if(n>0){cd.textContent=n;n--;setTimeout(tick,750);} else {cd.style.display='none'; startG1();} };
+  tick();
+};
+function startG1(){
+  fitCanvas(); makeDust(); stars=[]; ripples=[]; litOrder=[];
+  S.g1={stars:0,gaps:[],hits:0,clicks:0}; g1LastLit=0;
+  for(let i=0;i<6;i++) spawnStar();
+  running=true; document.getElementById('g1Hud').style.display='block';
+  const hud=document.getElementById('g1Hud'); let left=30;
+  const upd=()=>hud.textContent='寻光 · 剩余 '+left+'s'; upd();
+  g1Timer=setInterval(()=>{left--;upd(); if(left<=0)endG1();},1000);
+  const spawner=setInterval(()=>{ if(!running){clearInterval(spawner);return;}
+    if(stars.filter(s=>!s.lit).length<6) spawnStar(); },700);
+  loop();
+  cv.onclick=e=>{ if(!running)return; S.g1.clicks++;
+    const rect=cv.getBoundingClientRect(), x=e.clientX-rect.left, y=e.clientY-rect.top;
+    let best=null,bd=1e9;
+    stars.forEach(s=>{ if(!s.lit){const d=Math.hypot(s.x-x,s.y-y); if(d<bd){bd=d;best=s;}}});
+    if(best&&bd<26){ best.lit=true; S.g1.stars++; S.g1.hits++;
+      const now=performance.now();
+      if(S.g1.stars>1) S.g1.gaps.push(now-g1LastLit);
+      g1LastLit=now;
+      ripples.push({x:best.x,y:best.y,t:now}); litOrder.push(best);
+    }};
+}
+function endG1(){
+  running=false; clearInterval(g1Timer);
+  document.getElementById('g1Hud').style.display='none';
+  g1EndCb={t:performance.now()};
+  setTimeout(()=>{
+    document.getElementById('g1Stars').textContent=S.g1.stars;
+    document.getElementById('g1Pace').textContent = S.g1.stars>1 ? (S.g1.gaps.reduce((a,b)=>a+b,0)/S.g1.gaps.length/1000).toFixed(1):'--';
+    document.getElementById('g1Acc').textContent = S.g1.clicks? Math.round(S.g1.hits/S.g1.clicks*100)+'%':'--';
+    document.getElementById('g1End').style.display='flex';
+    goScene('scene-game1', 22, '小游戏 · 一 · 完成');
+  },1600);
+}
+document.getElementById('btnG1Next').onclick=()=>{ g1EndCb=null; enterGame2(); };
+
+/* ================= 游戏二：词语共鸣 ================= */
+const WORDS=[{w:'期待',v:1},{w:'温暖',v:1},{w:'平静',v:1},{w:'希望',v:1},{w:'被理解',v:1},
+ {w:'有力量',v:1},{w:'好奇',v:1},{w:'满足',v:1},{w:'疲惫',v:-1},{w:'沉重',v:-1},{w:'空虚',v:-1},
+ {w:'麻木',v:-1},{w:'孤独',v:-1},{w:'紧绷',v:-1},{w:'低落',v:-1},{w:'提不起劲',v:-1}];
+let g2Queue=[], g2Idx=0, g2WordAt=0;
+function enterGame2(){
+  goScene('scene-game2', 26, '小游戏 · 二 · 词语共鸣');
+  document.getElementById('g2Intro').style.display='block';
+  document.getElementById('g2Play').style.display='none';
+  document.getElementById('g2End').style.display='none';
+}
+document.getElementById('btnG2Start').onclick=()=>{
+  g2Queue=[...WORDS].sort(()=>Math.random()-.5); g2Idx=0;
+  S.g2={answers:[],pos:0,neg:0,linger:0};
+  document.getElementById('g2Intro').style.display='none';
+  document.getElementById('g2Play').style.display='block'; showWord();
+};
+function showWord(){
+  const it=g2Queue[g2Idx];
+  document.getElementById('wordStage').innerHTML=
+    `<div class="word-card"><div class="idx">${g2Idx+1} / ${g2Queue.length}</div><div class="w">${it.w}</div></div>`;
+  g2WordAt=performance.now();
+}
+function g2Answer(echo){
+  const it=g2Queue[g2Idx], ms=performance.now()-g2WordAt;
+  S.g2.answers.push({w:it.w,v:it.v,echo,ms});
+  if(echo){ it.v>0?S.g2.pos++:S.g2.neg++; }
+  if(ms>4500) S.g2.linger++;
+  g2Idx++; g2Idx<g2Queue.length? showWord():endG2();
+}
+document.getElementById('btnEcho').onclick=()=>g2Answer(true);
+document.getElementById('btnPass').onclick=()=>g2Answer(false);
+function endG2(){
+  document.getElementById('g2Play').style.display='none';
+  document.getElementById('g2Pos').textContent=S.g2.pos;
+  document.getElementById('g2Neg').textContent=S.g2.neg;
+  const echoed=S.g2.answers.filter(a=>a.echo).map(a=>'「'+a.w+'」');
+  document.getElementById('g2WordList').textContent = echoed.length ?
+    '让你停下脚步的词：'+echoed.join('、') : '这一轮没有词让你停留，也很好——也许此刻的你正被平静托着。';
+  document.getElementById('g2End').style.display='block';
+  goScene('scene-game2', 42, '小游戏 · 二 · 完成');
+}
+document.getElementById('btnG2Next').onclick=enterQuiz;
+
+/* ================= PHQ-9 ================= */
+const PHQ9=['做事时提不起劲或没有兴趣','感到心情低落、沮丧或绝望','入睡困难、睡不安稳，或睡得太多',
+ '感觉疲倦，或没有活力','食欲不振，或吃得太多','觉得自己很糟，或觉得自己很失败，或让自己、家人失望',
+ '对事物难以集中注意力，例如看书、看电视时','动作或说话缓慢到别人已经察觉；或正好相反——烦躁、坐立不安，比平时更严重',
+ '有过「不如死掉」或用某种方式伤害自己的念头'];
+const OPTS=['完全没有','有几天','一半以上天数','几乎每天'];
+function enterQuiz(){
+  goScene('scene-quiz', 44, 'PHQ-9 · 问卷');
+  document.getElementById('quizIntro').style.display='block';
+  document.getElementById('quizPlay').style.display='none';
+}
+document.getElementById('btnQuizStart').onclick=()=>{
+  document.getElementById('quizIntro').style.display='none';
+  document.getElementById('quizPlay').style.display='block';
+  S.quiz.idx=S.quiz.answers.findIndex(v=>v===null); if(S.quiz.idx<0)S.quiz.idx=0;
+  renderQ();
+};
+function renderQ(){
+  const i=S.quiz.idx;
+  document.getElementById('qNo').textContent=`问题 ${i+1} / 9`;
+  const dots=document.getElementById('qDots'); dots.innerHTML='';
+  for(let d=0;d<9;d++){ const sp=document.createElement('span');
+    if(d<i)sp.className='done'; if(d===i)sp.className='cur'; dots.appendChild(sp); }
+  goScene('scene-quiz', 44+Math.round(i/8*20), 'PHQ-9 · 问题 '+(i+1)+'/9');
+  const body=document.getElementById('qBody');
+  body.innerHTML=`<div class="q-anim">
+    <p class="q-title">「${PHQ9[i]}」<br><span style="font-size:15px;color:var(--ink-soft)">被它困扰的频率是？</span></p>
+    <div class="q-opts">${OPTS.map((o,s)=>`
+      <button class="opt ${S.quiz.answers[i]===s?'picked':''}" data-s="${s}">
+        <span>${o}</span><span class="score">${s}</span></button>`).join('')}
+    </div>
+    ${i===8?'<p class="q-care">这一题也许不好回答。如果此刻你正感到痛苦，请记得：你并不孤单，答完会有温暖的资源等你。</p>':''}
+  </div>`;
+  body.querySelectorAll('.opt').forEach(btn=>{
+    btn.onclick=()=>{ body.querySelectorAll('.opt').forEach(b=>b.classList.remove('picked'));
+      btn.classList.add('picked'); S.quiz.answers[i]=+btn.dataset.s;
+      setTimeout(()=>{ i<8? (S.quiz.idx=i+1,renderQ()) : showResult(); },420); };
+  });
+}
+document.getElementById('btnPrev').onclick=()=>{ if(S.quiz.idx>0){S.quiz.idx--;renderQ();} };
+
+/* ================= 结果页 ================= */
+const LEVELS=[
+ {min:0, tag:'晴朗或微风', motto:'请继续保持这份照亮自己的能力。',
+  desc:'你的回答显示，最近两周没有明显的抑郁倾向信号。情绪本就有阴晴起伏，偶尔的低落是心灵正常的呼吸。继续保持你与自己对话的习惯，也留意身边需要陪伴的人。'},
+ {min:5, tag:'轻度 · 飘雨的阴天', motto:'雨不大，但记得带伞，也别忘了抬头。',
+  desc:'你可能正被一些低落、疲惫或失眠悄悄造访。这类信号常在压力期出现，多数会随生活节奏恢复。建议规律作息、保持轻度运动，并在一两周后重新做一次这份觉察，观察趋势。'},
+ {min:10, tag:'中度 · 连绵的雨', motto:'雨会停，而你不必独自撑伞。',
+  desc:'这些困扰已经在实实在在地消耗你的精力与生活。它们值得被认真对待——建议预约一次学校心理中心或专业心理咨询。把这份报告带给咨询师，会让第一次谈话容易很多。'},
+ {min:15, tag:'中重度 · 暴雨将至', motto:'承认痛苦，是走出的第一步。我们陪你。',
+  desc:'你扛了太多，能坚持答完这份问卷本身就需要力气。请尽快寻求专业帮助：精神科医生或心理咨询师。这不是软弱，就像感冒了要看医生一样自然，而且抑郁症是可以治疗的。'},
+ {min:20, tag:'重度 · 风暴中心', motto:'你现在一定很辛苦。你值得被全力帮助。',
+  desc:'你此刻的痛苦是真实而沉重的，请务必尽快前往医院精神科 / 心理科就诊，并让一位你信任的人陪伴你、知晓你的状态。请记住：抑郁会扭曲你看世界的方式，让你以为毫无出路——而那是症状在说话，不是事实。治疗真的有效。'}];
+function showResult(){
+  goScene('scene-result', 72, '觉察报告');
+  const score=S.quiz.answers.reduce((a,b)=>a+b,0);
+  const lv=[...LEVELS].reverse().find(l=>score>=l.min);
+  document.getElementById('rLevel').textContent=lv.tag;
+  document.getElementById('rMotto').textContent=lv.motto;
+  document.getElementById('rDesc').textContent=lv.desc;
+  document.getElementById('rGame').innerHTML=gameSummary();
+  const tips={ base:['把睡眠当作第一位：固定的入睡与起床时间，比补觉更有效','每天留 10 分钟给一件纯粹让你舒服的小事','把今天的分数告诉一位信任的人，让情绪被看见'],
+    mid:['减少「必须好起来」的自我苛责，恢复期允许自己慢一点','尝试每天 20 分钟散步或任何轻度运动，它对情绪的改善有大量研究支持','预约一次专业心理咨询，把这份报告带过去'],
+    high:['请优先预约精神科 / 心理科就诊，药物与心理治疗都有效','让一位信任你的人知晓你现在的状态，不要独自扛','维持最基本的进食与睡眠，其余的先交给专业帮助','若出现伤害自己的念头，请立即拨打上方热线']};
+  const pick = score>=10? [...tips.mid,...tips.high] : (score>=5? [...tips.base,tips.mid[2]] : tips.base);
+  document.getElementById('rTips').innerHTML=pick.slice(0,5).map(t=>`<li>${t}</li>`).join('');
+  document.getElementById('crisisBox').style.display = S.quiz.answers[8]>=1?'block':'none';
+  const ring=document.getElementById('ring'), C=2*Math.PI*72;
+  ring.style.strokeDashoffset=C;
+  setTimeout(()=>{ ring.style.strokeDashoffset=C*(1-score/27);
+    let n=0; const step=Math.max(1,Math.ceil(score/40));
+    const t=setInterval(()=>{ n=Math.min(score,n+step);
+      document.getElementById('rScore').textContent=n; if(n>=score)clearInterval(t); },40);
+  },350);
+}
+function gameSummary(){
+  const g1=S.g1.stars>0
+    ? `「寻光」里，你在 30 秒点亮了 <b>${S.g1.stars}</b> 颗星${S.g1.stars>1?`，平均每 ${(S.g1.gaps.reduce((a,b)=>a+b,0)/S.g1.gaps.length/1000).toFixed(1)} 秒点亮一颗`:''}。研究提示，情绪低落时人的主动性与反应节奏可能放缓——但一次小游戏受设备、手感等太多偶然影响，它只代表那个夜晚的你，请别以此评判自己。`
+    : `「寻光」里，这一轮的星都还在夜空里等你。没关系，愿意看完这一页，本身就是一种靠近。`;
+  const g2=`「词语共鸣」里，有 <b>${S.g2.pos}</b> 个暖词、<b>${S.g2.neg}</b> 个沉重的词让你停下${S.g2.linger?`，你有 ${S.g2.linger} 次徘徊良久`:''}。留意那些让你停留的词——它们是内心寄来的信。`;
+  return g1+'<br><br>'+g2;
+}
+document.getElementById('btnCopy').onclick=copyBaseReport;
+document.getElementById('btnToEcho').onclick=enterEcho;
+document.getElementById('btnRestart1').onclick=fullRestart;
+function copyBaseReport(){
+  const score=S.quiz.answers.reduce((a,b)=>a+b,0);
+  const lv=[...LEVELS].reverse().find(l=>score>=l.min);
+  const txt=['【心屿 · 抑郁情绪自我觉察报告】','时间：'+new Date().toLocaleString('zh-CN'),
+    'PHQ-9 得分：'+score+' / 27（'+lv.tag+'）',
+    '逐题作答：'+S.quiz.answers.map((a,i)=>(i+1)+'.'+OPTS[a]).join('；'),
+    '游戏观察：寻光点亮 '+S.g1.stars+' 颗星；词语共鸣（暖 '+S.g2.pos+' / 沉 '+S.g2.neg+'）',
+    '※ 本报告仅供自我觉察参考，不构成医学诊断。'].join('\n');
+  doCopy(txt, document.getElementById('btnCopy'));
+}
+function doCopy(txt, btn){
+  navigator.clipboard.writeText(txt).then(()=>{
+    const old=btn.textContent; btn.textContent='已复制';
+    setTimeout(()=>btn.textContent=old,1800);
+  }).catch(()=>alert('复制失败，请手动选择文本'));
+}
+
+/* ================================================================
+   解忧回声室 · 逐词分析引擎
+   每个情绪词带权重；另识别：加重语气 / 时间 / 人物 / 身体 / 标点 /
+   提问 / 求救信号 / 认知歪曲 / 主题 —— 回信由上百个片段按分析结果
+   动态拼装，同样的文字每次都会得到不同的回应。
+================================================================ */
+const RISK_WORDS=['不想活','活不下去','想死','去死','了结','解脱','自杀','轻生','伤害自己','自残','割腕','撑不下去','没有意义','消失算了'];
+/* 情绪词典：[词, 权重] —— 权重代表这个词的沉重程度 */
+const EMO_LEX=[
+ {cat:'疲惫',words:[['累',1],['好累',1.8],['很累',1.8],['太累',2],['疲惫',1.8],['疲倦',1.6],['心累',2.2],['无力',1.6],['透支',2],['精疲力尽',2.6],['撑不住',2.4],['提不起劲',2],['不想动',1.8],['没力气',1.8],['硬撑',1.8]]},
+ {cat:'低落',words:[['想哭',2],['难过',1.6],['伤心',1.6],['不开心',1.4],['不快乐',1.4],['低落',1.6],['沮丧',1.8],['悲伤',1.8],['心酸',1.8],['眼泪',1.4],['哭',1.2],['开心不起来',2.2]]},
+ {cat:'焦虑',words:[['焦虑',2],['心慌',1.8],['紧张',1.4],['害怕',1.6],['恐惧',2],['担心',1.3],['不安',1.5],['烦躁',1.6],['慌',1.2],['压力',1.5],['喘不过气',2.2],['崩溃',2.6],['快疯了',2.4],['受够了',2]]},
+ {cat:'孤独',words:[['孤独',1.8],['孤单',1.8],['寂寞',1.8],['没朋友',2],['没人懂',2],['没人陪',1.8],['没人在乎',2.2],['被孤立',2],['没人',1.5],['一个人',1.2]]},
+ {cat:'自责',words:[['自责',2],['后悔',1.6],['对不起',1.4],['丢人',1.8],['丢脸',1.8],['羞耻',2],['没用',2.2],['废物',2.6],['失败',1.8],['差劲',2],['不配',2.2],['讨厌自己',2.4],['恨自己',2.6],['我不行',2],['我不够好',2],['都怪我',2.2],['是我的错',2.2],['一无是处',2.4]]},
+ {cat:'空虚',words:[['空虚',1.8],['麻木',2],['没意思',1.6],['没意义',2],['无聊',1.2],['行尸走肉',2.4],['空荡荡',1.8],['心如死水',2.2]]},
+ {cat:'愤怒',words:[['生气',1.4],['愤怒',1.8],['委屈',1.8],['不甘心',1.6],['火大',1.6],['气死',1.8],['恨',1.4]]}
+];
+const BODY_WORDS=['睡不着','失眠','熬夜','噩梦','整夜','头疼','胃疼','没胃口','吃不下','吃太多','心悸','恶心','发抖','喘不动'];
+const TIME_WORDS=['每天','天天','总是','一直','反复','整夜','每晚','最近','这几天','这一周','这周','这个月','这几个月','半年','一年','两年','三年','好久','很久','从来不','从来没有'];
+const PEOPLE_WORDS=['爸妈','父母','妈妈','爸爸','家里人','家人','老公','老婆','男朋友','女朋友','对象','暗恋','老板','领导','老师','同事','同学','舍友','室友','朋友','婆婆','孩子','前任'];
+const INTENS=['特别','真的','超级','非常','越来越','明明','根本','简直','彻底','完全','快疯了','受够了'];
+const HOPE=['想好起来','好起来','希望','努力','试试','想改变','坚持','撑下去','加油','自救','想开心','想振作'];
+/* 认知歪曲：每类带两种描述与两种提问 */
+const DIS=[
+ {name:'非黑即白',re:/(总是|永远|从来|从不|完全不|根本不|一点都不|一点也不|每次都)/,
+  descs:[w=>`我注意到你用了「${w}」这样的词。它们把世界分成了"全好"或"全坏"，可真实的生活，大多发生在中间地带。`,
+         w=>`「${w}」——这个词像一把太宽的刷子，把复杂的事情一下子刷成了单一的颜色。宽刷子画画，是会涂出界的。`],
+  asks:[w=>`如果满分是 100 分，这件事真的处在 0 分那一端吗？它有没有可能是 30 分、50 分？`,
+        w=>`「${w}」是每次都成立，还是最近几次？有没有哪一次，是例外？`]},
+ {name:'灾难化',re:/(完蛋|全完了|彻底完|没法活|活不下去|没救|崩溃|全毁了|快疯了)/,
+  descs:[w=>`你的句子里有「${w}」。大脑在感到危险时，会把未来放映成最坏的那一帧——这是古老的自保机制，却经常误报。`,
+         w=>`「${w}」这个词背后，你的想象力正全力工作——只是它此刻只在拍恐怖片。想象力也可以拍别的：比如"撑过去了"的那一帧。`],
+  asks:[w=>`最坏的情况真正发生的概率有多大？如果它发生在朋友身上，你会对 TA 说什么？`,
+        w=>`过去一年里，你担心过的事，有多少真正变成了「${w}」？`]},
+ {name:'过度个人化',re:/(都怪我|是我的错|都因为我|都怨我|因为我才)/,
+  descs:[w=>`你把「${w}」这样的话揽在了自己身上。可任何一件事的结果，都是无数因素共同织成的——你只是其中一根线。`,
+         w=>`「${w}」——这几个字扛了不属于一个人的重量。请把责任像切蛋糕一样切开：你的那块，可能比想象中小。`],
+  asks:[w=>`这件事的结果里，除了你，还有哪些因素在场？把它们一条条列出来。`,
+        w=>`如果责任是一块蛋糕，「${w}」这件事里，你的那块占几成？`]},
+ {name:'读心术',re:/(一定觉得|肯定觉得|肯定讨厌|一定讨厌|都觉得我|别人会笑|嘲笑我|看不起我)/,
+  descs:[w=>`你替别人写好了台词——「${w}」。可我们无法真的读心，那些"别人一定觉得"，只是想象在扮演事实。`,
+         w=>`「${w}」——这是你的大脑在替别人发言。但每个人心里的剧本，只有本人能翻页。`],
+  asks:[w=>`你「读」到的那个想法，有确凿的证据吗？还是一次猜测？`,
+        w=>`有没有第二种可能：TA 那天的反应，和你根本无关？`]},
+ {name:'预言未来',re:/(肯定不会|一定不会|注定|永远不会|反正.{0,6}没|再努力也没)/,
+  descs:[w=>`「${w}」——还没发生的事，先被判了刑。可你并不是预言家，未来也还没盖章。`,
+         w=>`你的信里写着「${w}」。请翻翻过去：有多少次你笃定"一定会糟"的事，其实熬过去了？你的预测记录，可能没那么准。`],
+  asks:[w=>`过去有多少次，你担心会发生的事，其实并没有发生？`,
+        w=>`三年前的你，能预言到今天的生活吗？既然那时预言不准，凭什么相信这次「${w}」呢？`]},
+ {name:'「应该」句式',re:/(应该|必须|不得不|只能)/,
+  descs:[w=>`「${w}」——"应该"像鞭子一样抽着自己，却很少问：这个标准，是谁定的？真的是你想要的吗？`,
+         w=>`你的句子里有个"应该"陷阱。试着把它换成"我希望"：目标没变，但压迫感会小很多。`],
+  asks:[w=>`把「我必须」换成「我希望」，再读一遍这句话——感受有什么不同？`,
+        w=>`这个"应该"，如果没做到，最坏会发生什么？那个后果，真的不可承受吗？`]},
+ {name:'以偏概全',re:/(一无是处|一事无成|所有人都|全部都|全都)/,
+  descs:[w=>`「${w}」——用一次的表现，给整个自己贴标签，这个逻辑经不起推敲。一次考砸，不等于"不会学习"。`,
+         w=>`你写下了「${w}」。一个标签如果足够大，就会遮住整面墙——可墙上的画，比你贴的标签多得多。`],
+  asks:[w=>`「一次没做好」等于「我整个人不行」吗？还是只是这一次、这一件事？`,
+        w=>`找出三个反例：过去做得不差的三件事。它们也是你。`]}
+];
+const TOPICS=[
+ {name:'学业压力',keys:['考','学','学校','作业','成绩','论文','老师','挂科','排名','补考','考研','上课','高考','竞赛','保研']},
+ {name:'工作与职场',keys:['上班','工作','老板','领导','加班','同事','辞职','裁员','工资','面试','汇报','绩效','kpi','职场']},
+ {name:'感情关系',keys:['分手','前任','恋爱','喜欢','男朋友','女朋友','异地','结婚','暗恋','表白','拒绝','离婚','暧昧','失恋','她','他']},
+ {name:'家庭',keys:['爸妈','父母','妈妈','爸爸','家人','家里','吵架','唠叨','控制','婆婆','亲戚','催婚','原生家庭']},
+ {name:'自我价值',keys:['没用','失败','废物','差劲','自卑','比不上','不配','一事无成','看不起自己']},
+ {name:'孤独感',keys:['孤独','孤单','寂寞','没朋友','没人','没人在乎']},
+ {name:'睡眠与身体',keys:['失眠','睡不着','熬夜','噩梦','头疼','胃疼','吃不下','没胃口','生病','累']},
+ {name:'对未来的迷茫',keys:['迷茫','未来','出路','方向','意义','不知道','选择','毕业','走不下去']},
+ {name:'人际关系',keys:['朋友','舍友','室友','同学','讨好','排挤','误会','社交']}];
+
+/* —— 开场白（按情绪浓度 / 长度分池） —— */
+const OPENINGS=['谢谢你愿意把这些写下来——打字的过程并不轻松，但你做到了。',
+ '我逐字读完了你的信，不止一遍。',
+ '这些话从心里搬到纸上，你已经完成了最勇敢的那一步。',
+ '现在，回声开始反送给你——请慢慢读。',
+ '你的每一个字，我都逐字读过了，包括那些打了又删的。'];
+const OPENINGS_HEAVY=['这封信，我读得很慢。因为里面的每一个字，都不轻。',
+ '先陪你深呼吸一下——你写下的这些，分量很重，而我正在认真接住。'];
+const OPEN_LONG='写了这么长——能感觉到这些话在心里憋了太久。没关系，今天让它们都倒出来，我一处都不会跳过。';
+const OPEN_SHORT='信不长，但我知道，把哪怕一句话写出来，也可能用光了今天的力气。谢谢你。';
+const CLOSINGS=['最后想说：情绪是天气，不是气候。今天的阴雨，改变不了你心里那片海的辽阔。',
+ '你不需要立刻好起来，只需要今天比昨天多照顾自己一点点。剩下的，交给时间和专业的人。',
+ '请把这段话读给自己听一遍——用你安慰好朋友时的那种语气。你值得同样的温柔。',
+ '天黑有星星，心里有回声。你不是一个人。',
+ '把灯调暖一点，把肩膀放下来。今晚，你已经被认真倾听过了。',
+ '回声室一直都在——下次心里堵了，随时回来。夜安。'];
+
+/* —— 共情段落：每种情绪 3 个模板，动态填入用户自己的词 —— */
+const EMPATHY={
+ '疲惫':[c=>`你说到了「${c.w1}」${c.w2?`，还有「${c.w2}」`:''}。这不是睡一觉就能散去的累——是心里的电量早就见底，却还在硬撑的那种。疲惫到某个程度，人会先于意识承认：我需要停下来。你现在意识到了，这很好。`,
+   c=>`「${c.w1}」这个词，我从你的信里轻轻拿了出来，放在手心看了看——它比你写下的更重。心累的人最常被误解为懒，可你分明一直在撑。这份累，值得被休息，而不是被责怪。`,
+   c=>`读到你写「${c.w1}」的时候，我停顿了很久。会喊累的人，其实一直在负重前行。请把这份累当作身体发来的加急信件——它要的不是坚强，是休息。`],
+ '低落':[c=>`信里那片湿漉漉的「${c.w1}」${c.w2?`和「${c.w2}」`:''}，我都读到了。难过不需要理由，也不需要立刻被解决——它先需要被允许存在。你现在做的，正是允许它存在。`,
+   c=>`「${c.w1}」——这个词放进信里，让整封信的语气都沉了下来。我想告诉你：情绪低落不是你的错，也不是矫情，它是心在说"我需要被照顾了"。`,
+   c=>`你写下的「${c.w1}」，像屋檐下的雨。我不会急着催你"振作"——雨有雨的节奏，你有你的。我陪你等它，慢慢下完。`],
+ '焦虑':[c=>`我读到那颗悬着的心——「${c.w1}」${c.w2?`、「${c.w2}」`:''}。焦虑其实是个太想保护你的老朋友，只是它说话的方式总在喊。我们可以在下面的处方里，教它小声一点。`,
+   c=>`「${c.w1}」这个词后面，藏着一根一直绷着的弦。绷太久的弦会疼。深呼吸不是敷衍——它是在用身体告诉大脑：此刻是安全的。`,
+   c=>`你说「${c.w1}」。焦虑最擅长把"可能"说成"一定"，把"明天"说成"马上"。可事实是：你担心过的事，大多数都没有发生——这一次，大概率也不会。`],
+ '孤独':[c=>`你写「${c.w1}」${c.w2?`，还说「${c.w2}」`:''}。那种"人很多，却没人接住我"的感觉，比一个人待着更沉。此刻你的话被我完整地接住了——被听见的这一刻，它会轻一克。`,
+   c=>`「${c.w1}」不是你的错。它只是提醒你：你渴望连接——这恰恰说明你的心还热着，还在期待。冷掉的心是不会孤独的。`,
+   c=>`读到「${c.w1}」，我想先隔着屏幕握一下你的手。孤独感最会撒谎，它说"没人在乎"，可你把话写下来给了我——连接，已经发生了。`],
+ '自责':[c=>`你对自己说的那些话——「${c.w1}」${c.w2?`、「${c.w2}」`:''}——我读到了，也想请你对它们喊停。请做个实验：如果你的好朋友遇到同样的事，你会这样骂 TA 吗？不会的。所以，也请别这样骂你。`,
+   c=>`「${c.w1}」——你把自己审判得太快、太重了。可法官也应该听取辩护：你当时已经做了当时能做到的最好选择。人不是用"完美"来计分的。`,
+   c=>`信里的「${c.w1}」像一根刺，扎向写它的人。请把这句话的箭头调转方向看看：它该指向那件"事"，而不是"你"。事可以改进，你不该被攻击。`],
+ '空虚':[c=>`你写「${c.w1}」${c.w2?`、「${c.w2}」`:''}。心理学里，麻木往往是心在超载后自动调暗了灯——不是没有感觉了，是在省电。灯还亮着，只是很微弱，我们可以一起把旋钮慢慢拧回来。`,
+   c=>`「${c.w1}」——那种空落落的状态，比难过更磨人，因为连痛苦都感觉不到。但请留意：你会为这种"没感觉"而难受，恰恰证明你还有感觉。`,
+   c=>`你说自己「${c.w1}」。心空的时候，不必急着填满它——先点一盏很小的灯：一首歌、一杯热饮、窗外五分钟。火种不需要盛大。`],
+ '愤怒':[c=>`信里的火气——「${c.w1}」${c.w2?`、「${c.w2}」`:''}——我读到了，而且我认为它合理。愤怒常常是"我在乎"的变形记：越在乎，火越大。这不丢人。`,
+   c=>`你写「${c.w1}」。委屈攒多了就会变成火。与其压住它变成对自己的攻击，不如承认：你受伤了，你生气了——这两件事都是真的，也都被允许。`,
+   c=>`「${c.w1}」这个词烧得很旺。但火焰下面往往是没被听见的需求。等火小一点，我们可以看看它到底在替你喊什么。`]};
+/* —— 主题段落：每个主题 2 个变体 —— */
+const TOPIC_TEXT={
+ '学业压力':['成绩和排名把人变成了数字，可你从来不是一张试卷能概括的。你背着这么重的书包走了这么远，这件事本身，就值得被看见。',
+   '学业这条路，常常让人觉得"掉一步就全完了"——但人生不是独木桥，它是旷野。一道题、一次考试，都只是旷野里的一个路标。'],
+ '工作与职场':['工作可以占领你的八小时，但不必占领你这个人。你的价值，不由绩效单方面定义——下班后的你，同样是完整而珍贵的。',
+   '职场里最难的不是任务本身，而是那些悬而未决的评价和关系。把它们和"我是谁"分开：事是事，你是你。'],
+ '感情关系':['心碎不是矫情，它是真实的丧失——值得像悼念一样，被认真对待。你有权为一段关系的落幕，好好难过一场。',
+   '爱过、期待过、失望过——这些经历证明你认真地活过、爱过。它们不会白费，它们会变成你识人和爱人的能力。'],
+ '家庭':['最亲近的人带来的伤，往往最深，也最难说出口。你的为难与撕裂，都是正当的——不必因为"他们是为我好"而否定自己的感受。',
+   '家人的爱和伤害，常常装在同一个包裹里。你可以爱他们，同时为某些部分设立边界——这两件事不矛盾。'],
+ '自我价值':['你一直在用别人的尺子量自己，难怪总觉得自己不够。从今天起，换一把你自己的尺子——上面刻的是"今天我照顾好自己了吗"，而不是"今天我赢了吗"。',
+   '低自我价值感是个熟练的骗子：它只给你看证据的一半。你做成过的事、熬过的夜、帮过的人——另一半证据，我们一起补齐。'],
+ '孤独感':['孤独不是性格缺陷，它是人类最古老的信号——和饥饿一样，它在说"我需要连接"。这不是矫情，是需求。',
+   '感觉"没人在乎"的时候，请记得：在乎是双向的信号，有时候只是频道暂时没对上。你的信号，值得继续发送。'],
+ '睡眠与身体':['身体和情绪是连通器。心累久了，身体会替心喊疼。先把身体照顾好，情绪会跟着松一点——这不是本末倒置，是聪明的顺序。',
+   '睡不好的人，白天的勇气会打对折。所以"睡个好觉"不是小事，它是你恢复力的补给站。我们从今晚开始修它。'],
+ '对未来的迷茫':['看不清方向不是失败——是人生本来就该有雾。雾里也能走路，只是慢一点。慢一点，没关系。',
+   '你不需要现在就找到"人生方向"。先找"下个月有点期待的一件小事"，路是走着走着，从雾里显出来的。'],
+ '人际关系':['关系里的委屈最磨人——既要呼吸，又怕伤人。你的分寸感，已经是很珍贵的温柔；但温柔也该给自己留一份。',
+   '讨好换不来真正的靠近，只会换来更累的自己。试着把一份讨好收回来，换成一次诚实的"我其实不太想"——观察天会不会塌。'],
+ '生活本身':['没有具体名字的烦恼，往往是最沉的——它没法被一句话概括，却压在每一天里。没关系，我们把它拆开来看。',
+   '生活有时候就是会莫名地沉。这不是你的问题，是"活着"这项任务自带的重量。累了就卸下一会儿，不丢人。']};
+/* —— 处方池：按症状触发 —— */
+const RX_SLEEP=['固定起床时间比固定入睡更重要：先只把这一件事定死','睡前 1 小时把手机放到卧室外，用纸质书或白噪音填满那 60 分钟','下午 2 点后不碰咖啡因，给褪黑素让路'];
+const RX_EAT=['没胃口也定时吃一点点：三口饭、一根香蕉都算数，身体需要知道"还有人管我"','喝一杯温的东西，双手捧着，慢慢喝完——温度会顺着双手传到心里'];
+const RX_RUMIN=['给担心开一个「办公时间」：每天固定 15 分钟只用来想它，其他时间来访一律"请到办公时间再来"','把脑子里盘旋的念头全部写在纸上——写下来的念头，会比在脑子里转圈时安静 30%'];
+const RX_BLAME=['给"今天没做到的事"列一张清单，然后在每一条后面补一句："而我已经做到了……"','用给朋友的语气，给自己写一条 60 字以内的短信，今晚睡前读一遍'];
+const RX_ANX=['试一次 5-4-3-2-1 落地练习：说出 5 个看到的、4 个听到的、3 个摸到的、2 个闻到的、1 个尝到的','用"4-7-8"呼吸：吸气 4 秒、屏息 7 秒、呼气 8 秒，来 4 轮'];
+const RX_LOW=['用"两分钟启动法"对抗没力气：只承诺做 2 分钟，做完就有权停——通常开始了就会继续','今天完成一件 10 分钟的小事（洗碗、浇花、扔垃圾都算），用行动给"我能行"投一票'];
+const RX_LONE=['给通讯录里一个安全的人发条消息，内容就三个字："在想你"','去有人的地方待 30 分钟：书店、咖啡馆、公园长椅——人群的音量本身就是陪伴'];
+const RX_CRY=['给自己 15 分钟"合法难过时间"：设闹钟，痛快地难过，到点去洗把脸','哭没有用？有的——眼泪里真的有压力激素。让它流。'];
+const RX_LIB={
+ '学业压力':['把「考不好」翻译成一件具体的小事：今晚只弄懂一个卡住的知识点','用 25 分钟番茄钟学习，再离开座位 5 分钟，让大脑有呼吸的间隙'],
+ '工作与职场':['下班路上做一个「下班仪式」：摘下耳机走 500 米，把工作留在门外','把待办分成「必须今天 / 可以明天 / 其实不重要」三栏，只做第一栏'],
+ '感情关系':['给这段关系写一封不寄出的信，把没说完的话说完','重新捡起一件「恋爱之前的你」喜欢的小事，把生活的锚找回来'],
+ '家庭':['试着用「我感到…我希望…」造一个句子，代替「你们总是…」','本周练一条最小边界：对一次不合理要求说「我需要想一想」'],
+ '自我价值':['写下 5 件「我做成过的事」，再小也算——你对自己的印象需要证据更新','把「我不行」改成「我还不熟练」：事实没变，但门开了'],
+ '孤独感':['主动发出一条消息：不需要理由，就问一句「最近怎么样」','领养一个「需要你」的小东西：一盆植物、一缸鱼，被需要会生根'],
+ '睡眠与身体':['白天晒 15 分钟太阳，给身体的生物钟一个「白天」的证据','睡前把明天的烦恼写在纸上合起来——物理上把它们关进抽屉'],
+ '对未来的迷茫':['写下 3 个哪怕很小、但想去的地方或想试的事，为其中 1 个查查攻略','找一位比你年长 10 岁的人聊聊 TA 的当年——路都是弯着走的'],
+ '人际关系':['练一练「课题分离」：别人怎么想是别人的课题，你怎么活是你的课题','拒绝一次你最不想去的邀约，观察天有没有塌——多半不会'],
+ '_default':['今晚睡前，写下今天三件「最小的好事」——哪怕是「午饭很好吃」','出门走 15 分钟，不看手机，只看路边的树和光','把明天「最重要的 1 件事」写在纸上，替大脑卸下排练的负担']};
+
+/* —— 深度分析 —— */
+function countAll(text,w){ let c=0,i=0; while((i=text.indexOf(w,i))!==-1){c++;i+=w.length;} return c; }
+function extractQuestion(text){
+  const segs=text.split(/[。！!；;\n]/);
+  for(const s of segs){ if(s.includes('？')){ const q=s.trim();
+    return q.length>34? q.slice(0,33)+'…' : q; } }
+  return null;
+}
+function analyze(text){
+  const chars=Array.from(text);
+  const mark=chars.map(()=>null);
+  const occ=chars.map(()=>false);
+  const claim=(idx,len,cls)=>{ for(let k=idx;k<idx+len;k++) if(occ[k]) return false;
+    for(let k=idx;k<idx+len;k++){occ[k]=true;mark[k]=cls;} return true; };
+  const findAll=w=>{ const arr=[]; let i=0;
+    while((i=text.indexOf(w,i))!==-1){arr.push(i); i+=1;} return arr; };
+  /* 求救信号最先占位（红色标记） */
+  const risks=[];
+  RISK_WORDS.forEach(w=>findAll(w).forEach(idx=>{ if(claim(idx,w.length,'risk')) risks.push(w); }));
+  /* 情绪词（长词优先，避免"没人"盖住"没人在乎"） */
+  const emoAll=[];
+  EMO_LEX.forEach(g=>g.words.forEach(([w,wt])=>emoAll.push({w,cat:g.cat,wt})));
+  emoAll.sort((a,b)=>b.w.length-a.w.length);
+  const emos=[];
+  emoAll.forEach(({w,cat,wt})=>findAll(w).forEach(idx=>{ if(claim(idx,w.length,'emo')) emos.push({w,cat,wt}); }));
+  /* 思维陷阱 */
+  const dis=[];
+  DIS.forEach(d=>{ const m=text.match(d.re);
+    if(m&&m.index!==undefined){
+      let free=true; for(let k=m.index;k<m.index+m[0].length;k++) if(occ[k])free=false;
+      if(free){ for(let k=m.index;k<m.index+m[0].length;k++){occ[k]=true;mark[k]='dis';}
+        dis.push({...d,word:m[0],at:m.index}); }
+    }});
+  dis.sort((a,b)=>a.at-b.at);
+  const body=BODY_WORDS.filter(w=>text.includes(w)).slice(0,3);
+  const times=TIME_WORDS.filter(w=>text.includes(w)).slice(0,2);
+  const people=PEOPLE_WORDS.filter(w=>text.includes(w)).slice(0,2);
+  const hopes=HOPE.filter(w=>text.includes(w)).slice(0,2);
+  const intens=INTENS.reduce((n,w)=>n+countAll(text,w),0);
+  const ellipsis=countAll(text,'……')+countAll(text,'...');
+  const excl=(text.match(/[！!]/g)||[]).length;
+  const question=extractQuestion(text);
+  /* 情绪分类统计（按权重累加排序） */
+  const stat={};
+  emos.forEach(e=>{ stat[e.cat]=stat[e.cat]||{n:0,sum:0,ws:[]};
+    stat[e.cat].n++; stat[e.cat].sum+=e.wt; if(!stat[e.cat].ws.includes(e.w))stat[e.cat].ws.push(e.w); });
+  const topCats=Object.entries(stat)
+    .sort((a,b)=>b[1].sum-a[1].sum||b[1].n-a[1].n).map(e=>e[0]);
+  const intensity=emos.reduce((n,e)=>n+e.wt,0)+intens*.7;
+  const low=text.toLowerCase();
+  const topics=TOPICS.map(t=>({name:t.name,c:t.keys.filter(k=>low.includes(k)).length}))
+    .filter(t=>t.c>0).sort((a,b)=>b.c-a.c);
+  return {chars,mark,emos,stat,topCats:topCats.slice(0,2),
+    dis:dis.slice(0,2), topic:topics.length?topics[0].name:'生活本身',
+    body,times,people,hopes,intens,ellipsis,excl,question,
+    risks:[...new Set(risks)],intensity,len:text.length};
+}
+function pickFragment(text,A){
+  const clauses=Array.from(text.split(/[。！？!?\n，,；;：:]+/)).map(s=>s.trim()).filter(s=>s.length>=2);
+  if(!clauses.length) return null;
+  let best=clauses[0],score=-1;
+  clauses.forEach(c=>{
+    let sc=c.length;
+    if(A.emos.some(e=>c.includes(e.w))) sc+=30;
+    if(A.risks.some(r=>c.includes(r))) sc+=60;
+    if(sc>score){score=sc;best=c;}
+  });
+  return best.length>20? best.slice(0,19)+'…':best;
+}
+
+/* —— 回信拼装 —— */
+const echoTA=document.getElementById('echoText');
+echoTA.addEventListener('input',()=>document.getElementById('echoCount').textContent=echoTA.value.length+' 字');
+document.querySelectorAll('#starterChips button').forEach(b=>{
+  b.onclick=()=>{ echoTA.value=b.textContent; echoTA.dispatchEvent(new Event('input')); echoTA.focus(); };
+});
+function enterEcho(){ goScene('scene-echo', 76, '解忧回声室 · 倾诉'); echoReset(); }
+function echoReset(){
+  document.getElementById('echoIntro').style.display='block';
+  document.getElementById('echoScan').style.display='none';
+  document.getElementById('echoLetter').style.display='none';
+  document.getElementById('foundChips').innerHTML='';
+  echoTA.value=''; document.getElementById('echoCount').textContent='0 字';
+}
+document.getElementById('btnEchoSkip').onclick=enterFirefly;
+document.getElementById('btnEchoAgain').onclick=()=>{ goScene('scene-echo', 76, '解忧回声室 · 倾诉'); echoReset(); };
+document.getElementById('btnEchoSend').onclick=()=>{
+  const text=echoTA.value.trim();
+  if(text.length<4){ echoTA.focus(); echoTA.placeholder='再多写一点点吧，哪怕一句也行。'; return; }
+  startEchoScan(text);
+};
+let scanRAF=null;
+function startEchoScan(text){
+  const A=analyze(text);
+  const frag=pickFragment(text,A);
+  S.echo.last={text,A,frag,letter:null,rx:null};
+  document.getElementById('echoIntro').style.display='none';
+  document.getElementById('echoScan').style.display='block';
+  goScene('scene-echo', 79, '回声室 · 正在倾听');
+  const box=document.getElementById('scanBox'); box.innerHTML='';
+  const spans=[];
+  A.chars.forEach(ch=>{
+    if(ch==='\n'){ box.appendChild(document.createElement('br')); spans.push(null); return; }
+    const s=document.createElement('span'); s.className='ch'; s.textContent=ch;
+    box.appendChild(s); spans.push(s);
+  });
+  const dur=Math.min(4200,Math.max(1800,1600+A.chars.length*26));
+  box.insertAdjacentHTML('beforeend',`<div class="scan-cursor" style="--scan-dur:${dur}ms"></div>`);
+  const t0=performance.now();
+  cancelAnimationFrame(scanRAF);
+  const step=now=>{
+    const p=(now-t0)/dur, upto=Math.min(A.chars.length,Math.floor(p*A.chars.length)+1);
+    for(let i=0;i<upto;i++){ const s=spans[i]; if(!s)continue;
+      s.classList.add('on');
+      if(A.mark[i]==='emo')s.classList.add('emo');
+      if(A.mark[i]==='dis')s.classList.add('dis');
+      if(A.mark[i]==='risk')s.classList.add('risk');
+    }
+    if(upto<A.chars.length) scanRAF=requestAnimationFrame(step);
+    else setTimeout(()=>showChips(A),420);
+  };
+  scanRAF=requestAnimationFrame(step);
+}
+function showChips(A){
+  const holder=document.getElementById('foundChips'); holder.innerHTML='';
+  const chips=[];
+  if(A.risks.length) chips.push(`<b style="color:#B5412B">安全提醒</b> · 有些话需要被认真对待`);
+  A.topCats.forEach(c=>chips.push(`<b>听见</b> · ${c}`));
+  if(A.intens) chips.push(`<b>浓度</b> · ${A.intens} 处加重语气`);
+  if(A.times.length) chips.push(`<b>时间</b> · 「${A.times.join('」「')}」`);
+  if(A.people.length) chips.push(`<b>提到的人</b> · ${A.people.join('、')}`);
+  if(A.body.length) chips.push(`<b>身体信号</b> · ${A.body.join('、')}`);
+  A.emos.slice(0,3).forEach(e=>chips.push(`<b>关键词</b> · 「${e.w}」`));
+  if(A.question) chips.push(`<b>你在问</b> · 一个问题`);
+  if(A.ellipsis>=2) chips.push(`<b>标点</b> · ${A.ellipsis} 处省略号`);
+  else if(A.excl>=2) chips.push(`<b>标点</b> · ${A.excl} 个感叹号`);
+  if(A.topic!=='生活本身') chips.push(`<b>主题</b> · ${A.topic}`);
+  A.dis.forEach(d=>chips.push(`<b>思维陷阱</b> · ${d.name}`));
+  if(!chips.length) chips.push(`<b>听见</b> · 你此刻的心情`);
+  chips.forEach((c,i)=>{
+    setTimeout(()=>{ const d=document.createElement('div'); d.className='chip'; d.innerHTML=c;
+      holder.appendChild(d); requestAnimationFrame(()=>d.classList.add('show')); }, i*320);
+  });
+  setTimeout(buildLetter, chips.length*320+700);
+}
+/* —— 信件各段生成器 —— */
+function wordsLine(A){
+  const ws=[...new Set(A.emos.map(e=>e.w))].slice(0,3);
+  if(!ws.length) return null;
+  const list=ws.map(w=>'「'+w+'」').join('、');
+  return rnd([
+    `我把你信里的词，一个一个捡了出来：${list}。${ws.length>=3?'几个词叠在一起，重量几乎能压弯脊背——你已经扛了太久了。':'它们不是随手一写，是心里真实的天气。'}`,
+    `有 ${ws.length} 个词让我的光标停了下来：${list}。词语是内心的指纹——它们告诉我，你最近过的是什么日子。`,
+    `注意到了吗？你在用「${ws[0]}」形容自己的状态。这些词是心里发出来的信号，不是矫情，更不是夸张。`
+  ]);
+}
+function empathyPara(cat,ws){
+  const tpl=EMPATHY[cat]||EMPATHY['低落'];
+  const w1=ws[0]||'低落', w2=ws[1]||null;
+  return rnd(tpl)({w1,w2,ws});
+}
+function timePara(times){
+  const t=times.map(w=>'「'+w+'」').join('、');
+  const heavy=times.some(w=>['每天','天天','总是','一直','反复','整夜','每晚','从来不','从来没有'].includes(w));
+  return `你提到${t}。`+(heavy
+    ?'天天如此的事，最能磨损一个人——不是你不够坚强，是它持续得太久了。'
+    :'时间会让感受变得黏稠。被同一件事困这么久，累是必然的，不是你的错。');
+}
+function peoplePara(people){
+  return `信里出现了「${people[0]}」。和重要的人之间的事，往往最难——因为既要守住自己，又不想弄伤关系。你卡在中间的为难，是正常的，也是在乎的证明。`;
+}
+function bodyPara(body){
+  return `你还写到了身体：「${body.join('」「')}」。情绪从来不只是心情——它会顺着神经，住进睡眠、胃和肩膀里。所以接下来照顾身体，就是在照顾情绪，这不是绕远路。`;
+}
+function questionPara(q){
+  return `你还在信里问：「${q}」。我不想用一句漂亮话敷衍你——这个问题也许暂时没有标准答案。但请留意：能把问题问出口的人，已经站在答案的门边了。`;
+}
+function metaPara(n){
+  return `数了一下，你的信里有 ${n} 处省略号。那些打了又删、最终变成"……"的话，我也一并听见了——不必现在补上，留给你想说的时机就好。`;
+}
+function exclPara(n){
+  return `信里那 ${n} 个感叹号，是你压不住的情绪在敲门。它们有权被喊出来，而不是被摁回去。`;
+}
+function strengthPara(A){
+  if(A.hopes.length)
+    return `另外，我在这封信里发现了「${A.hopes[0]}」这样的词。在这么沉的日子里还留着想好起来的念头——这不是理所当然，这是你的心在自救。请保护好它。`;
+  if(A.len>140)
+    return `还有一件事：你写了这么长的一封信。能把这么重的事情完整写下来的人，远比自己以为的更有力量。`;
+  return `愿意面对自己、把心事交给一张纸的人，都自带一种安静的力量。你刚刚就做到了。`;
+}
+function riskPara(risks){
+  return `有一句话，我想从信里单独拿出来，认真回应——你写到了「${risks[0]}」。\n请先答应我三件事：今晚不要独自做任何重大决定；现在就把此刻的感受告诉一个能立刻联系到的人；把 12356 存进手机（24 小时心理援助热线）。\n你把这句话写下来而不是憋着，说明你还在寻找出口——这就是最重要、最珍贵的信号。我们陪着你。`;
+}
+let typer=null;
+function typeInto(el,text,speed){
+  if(typer)typer.cancel();
+  let i=0,dead=false,timer=null;
+  const done=()=>{ if(dead)return; dead=true; clearTimeout(timer);
+    el.textContent=text; el.classList.remove('typing');
+    document.getElementById('btnLetterSkip').style.display='none';
+    afterLetter(); };
+  const step=()=>{ if(dead)return;
+    const ch=text[i]; el.textContent+=ch; i++;
+    if(i>=text.length){ done(); return; }
+    let d=speed; if('，。！？；…—\n'.includes(ch)) d=speed*5;
+    timer=setTimeout(step,d); };
+  timer=setTimeout(step,speed);
+  return { cancel(){dead=true;clearTimeout(timer);},
+    finish(){ dead=true; clearTimeout(timer);
+      el.textContent=text; el.classList.remove('typing');
+      document.getElementById('btnLetterSkip').style.display='none';
+      afterLetter(); } };
+}
+function buildLetter(){
+  if(typer)typer.cancel();
+  const A=S.echo.last.A, text=S.echo.last.text, frag=S.echo.last.frag;
+  document.getElementById('echoInsight').innerHTML='';
+  document.getElementById('rxHolder').innerHTML='';
+  document.getElementById('btnLetterSkip').style.display='';
+  const P=[];
+  /* 开场白：按情绪浓度与信件长度选池 */
+  let pool=[...OPENINGS];
+  if(A.risks.length||A.intensity>=6) pool=[...OPENINGS_HEAVY,...pool];
+  if(A.len>120) pool.push(OPEN_LONG);
+  if(A.len<20) pool.push(OPEN_SHORT);
+  P.push(rnd(pool));
+  /* 求救信号：最高优先级 */
+  if(A.risks.length) P.push(riskPara(A.risks));
+  /* 引用原句 */
+  if(frag) P.push(`你说：「${frag}」——这句话，我收到了。`);
+  /* 捡词 */
+  const wl=wordsLine(A); if(wl) P.push(wl);
+  /* 主情绪共情（填入用户自己的词） */
+  if(A.topCats.length) P.push(empathyPara(A.topCats[0], A.stat[A.topCats[0]].ws));
+  /* 时间 / 人物 / 身体 / 提问 / 标点 */
+  if(A.times.length) P.push(timePara(A.times));
+  if(A.people.length) P.push(peoplePara(A.people));
+  if(A.body.length) P.push(bodyPara(A.body));
+  if(A.question) P.push(questionPara(A.question));
+  if(A.ellipsis>=2) P.push(metaPara(A.ellipsis));
+  else if(A.excl>=2) P.push(exclPara(A.excl));
+  /* 主题段落 */
+  P.push(rnd(TOPIC_TEXT[A.topic]||TOPIC_TEXT['生活本身']));
+  /* 思维陷阱（变体描述） */
+  if(A.dis.length) P.push(rnd(A.dis[0].descs)(A.dis[0].word));
+  /* 力量确认 */
+  P.push(strengthPara(A));
+  P.push(rnd(CLOSINGS));
+  P.push(`—— 心屿回声室 · ${new Date().toLocaleDateString('zh-CN')}`);
+  const letter=P.join('\n\n');
+  S.echo.last.letter=letter;
+  document.getElementById('echoScan').style.display='none';
+  document.getElementById('echoLetter').style.display='block';
+  goScene('scene-echo', 82, '回声室 · 回信');
+  document.getElementById('letterBody').parentElement.scrollIntoView({behavior:'smooth',block:'start'});
+  typer=typeInto(document.getElementById('letterBody'),letter,16);
+}
+document.getElementById('btnLetterSkip').onclick=()=>{ if(typer)typer.finish(); };
+document.getElementById('btnLetterRetype').onclick=()=>{ if(S.echo.last) buildLetter(); };
+function afterLetter(){
+  const A=S.echo.last.A;
+  /* 认知放大镜（变体提问） */
+  const ins=document.getElementById('echoInsight'); ins.innerHTML='';
+  A.dis.forEach(d=>{
+    ins.insertAdjacentHTML('beforeend',`<div class="magnifier">
+      <h4>认知放大镜 · ${d.name}</h4>
+      <p>${rnd(d.descs)(d.word)} 比如你写下的「${d.word}」。</p>
+      <p class="ask">留给你一个问题：${rnd(d.asks)(d.word)}</p></div>`);
+  });
+  /* 处方笺：按症状触发 */
+  const pool=[];
+  const push=arr=>arr.forEach(x=>pool.push(x));
+  if(A.risks.length) pool.push('今晚不要独自待着：现在就联系一位能立刻找到的人，或拨打 12356（24 小时心理援助热线）');
+  if(A.body.some(b=>['睡不着','失眠','熬夜','噩梦','整夜'].includes(b))) push(RX_SLEEP);
+  if(A.body.some(b=>['没胃口','吃不下','吃太多'].includes(b))) push(RX_EAT);
+  if(/(反复|一直想|脑子里|停不下来|想个不停|翻来覆去)/.test(S.echo.last.text)) push(RX_RUMIN);
+  if(A.topCats.includes('自责')) push(RX_BLAME);
+  if(A.topCats.includes('焦虑')) push(RX_ANX);
+  if(A.topCats.includes('低落')||A.topCats.includes('空虚')) push(RX_LOW);
+  if(A.topCats.includes('孤独')) push(RX_LONE);
+  if(A.emos.some(e=>e.w.includes('哭'))) push(RX_CRY);
+  push((RX_LIB[A.topic]||[]).slice(0,2));
+  push(RX_LIB['_default']);
+  const seen=new Set(), rxItems=[];
+  for(const it of pool){ if(!seen.has(it)){seen.add(it);rxItems.push(it);} if(rxItems.length>=5)break; }
+  const cats=(A.topCats.length?A.topCats.join('、'):'复杂而真实')
+    +(A.body.length?`（身体：${A.body.join('/')}）`:'');
+  const no='No.'+Date.now().toString().slice(-8);
+  S.echo.last.rx={topic:A.topic,cats,rxItems,no};
+  document.getElementById('rxHolder').innerHTML=`<div class="rx" id="rxCard">
+    <div class="rx-head"><div class="rx-title">心屿解忧室 · 处方笺</div><div class="rx-no">${no}</div></div>
+    <div class="rx-row"><span>主诉</span><p>${A.topic} · 伴随情绪：${cats}</p></div>
+    <div class="rx-row"><span>处方</span><ol>${rxItems.map(i=>`<li>${i}</li>`).join('')}</ol></div>
+    <div class="rx-row"><span>用法</span><p>每日一剂，心情低落时可加服。副作用：可能会感觉被理解。</p></div>
+    <div class="rx-sign">签发：心屿回声室 · ${new Date().toLocaleDateString('zh-CN')}</div>
+    <div class="seal" id="rxSeal">解忧</div></div>`;
+  setTimeout(()=>{
+    document.getElementById('rxSeal').classList.add('on');
+    document.getElementById('rxCard').scrollIntoView({behavior:'smooth',block:'center'});
+    chime(true);
+  },600);
+  S.echo.logs.push({topic:A.topic,cats,dis:A.dis.map(d=>d.name),frag:S.echo.last.frag});
+  goScene('scene-echo', 86, '回声室 · 处方笺');
+}
+document.getElementById('btnCopyRx').onclick=()=>{
+  const L=S.echo.last; if(!L||!L.rx)return;
+  const txt=['【心屿回声室 · 回信与处方】','',
+    '你写的：「'+(L.frag||'')+'」','','—— 回信 ——',L.letter||'','',
+    `—— 处方笺 ${L.rx.no} ——`,'主诉：'+L.rx.topic+' · 情绪：'+L.rx.cats,
+    '处方：'+L.rx.rxItems.map((x,i)=>(i+1)+') '+x).join('\n'),
+    '用法：每日一剂，低落时可加服。','※ 仅供自我觉察参考，不构成医学建议。'].join('\n');
+  doCopy(txt, document.getElementById('btnCopyRx'));
+};
+document.getElementById('btnToFirefly').onclick=enterFirefly;
+
+/* ================= 轻音（WebAudio 本地合成） ================= */
+function chime(soft){
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext; if(!AC)return;
+    const ac=S.ac||(S.ac=new AC()); if(ac.state==='suspended')ac.resume();
+    const t=ac.currentTime, fs=soft?[659.25,987.77]:[523.25,659.25,783.99];
+    fs.forEach((f,i)=>{ const o=ac.createOscillator(),g=ac.createGain();
+      o.type='sine'; o.frequency.value=f;
+      g.gain.setValueAtTime(0,t+i*.12);
+      g.gain.linearRampToValueAtTime(soft?.05:.11,t+i*.12+.02);
+      g.gain.exponentialRampToValueAtTime(.0001,t+i*.12+1.3);
+      o.connect(g).connect(ac.destination); o.start(t+i*.12); o.stop(t+i*.12+1.4); });
+  }catch(e){}
+}
+
+/* ================= 化萤仪式 ================= */
+const ff=document.getElementById('ffCanvas'), ffx=ff.getContext('2d');
+let FF=[], ffDust=[], ffOn=false, ffw=0, ffh=0;
+function fitFF(){ const d=window.devicePixelRatio||1; ffw=ff.clientWidth; ffh=ff.clientHeight;
+  ff.width=ffw*d; ff.height=ffh*d; ffx.setTransform(d,0,0,d,0,0); }
+window.addEventListener('resize',()=>{ if(document.getElementById('scene-firefly').classList.contains('active')) fitFF(); });
+function spawnFF(x,y,n){
+  for(let i=0;i<n;i++){
+    if(FF.length>90)break;
+    const r=Math.random();
+    FF.push({x:x+(Math.random()-.5)*40, y:y+(Math.random()-.5)*20,
+      vx:(Math.random()-.5)*.5, vy:-(.35+Math.random()*.75),
+      r:1.2+r*1.9, flick:Math.random()*6.28, life:1,
+      col:Math.random()<.5?'217,232,166':'255,233,168'});
+  }
+}
+function drawFF(t){
+  ffx.clearRect(0,0,ffw,ffh);
+  const bg=ffx.createRadialGradient(ffw/2,ffh*.4,60,ffw/2,ffh*.5,Math.max(ffw,ffh)*.8);
+  bg.addColorStop(0,'#131C2A'); bg.addColorStop(1,'#0A0F17');
+  ffx.fillStyle=bg; ffx.fillRect(0,0,ffw,ffh);
+  ffDust.forEach(d=>{ ffx.globalAlpha=d.a; ffx.fillStyle='#A9B7C9';
+    ffx.beginPath(); ffx.arc(d.x,d.y,d.r,0,7); ffx.fill(); });
+  ffx.globalAlpha=1;
+  FF=FF.filter(p=>p.life>0&&p.y>-30);
+  FF.forEach(p=>{
+    p.x+=p.vx+Math.sin(t/900+p.flick)*.18; p.y+=p.vy;
+    p.life-=.0016;
+    const a=Math.max(0,Math.min(1,p.life))*(0.45+0.55*Math.abs(Math.sin(t/280+p.flick)));
+    ffx.shadowColor=`rgba(${p.col},.9)`; ffx.shadowBlur=12;
+    ffx.fillStyle=`rgba(${p.col},${a})`;
+    ffx.beginPath(); ffx.arc(p.x,p.y,p.r,0,7); ffx.fill();
+    ffx.shadowBlur=0;
+  });
+}
+function ffLoop(){ if(!ffOn)return; drawFF(performance.now()); requestAnimationFrame(ffLoop); }
+function enterFirefly(){
+  goScene('scene-firefly', 90, '化萤 · 释放仪式');
+  document.getElementById('ffIntro').style.display='flex';
+  document.getElementById('ffWrite').style.display='none';
+  document.getElementById('ffFortune').style.display='none';
+  document.getElementById('ffCaption').classList.remove('show');
+  fitFF();
+  ffDust=Array.from({length:60},()=>({x:Math.random()*ffw,y:Math.random()*ffh,
+    r:Math.random()*1.1+.3,a:Math.random()*.35+.08}));
+  FF=[]; ffOn=true; ffLoop();
+  spawnFF(ffw*.3,ffh*.7,4); spawnFF(ffw*.7,ffh*.8,4);
+}
+document.getElementById('btnFFStart').onclick=()=>{
+  document.getElementById('ffIntro').style.display='none';
+  document.getElementById('ffWrite').style.display='flex';
+};
+document.getElementById('btnFFSkip').onclick=()=>{ enterFortune(); };
+const holdBtn=document.getElementById('holdBtn'), holdRing=document.getElementById('holdRing');
+const ffTA=document.getElementById('ffText');
+let holding=false, charge=0, holdRAF=null;
+function startHold(e){ e.preventDefault();
+  const text=ffTA.value.trim();
+  if(!text){ document.getElementById('ffWarn').textContent='先写点什么，再交给夜空吧。'; return; }
+  document.getElementById('ffWarn').textContent='';
+  holding=true; charge=0;
+  const t0=performance.now();
+  const step=now=>{
+    if(!holding)return;
+    charge=Math.min(1,(now-t0)/2200);
+    holdRing.style.strokeDashoffset=377*(1-charge);
+    holdBtn.style.transform=`scale(${1+charge*.07})`;
+    ffTA.style.transform=`translate(${(Math.random()-.5)*charge*3.4}px,${(Math.random()-.5)*charge*2.6}px)`;
+    if(charge>=1){ holding=false; releaseText(); return; }
+    holdRAF=requestAnimationFrame(step);
+  };
+  holdRAF=requestAnimationFrame(step);
+}
+function cancelHold(){ if(!holding)return; holding=false;
+  cancelAnimationFrame(holdRAF);
+  holdRing.style.strokeDashoffset=377; holdBtn.style.transform='';
+  ffTA.style.transform=''; }
+holdBtn.addEventListener('pointerdown',startHold);
+holdBtn.addEventListener('pointerup',cancelHold);
+holdBtn.addEventListener('pointerleave',cancelHold);
+holdBtn.addEventListener('pointercancel',cancelHold);
+holdBtn.addEventListener('contextmenu',e=>e.preventDefault());
+function releaseText(){
+  chime(false);
+  const rect=ffTA.getBoundingClientRect();
+  const text=ffTA.value;
+  const holder=document.createElement('div');
+  holder.style.cssText=`position:fixed;left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;`;
+  const spans=[];
+  Array.from(text).forEach(ch=>{
+    if(ch==='\n'){ holder.appendChild(document.createElement('br')); return; }
+    const s=document.createElement('span'); s.className='scatter-ch'; s.textContent=ch;
+    holder.appendChild(s); spans.push(s);
+  });
+  document.body.appendChild(holder);
+  ffTA.style.visibility='hidden';
+  document.getElementById('holdWrap').style.opacity='.15';
+  document.getElementById('holdWrap').style.pointerEvents='none';
+  requestAnimationFrame(()=>{
+    spans.forEach((s,i)=>{
+      setTimeout(()=>{
+        s.style.transition='transform 1.7s cubic-bezier(.2,.6,.2,1), opacity 1.5s ease';
+        s.style.transform=`translate(${(Math.random()-.5)*260}px, ${-(60+Math.random()*260)}px) rotate(${(Math.random()-.5)*70}deg)`;
+        s.style.opacity='0';
+      }, i*10);
+    });
+  });
+  setTimeout(()=>holder.remove(),2400);
+  spawnFF(rect.left+rect.width/2, rect.top+rect.height/2, 42);
+  const cap=document.getElementById('ffCaption');
+  setTimeout(()=>cap.classList.add('show'),900);
+  setTimeout(()=>{ cap.classList.remove('show'); enterFortune(); },2600);
+  S.ff.released=true;
+}
+const FORTUNES=['雨停之前，这把伞先借给你。','你不必发光，萤火也是光。',
+ '今晚允许自己什么都不想，像溪水路过石头。','沉重只是暂时寄放在你这里，夜空已经替你收下了。',
+ '明天的事交给明天的你。今晚的你，只负责好好睡觉。','你已经走了这么远——剩下的路，也走得动的。',
+ '难过不丢人，那是心还在认真活着的声音。','风，会替你把这一页翻过去的。',
+ '你值得被温柔对待，包括被你自己。','世界偶尔迟到，但没有缺席你的好日子。',
+ '今天到这里就够了，剩下的交给月亮值班。','慢慢来，反而比较快。',
+ '夜再长，也长不过你熬过的每一个夜——你已经很会活下来了。','把伤口晒晒月亮，会轻一点。'];
+const GRADES=['上吉','大吉','中吉','吉'], CNS=['一','二','三','四','五','六','七','八','九','十'];
+let lastFortune=-1;
+function drawFortune(){
+  let i; do{ i=Math.floor(Math.random()*FORTUNES.length); }while(i===lastFortune&&FORTUNES.length>1);
+  lastFortune=i;
+  const card=document.getElementById('fortuneCard');
+  card.style.animation='none'; void card.offsetWidth; card.style.animation='';
+  document.getElementById('fNo').textContent=`第 ${CNS[Math.floor(Math.random()*10)]} 签 · ${GRADES[Math.floor(Math.random()*GRADES.length)]}`;
+  document.getElementById('fText').textContent=FORTUNES[i];
+  S.ff.fortune=FORTUNES[i];
+}
+function enterFortune(){
+  document.getElementById('ffIntro').style.display='none';
+  document.getElementById('ffWrite').style.display='none';
+  document.getElementById('ffFortune').style.display='flex';
+  goScene('scene-firefly', 94, '化萤 · 萤火签');
+  if(!ffOn){ ffOn=true; ffLoop(); }
+  drawFortune(); chime(true);
+}
+document.getElementById('btnFFAgain').onclick=drawFortune;
+document.getElementById('btnToEnd').onclick=enterEnd;
+
+/* ================= 终点 ================= */
+function enterEnd(){
+  ffOn=false; FF=[];
+  goScene('scene-end', 100, '旅程终点');
+  const score=S.quiz.answers.reduce((a,b)=>a+b,0);
+  const lv=[...LEVELS].reverse().find(l=>score>=l.min);
+  document.getElementById('endQuote').textContent =
+    S.ff.fortune? `「${S.ff.fortune}」` : '「情绪是天气，不是气候。」';
+  const parts=[`PHQ-9 得分 ${score} 分（${lv.tag}）`];
+  if(S.echo.logs.length) parts.push(`回声室替你接住了 ${S.echo.logs.length} 件心事`);
+  if(S.ff.released) parts.push('你的那句话已经化成萤火，交给了夜空');
+  document.getElementById('endSummary').textContent =
+    '今晚的旅程：'+parts.join('；')+'。'+
+    (score>=15? ' 请记得，尽快让专业的人加入你的旅程——你值得被全力帮助。'
+      : score>=5? ' 情绪值得被持续留意，一两周后可以再回来做一次觉察。'
+      : ' 请继续保持这份照亮自己的能力。')+' 今晚早点睡。';
+}
+document.getElementById('btnCopyAll').onclick=function(){
+  const score=S.quiz.answers.reduce((a,b)=>a+b,0);
+  const lv=[...LEVELS].reverse().find(l=>score>=l.min);
+  const lines=['【心屿 · 完整旅程报告】','时间：'+new Date().toLocaleString('zh-CN'), '',
+    '① PHQ-9：'+score+' / 27（'+lv.tag+'）',
+    '   逐题：'+S.quiz.answers.map((a,i)=>(i+1)+'.'+OPTS[a]).join('；'),
+    '② 游戏：寻光点亮 '+S.g1.stars+' 颗星；词语共鸣（暖 '+S.g2.pos+' / 沉 '+S.g2.neg+'）'];
+  if(S.echo.logs.length){
+    lines.push('③ 回声室：'+S.echo.logs.map((l,i)=>
+      `第${i+1}件（主题：${l.topic}；情绪：${l.cats}${l.dis.length? '；陷阱：'+l.dis.join('/'):''}）`).join('；'));
+  }
+  if(S.ff.fortune) lines.push('④ 萤火签：'+S.ff.fortune);
+  lines.push('','※ 本报告仅供自我觉察参考，不构成医学诊断。','※ 心理援助热线：12356（24小时）');
+  doCopy(lines.join('\n'), this);
+};
+document.getElementById('btnRestart2').onclick=fullRestart;
+function fullRestart(){
+  ffOn=false; FF=[];
+  S.g1={stars:0,gaps:[],hits:0,clicks:0};
+  S.g2={answers:[],pos:0,neg:0,linger:0};
+  S.quiz={answers:[null,null,null,null,null,null,null,null,null], idx:0};
+  S.echo={logs:[], last:null}; S.ff={fortune:null, released:false};
+  goScene('scene-intro', 0, '自我觉察之旅');
+}
+</script>
+</body>
+</html>
