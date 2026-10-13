@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -88,6 +87,11 @@
   .g1-stats i{font-style:normal;font-size:12.5px;color:rgba(237,230,214,.6);letter-spacing:2px}
   #g1Countdown{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
     font-size:110px;color:var(--starlight);pointer-events:none;display:none}
+  /* 小游戏用途说明 */
+  .g1-purpose{margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,217,142,.18);text-align:left}
+  .g1-purpose b{display:block;font-size:13px;letter-spacing:2px;color:var(--starlight);margin-bottom:10px}
+  .g1-purpose p{font-size:13.5px;color:rgba(237,230,214,.78);line-height:2.05;margin:0 0 10px}
+  .g1-purpose p:last-child{margin-bottom:0}
 
   /* 游戏二：词语共鸣 */
   #scene-game2 .wrap{text-align:center}
@@ -208,11 +212,10 @@
   .rx-row{display:flex;gap:16px;margin:10px 0;align-items:baseline}
   .rx-row>span{flex:none;font-size:13px;letter-spacing:2px;color:var(--green);font-weight:700}
   .rx-row p,.rx-row li{font-size:15px;line-height:1.95;color:#4A443A}
-  .rx ol{margin-left:2px;list-style:none}
-  .rx ol li{padding-left:34px;position:relative}
-  .rx ol li::before{content:counter(rx,cjk-ideographic) "、";counter-increment:rx;
+  .rx ol{margin-left:2px;list-style:none;counter-reset:rx}
+  .rx ol li{padding-left:34px;position:relative;counter-increment:rx}
+  .rx ol li::before{content:counter(rx,cjk-ideographic) "、";
     position:absolute;left:0;color:var(--accent);font-size:13.5px;top:4px}
-  .rx ol{counter-reset:rx}
   .rx-sign{display:flex;justify-content:flex-end;align-items:center;margin-top:14px;
     padding-top:12px;border-top:1px dashed var(--line);font-size:13px;color:var(--ink-soft)}
   .seal{position:absolute;right:22px;bottom:58px;width:76px;height:76px;border-radius:50%;
@@ -269,6 +272,7 @@
     .g1-hud{top:46px;right:16px}
     .result-hero{text-align:center}
     .rx{padding:20px 18px}
+    .night-panel{padding:30px 24px}
   }
 </style>
 </head>
@@ -320,20 +324,24 @@
       <div class="night-panel">
         <div class="tag">小游戏 · 一</div>
         <h2>寻 光</h2>
-        <p>夜色里漂浮着一些暗淡的星。<br>在 30 秒内，点击它们，把光一颗一颗点亮。<br>没有对错，也没有输赢——只是去看看，<br>当你说「去点亮」的时候，你的手和心会怎么做。</p>
+        <p>夜色里漂浮着一些暗淡的星。<br>只有短短 <b style="color:var(--starlight)">5 秒</b>——点击它们，把光一颗一颗点亮。<br>没有对错，也没有输赢——只是去看看，<br>当你说「去点亮」的时候，你的手和心会怎么做。</p>
         <button class="btn" style="background:var(--starlight);color:#3A2E14" id="btnG1Start">进入夜色</button>
       </div>
     </div>
     <div class="overlay-center" id="g1End" style="display:none">
       <div class="night-panel">
-        <div class="tag">这一夜，你点亮了</div>
+        <div class="tag">这 5 秒，你点亮了</div>
         <div class="g1-count"><span id="g1Stars">0</span> 颗星</div>
         <div class="g1-stats">
           <div><b id="g1Pace">--</b><i>秒 / 颗</i></div>
           <div><b id="g1Acc">--</b><i>指尖命中率</i></div>
         </div>
-        <p style="margin:0 0 24px">无论多与少，行动本身就已经是光了。</p>
-        <button class="btn" style="background:var(--starlight);color:#3A2E14" id="btnG1Next">继续旅程</button>
+        <div class="g1-purpose">
+          <b>这个 5 秒的小游戏，其实在做什么？</b>
+          <p>它借用的是心理学里「行为激活」的原理：情绪低落时，人总想等"有心情了再行动"，但真实的顺序恰恰相反——是先有微小的行动，动力和心情才会跟上来。这 5 秒里，你每点亮一颗星，就完成了一次完整的「行动 → 即时反馈 → 掌控感」循环；而掌控感，正是抑郁最擅长偷走、也最容易用小行动赎回的东西。</p>
+          <p>至于你的速度与命中率——它们只是今晚状态的一个小小观察样本，受手感、设备、心情起伏影响太多，不作任何评判。你愿意伸手去点的那个瞬间，就已经是光了。</p>
+        </div>
+        <button class="btn" style="background:var(--starlight);color:#3A2E14;margin-top:20px" id="btnG1Next">继续旅程</button>
       </div>
     </div>
   </section>
@@ -568,6 +576,7 @@ const S = {
   ac:null
 };
 const rnd = arr => arr[Math.floor(Math.random()*arr.length)];
+const G1_DURATION = 5;   /* 寻光时长（秒） */
 
 /* ================= 场景切换 ================= */
 const scenes = document.querySelectorAll('.scene');
@@ -600,7 +609,7 @@ function startBreath(){
 }
 document.getElementById('btnSkipBreath').onclick = ()=>{ breathTimers.forEach(clearTimeout); enterGame1(); };
 
-/* ================= 游戏一：寻光 ================= */
+/* ================= 游戏一：寻光（5 秒） ================= */
 const cv=document.getElementById('starCanvas'), ctx=cv.getContext('2d');
 let stars=[], ripples=[], dust=[], running=false, g1Timer=null, litOrder=[], g1LastLit=0, g1EndCb=null;
 let W=0,H=0,DPR=1;
@@ -673,7 +682,7 @@ function startG1(){
   S.g1={stars:0,gaps:[],hits:0,clicks:0}; g1LastLit=0;
   for(let i=0;i<6;i++) spawnStar();
   running=true; document.getElementById('g1Hud').style.display='block';
-  const hud=document.getElementById('g1Hud'); let left=30;
+  const hud=document.getElementById('g1Hud'); let left=G1_DURATION;
   const upd=()=>hud.textContent='寻光 · 剩余 '+left+'s'; upd();
   g1Timer=setInterval(()=>{left--;upd(); if(left<=0)endG1();},1000);
   const spawner=setInterval(()=>{ if(!running){clearInterval(spawner);return;}
@@ -825,7 +834,7 @@ function showResult(){
 }
 function gameSummary(){
   const g1=S.g1.stars>0
-    ? `「寻光」里，你在 30 秒点亮了 <b>${S.g1.stars}</b> 颗星${S.g1.stars>1?`，平均每 ${(S.g1.gaps.reduce((a,b)=>a+b,0)/S.g1.gaps.length/1000).toFixed(1)} 秒点亮一颗`:''}。研究提示，情绪低落时人的主动性与反应节奏可能放缓——但一次小游戏受设备、手感等太多偶然影响，它只代表那个夜晚的你，请别以此评判自己。`
+    ? `「寻光」里，你在短短 ${G1_DURATION} 秒点亮了 <b>${S.g1.stars}</b> 颗星${S.g1.stars>1?`，平均每 ${(S.g1.gaps.reduce((a,b)=>a+b,0)/S.g1.gaps.length/1000).toFixed(1)} 秒点亮一颗`:''}。这个 5 秒小游戏是一次「行为激活」微体验——先行动，动力才跟上；你的成绩只代表那个瞬间的手感，请别以此评判自己。`
     : `「寻光」里，这一轮的星都还在夜空里等你。没关系，愿意看完这一页，本身就是一种靠近。`;
   const g2=`「词语共鸣」里，有 <b>${S.g2.pos}</b> 个暖词、<b>${S.g2.neg}</b> 个沉重的词让你停下${S.g2.linger?`，你有 ${S.g2.linger} 次徘徊良久`:''}。留意那些让你停留的词——它们是内心寄来的信。`;
   return g1+'<br><br>'+g2;
@@ -839,7 +848,7 @@ function copyBaseReport(){
   const txt=['【心屿 · 抑郁情绪自我觉察报告】','时间：'+new Date().toLocaleString('zh-CN'),
     'PHQ-9 得分：'+score+' / 27（'+lv.tag+'）',
     '逐题作答：'+S.quiz.answers.map((a,i)=>(i+1)+'.'+OPTS[a]).join('；'),
-    '游戏观察：寻光点亮 '+S.g1.stars+' 颗星；词语共鸣（暖 '+S.g2.pos+' / 沉 '+S.g2.neg+'）',
+    '游戏观察：寻光 '+G1_DURATION+' 秒点亮 '+S.g1.stars+' 颗星；词语共鸣（暖 '+S.g2.pos+' / 沉 '+S.g2.neg+'）',
     '※ 本报告仅供自我觉察参考，不构成医学诊断。'].join('\n');
   doCopy(txt, document.getElementById('btnCopy'));
 }
@@ -852,12 +861,8 @@ function doCopy(txt, btn){
 
 /* ================================================================
    解忧回声室 · 逐词分析引擎
-   每个情绪词带权重；另识别：加重语气 / 时间 / 人物 / 身体 / 标点 /
-   提问 / 求救信号 / 认知歪曲 / 主题 —— 回信由上百个片段按分析结果
-   动态拼装，同样的文字每次都会得到不同的回应。
 ================================================================ */
 const RISK_WORDS=['不想活','活不下去','想死','去死','了结','解脱','自杀','轻生','伤害自己','自残','割腕','撑不下去','没有意义','消失算了'];
-/* 情绪词典：[词, 权重] —— 权重代表这个词的沉重程度 */
 const EMO_LEX=[
  {cat:'疲惫',words:[['累',1],['好累',1.8],['很累',1.8],['太累',2],['疲惫',1.8],['疲倦',1.6],['心累',2.2],['无力',1.6],['透支',2],['精疲力尽',2.6],['撑不住',2.4],['提不起劲',2],['不想动',1.8],['没力气',1.8],['硬撑',1.8]]},
  {cat:'低落',words:[['想哭',2],['难过',1.6],['伤心',1.6],['不开心',1.4],['不快乐',1.4],['低落',1.6],['沮丧',1.8],['悲伤',1.8],['心酸',1.8],['眼泪',1.4],['哭',1.2],['开心不起来',2.2]]},
@@ -872,7 +877,6 @@ const TIME_WORDS=['每天','天天','总是','一直','反复','整夜','每晚'
 const PEOPLE_WORDS=['爸妈','父母','妈妈','爸爸','家里人','家人','老公','老婆','男朋友','女朋友','对象','暗恋','老板','领导','老师','同事','同学','舍友','室友','朋友','婆婆','孩子','前任'];
 const INTENS=['特别','真的','超级','非常','越来越','明明','根本','简直','彻底','完全','快疯了','受够了'];
 const HOPE=['想好起来','好起来','希望','努力','试试','想改变','坚持','撑下去','加油','自救','想开心','想振作'];
-/* 认知歪曲：每类带两种描述与两种提问 */
 const DIS=[
  {name:'非黑即白',re:/(总是|永远|从来|从不|完全不|根本不|一点都不|一点也不|每次都)/,
   descs:[w=>`我注意到你用了「${w}」这样的词。它们把世界分成了"全好"或"全坏"，可真实的生活，大多发生在中间地带。`,
@@ -921,7 +925,6 @@ const TOPICS=[
  {name:'对未来的迷茫',keys:['迷茫','未来','出路','方向','意义','不知道','选择','毕业','走不下去']},
  {name:'人际关系',keys:['朋友','舍友','室友','同学','讨好','排挤','误会','社交']}];
 
-/* —— 开场白（按情绪浓度 / 长度分池） —— */
 const OPENINGS=['谢谢你愿意把这些写下来——打字的过程并不轻松，但你做到了。',
  '我逐字读完了你的信，不止一遍。',
  '这些话从心里搬到纸上，你已经完成了最勇敢的那一步。',
@@ -938,7 +941,6 @@ const CLOSINGS=['最后想说：情绪是天气，不是气候。今天的阴雨
  '把灯调暖一点，把肩膀放下来。今晚，你已经被认真倾听过了。',
  '回声室一直都在——下次心里堵了，随时回来。夜安。'];
 
-/* —— 共情段落：每种情绪 3 个模板，动态填入用户自己的词 —— */
 const EMPATHY={
  '疲惫':[c=>`你说到了「${c.w1}」${c.w2?`，还有「${c.w2}」`:''}。这不是睡一觉就能散去的累——是心里的电量早就见底，却还在硬撑的那种。疲惫到某个程度，人会先于意识承认：我需要停下来。你现在意识到了，这很好。`,
    c=>`「${c.w1}」这个词，我从你的信里轻轻拿了出来，放在手心看了看——它比你写下的更重。心累的人最常被误解为懒，可你分明一直在撑。这份累，值得被休息，而不是被责怪。`,
@@ -961,7 +963,6 @@ const EMPATHY={
  '愤怒':[c=>`信里的火气——「${c.w1}」${c.w2?`、「${c.w2}」`:''}——我读到了，而且我认为它合理。愤怒常常是"我在乎"的变形记：越在乎，火越大。这不丢人。`,
    c=>`你写「${c.w1}」。委屈攒多了就会变成火。与其压住它变成对自己的攻击，不如承认：你受伤了，你生气了——这两件事都是真的，也都被允许。`,
    c=>`「${c.w1}」这个词烧得很旺。但火焰下面往往是没被听见的需求。等火小一点，我们可以看看它到底在替你喊什么。`]};
-/* —— 主题段落：每个主题 2 个变体 —— */
 const TOPIC_TEXT={
  '学业压力':['成绩和排名把人变成了数字，可你从来不是一张试卷能概括的。你背着这么重的书包走了这么远，这件事本身，就值得被看见。',
    '学业这条路，常常让人觉得"掉一步就全完了"——但人生不是独木桥，它是旷野。一道题、一次考试，都只是旷野里的一个路标。'],
@@ -983,7 +984,6 @@ const TOPIC_TEXT={
    '讨好换不来真正的靠近，只会换来更累的自己。试着把一份讨好收回来，换成一次诚实的"我其实不太想"——观察天会不会塌。'],
  '生活本身':['没有具体名字的烦恼，往往是最沉的——它没法被一句话概括，却压在每一天里。没关系，我们把它拆开来看。',
    '生活有时候就是会莫名地沉。这不是你的问题，是"活着"这项任务自带的重量。累了就卸下一会儿，不丢人。']};
-/* —— 处方池：按症状触发 —— */
 const RX_SLEEP=['固定起床时间比固定入睡更重要：先只把这一件事定死','睡前 1 小时把手机放到卧室外，用纸质书或白噪音填满那 60 分钟','下午 2 点后不碰咖啡因，给褪黑素让路'];
 const RX_EAT=['没胃口也定时吃一点点：三口饭、一根香蕉都算数，身体需要知道"还有人管我"','喝一杯温的东西，双手捧着，慢慢喝完——温度会顺着双手传到心里'];
 const RX_RUMIN=['给担心开一个「办公时间」：每天固定 15 分钟只用来想它，其他时间来访一律"请到办公时间再来"','把脑子里盘旋的念头全部写在纸上——写下来的念头，会比在脑子里转圈时安静 30%'];
@@ -999,12 +999,11 @@ const RX_LIB={
  '家庭':['试着用「我感到…我希望…」造一个句子，代替「你们总是…」','本周练一条最小边界：对一次不合理要求说「我需要想一想」'],
  '自我价值':['写下 5 件「我做成过的事」，再小也算——你对自己的印象需要证据更新','把「我不行」改成「我还不熟练」：事实没变，但门开了'],
  '孤独感':['主动发出一条消息：不需要理由，就问一句「最近怎么样」','领养一个「需要你」的小东西：一盆植物、一缸鱼，被需要会生根'],
- '睡眠与身体':['白天晒 15 分钟太阳，给身体的生物钟一个「白天」的证据','睡前把明天的烦恼写在纸上合起来——物理上把它们关进抽屉'],
+ '睡眠与身体':['白天晒 15 分钟太阳，给身体的生物钟一个「白天的证据」','睡前把明天的烦恼写在纸上合起来——物理上把它们关进抽屉'],
  '对未来的迷茫':['写下 3 个哪怕很小、但想去的地方或想试的事，为其中 1 个查查攻略','找一位比你年长 10 岁的人聊聊 TA 的当年——路都是弯着走的'],
  '人际关系':['练一练「课题分离」：别人怎么想是别人的课题，你怎么活是你的课题','拒绝一次你最不想去的邀约，观察天有没有塌——多半不会'],
  '_default':['今晚睡前，写下今天三件「最小的好事」——哪怕是「午饭很好吃」','出门走 15 分钟，不看手机，只看路边的树和光','把明天「最重要的 1 件事」写在纸上，替大脑卸下排练的负担']};
 
-/* —— 深度分析 —— */
 function countAll(text,w){ let c=0,i=0; while((i=text.indexOf(w,i))!==-1){c++;i+=w.length;} return c; }
 function extractQuestion(text){
   const segs=text.split(/[。！!；;\n]/);
@@ -1020,16 +1019,13 @@ function analyze(text){
     for(let k=idx;k<idx+len;k++){occ[k]=true;mark[k]=cls;} return true; };
   const findAll=w=>{ const arr=[]; let i=0;
     while((i=text.indexOf(w,i))!==-1){arr.push(i); i+=1;} return arr; };
-  /* 求救信号最先占位（红色标记） */
   const risks=[];
   RISK_WORDS.forEach(w=>findAll(w).forEach(idx=>{ if(claim(idx,w.length,'risk')) risks.push(w); }));
-  /* 情绪词（长词优先，避免"没人"盖住"没人在乎"） */
   const emoAll=[];
   EMO_LEX.forEach(g=>g.words.forEach(([w,wt])=>emoAll.push({w,cat:g.cat,wt})));
   emoAll.sort((a,b)=>b.w.length-a.w.length);
   const emos=[];
   emoAll.forEach(({w,cat,wt})=>findAll(w).forEach(idx=>{ if(claim(idx,w.length,'emo')) emos.push({w,cat,wt}); }));
-  /* 思维陷阱 */
   const dis=[];
   DIS.forEach(d=>{ const m=text.match(d.re);
     if(m&&m.index!==undefined){
@@ -1046,7 +1042,6 @@ function analyze(text){
   const ellipsis=countAll(text,'……')+countAll(text,'...');
   const excl=(text.match(/[！!]/g)||[]).length;
   const question=extractQuestion(text);
-  /* 情绪分类统计（按权重累加排序） */
   const stat={};
   emos.forEach(e=>{ stat[e.cat]=stat[e.cat]||{n:0,sum:0,ws:[]};
     stat[e.cat].n++; stat[e.cat].sum+=e.wt; if(!stat[e.cat].ws.includes(e.w))stat[e.cat].ws.push(e.w); });
@@ -1074,7 +1069,6 @@ function pickFragment(text,A){
   return best.length>20? best.slice(0,19)+'…':best;
 }
 
-/* —— 回信拼装 —— */
 const echoTA=document.getElementById('echoText');
 echoTA.addEventListener('input',()=>document.getElementById('echoCount').textContent=echoTA.value.length+' 字');
 document.querySelectorAll('#starterChips button').forEach(b=>{
@@ -1149,7 +1143,6 @@ function showChips(A){
   });
   setTimeout(buildLetter, chips.length*320+700);
 }
-/* —— 信件各段生成器 —— */
 function wordsLine(A){
   const ws=[...new Set(A.emos.map(e=>e.w))].slice(0,3);
   if(!ws.length) return null;
@@ -1224,32 +1217,23 @@ function buildLetter(){
   document.getElementById('rxHolder').innerHTML='';
   document.getElementById('btnLetterSkip').style.display='';
   const P=[];
-  /* 开场白：按情绪浓度与信件长度选池 */
   let pool=[...OPENINGS];
   if(A.risks.length||A.intensity>=6) pool=[...OPENINGS_HEAVY,...pool];
   if(A.len>120) pool.push(OPEN_LONG);
   if(A.len<20) pool.push(OPEN_SHORT);
   P.push(rnd(pool));
-  /* 求救信号：最高优先级 */
   if(A.risks.length) P.push(riskPara(A.risks));
-  /* 引用原句 */
   if(frag) P.push(`你说：「${frag}」——这句话，我收到了。`);
-  /* 捡词 */
   const wl=wordsLine(A); if(wl) P.push(wl);
-  /* 主情绪共情（填入用户自己的词） */
   if(A.topCats.length) P.push(empathyPara(A.topCats[0], A.stat[A.topCats[0]].ws));
-  /* 时间 / 人物 / 身体 / 提问 / 标点 */
   if(A.times.length) P.push(timePara(A.times));
   if(A.people.length) P.push(peoplePara(A.people));
   if(A.body.length) P.push(bodyPara(A.body));
   if(A.question) P.push(questionPara(A.question));
   if(A.ellipsis>=2) P.push(metaPara(A.ellipsis));
   else if(A.excl>=2) P.push(exclPara(A.excl));
-  /* 主题段落 */
   P.push(rnd(TOPIC_TEXT[A.topic]||TOPIC_TEXT['生活本身']));
-  /* 思维陷阱（变体描述） */
   if(A.dis.length) P.push(rnd(A.dis[0].descs)(A.dis[0].word));
-  /* 力量确认 */
   P.push(strengthPara(A));
   P.push(rnd(CLOSINGS));
   P.push(`—— 心屿回声室 · ${new Date().toLocaleDateString('zh-CN')}`);
@@ -1265,7 +1249,6 @@ document.getElementById('btnLetterSkip').onclick=()=>{ if(typer)typer.finish(); 
 document.getElementById('btnLetterRetype').onclick=()=>{ if(S.echo.last) buildLetter(); };
 function afterLetter(){
   const A=S.echo.last.A;
-  /* 认知放大镜（变体提问） */
   const ins=document.getElementById('echoInsight'); ins.innerHTML='';
   A.dis.forEach(d=>{
     ins.insertAdjacentHTML('beforeend',`<div class="magnifier">
@@ -1273,7 +1256,6 @@ function afterLetter(){
       <p>${rnd(d.descs)(d.word)} 比如你写下的「${d.word}」。</p>
       <p class="ask">留给你一个问题：${rnd(d.asks)(d.word)}</p></div>`);
   });
-  /* 处方笺：按症状触发 */
   const pool=[];
   const push=arr=>arr.forEach(x=>pool.push(x));
   if(A.risks.length) pool.push('今晚不要独自待着：现在就联系一位能立刻找到的人，或拨打 12356（24 小时心理援助热线）');
@@ -1500,7 +1482,7 @@ document.getElementById('btnCopyAll').onclick=function(){
   const lines=['【心屿 · 完整旅程报告】','时间：'+new Date().toLocaleString('zh-CN'), '',
     '① PHQ-9：'+score+' / 27（'+lv.tag+'）',
     '   逐题：'+S.quiz.answers.map((a,i)=>(i+1)+'.'+OPTS[a]).join('；'),
-    '② 游戏：寻光点亮 '+S.g1.stars+' 颗星；词语共鸣（暖 '+S.g2.pos+' / 沉 '+S.g2.neg+'）'];
+    `② 游戏：寻光 ${G1_DURATION} 秒点亮 ${S.g1.stars} 颗星；词语共鸣（暖 ${S.g2.pos} / 沉 ${S.g2.neg}）`];
   if(S.echo.logs.length){
     lines.push('③ 回声室：'+S.echo.logs.map((l,i)=>
       `第${i+1}件（主题：${l.topic}；情绪：${l.cats}${l.dis.length? '；陷阱：'+l.dis.join('/'):''}）`).join('；'));
@@ -1521,3 +1503,4 @@ function fullRestart(){
 </script>
 </body>
 </html>
+
