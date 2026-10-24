@@ -18,6 +18,19 @@
     background:var(--paper);color:var(--ink);overflow:hidden}
   body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.4 0 0 0 0 0.36 0 0 0 0 0.28 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E")}
+  /* ============ 外置催眠音频播放器（body 顶部） ============ */
+  #extAudioWrap{position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:120;
+    background:rgba(255,253,248,.94);border:1px solid var(--line);border-radius:14px;
+    padding:8px 10px 6px;box-shadow:0 10px 26px rgba(80,66,40,.18);
+    max-width:424px;width:calc(100vw - 24px);transition:box-shadow .35s}
+  body.on-dark #extAudioWrap{background:rgba(16,24,36,.92);border-color:rgba(255,217,142,.25)}
+  #extAudioWrap audio{display:block;width:100%;max-width:400px}
+  #extAudioWrap.pulse{box-shadow:0 0 0 5px rgba(194,104,59,.28),0 10px 26px rgba(80,66,40,.24)}
+  #extAudioWrap.min audio{display:none}
+  #extAudioWrap.min{padding:6px 10px}
+  #extAudioMin{position:absolute;top:-10px;right:-10px;width:26px;height:26px;border-radius:50%;
+    border:1px solid var(--line);background:var(--card);cursor:pointer;font-size:13px;
+    color:var(--ink-soft);line-height:1;box-shadow:0 4px 10px rgba(80,66,40,.2)}
   #journey{position:fixed;top:0;left:0;right:0;height:3px;background:rgba(0,0,0,.06);z-index:60}
   #journey i{display:block;height:100%;width:0;background:var(--accent);transition:width .9s cubic-bezier(.22,.9,.3,1)}
   header{position:fixed;top:3px;left:0;right:0;z-index:50;display:flex;justify-content:space-between;
@@ -25,7 +38,6 @@
   body.on-dark header{color:rgba(245,240,230,.75)}
   header .logo{font-size:15px;letter-spacing:4px}
   header .step{font-size:12px;letter-spacing:2px;opacity:.7}
-
   main{position:relative;height:100dvh;z-index:1}
   .scene{position:absolute;inset:0;overflow-y:auto;display:flex;flex-direction:column;
     opacity:0;visibility:hidden;transform:translateY(16px);
@@ -33,7 +45,6 @@
   .scene.active{opacity:1;visibility:visible;transform:none}
   .scene .wrap{margin:auto;width:min(680px,92vw);padding:70px 0 40px}
   .scene.dark{background:var(--night);color:#EDE6D6}
-
   .kicker{font-size:13px;letter-spacing:6px;color:var(--accent);margin-bottom:14px}
   h1{font-size:clamp(30px,5.4vw,46px);line-height:1.3;letter-spacing:2px;font-weight:700}
   h2{font-size:clamp(22px,3.6vw,30px);letter-spacing:2px;line-height:1.4}
@@ -50,17 +61,13 @@
   .link{background:none;border:none;font-family:inherit;color:var(--ink-soft);cursor:pointer;
     font-size:14px;letter-spacing:2px;text-decoration:underline;text-underline-offset:5px}
   .link:hover{color:var(--accent)}
-
-  /* 封面 */
   #scene-intro .hero-rule{width:52px;height:2px;background:var(--accent);margin:22px 0}
   .intro-cards{display:flex;gap:14px;margin:30px 0 34px;flex-wrap:wrap}
-  .intro-cards .card{flex:1;min-width:130px;padding:18px 16px;text-align:center}
+  .intro-cards .card{flex:1;min-width:110px;padding:18px 12px;text-align:center}
   .intro-cards .num{font-size:26px;color:var(--accent)}
   .intro-cards .lab{font-size:13px;color:var(--ink-soft);margin-top:6px;letter-spacing:2px}
   .privacy{font-size:12.5px;color:var(--ink-soft);line-height:1.9;margin-top:26px;
     padding-left:12px;border-left:2px solid var(--line)}
-
-  /* 呼吸 */
   #scene-breath .wrap{text-align:center}
   .breath-stage{height:240px;display:flex;align-items:center;justify-content:center;margin:34px 0}
   .breath-circle{width:130px;height:130px;border-radius:50%;
@@ -69,8 +76,6 @@
     display:flex;align-items:center;justify-content:center}
   .breath-circle span{color:#5C4E33;font-size:16px;letter-spacing:4px}
   .breath-tip{font-size:13px;color:var(--ink-soft);letter-spacing:2px}
-
-  /* 游戏一：寻光 */
   #starCanvas{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair}
   .g1-hud{position:fixed;top:52px;right:26px;z-index:5;font-size:15px;letter-spacing:3px;
     color:var(--starlight);opacity:.9;display:none}
@@ -87,13 +92,10 @@
   .g1-stats i{font-style:normal;font-size:12.5px;color:rgba(237,230,214,.6);letter-spacing:2px}
   #g1Countdown{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
     font-size:110px;color:var(--starlight);pointer-events:none;display:none}
-  /* 小游戏用途说明 */
   .g1-purpose{margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,217,142,.18);text-align:left}
   .g1-purpose b{display:block;font-size:13px;letter-spacing:2px;color:var(--starlight);margin-bottom:10px}
   .g1-purpose p{font-size:13.5px;color:rgba(237,230,214,.78);line-height:2.05;margin:0 0 10px}
   .g1-purpose p:last-child{margin-bottom:0}
-
-  /* 游戏二：词语共鸣 */
   #scene-game2 .wrap{text-align:center}
   .word-stage{min-height:220px;display:flex;align-items:center;justify-content:center;margin:26px 0}
   .word-card{animation:wordIn .5s ease both}
@@ -104,8 +106,6 @@
   .g2-stats{display:flex;justify-content:center;gap:30px;margin:22px 0 26px}
   .g2-stats b{display:block;font-size:28px;color:var(--accent)}
   .g2-stats i{font-style:normal;font-size:12.5px;color:var(--ink-soft);letter-spacing:2px}
-
-  /* 问卷 */
   #scene-quiz .wrap{width:min(600px,92vw)}
   .q-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
   .q-no{font-size:13px;letter-spacing:3px;color:var(--accent)}
@@ -129,8 +129,6 @@
     padding:12px 16px;background:rgba(51,84,74,.07);border-radius:12px}
   .q-anim{animation:qIn .45s ease both}
   @keyframes qIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-
-  /* 结果页 */
   #scene-result .wrap{width:min(640px,92vw)}
   .result-hero{display:flex;gap:30px;align-items:center;flex-wrap:wrap;justify-content:center;text-align:left}
   .ring-wrap{position:relative;width:170px;height:170px;flex:none}
@@ -158,8 +156,6 @@
   .result-btns{display:flex;gap:14px;justify-content:center;margin:30px 0 10px;flex-wrap:wrap}
   .echo-invite{text-align:center;font-size:14.5px;color:var(--ink-soft);margin-top:16px;letter-spacing:1px}
   .disclaimer{font-size:12px;color:var(--ink-soft);line-height:1.9;text-align:center;margin-top:18px}
-
-  /* ============ 解忧回声室 ============ */
   #scene-echo .wrap{width:min(640px,92vw)}
   .letter-paper{background:var(--card);border:1px solid var(--line);border-radius:16px;
     overflow:hidden;box-shadow:0 14px 34px rgba(80,66,40,.08);margin-top:24px}
@@ -180,6 +176,7 @@
   .scan-box .ch.emo{text-decoration:underline wavy var(--accent) 1.5px;text-underline-offset:5px}
   .scan-box .ch.dis{background:var(--accent-soft);border-radius:4px;border-bottom:2px solid var(--accent)}
   .scan-box .ch.risk{background:rgba(181,65,43,.16);border-radius:4px;border-bottom:2px solid #B5412B}
+  .scan-box .ch.sit{background:rgba(51,84,74,.12);border-radius:4px;border-bottom:2px solid var(--green)}
   .scan-cursor{position:absolute;top:0;bottom:0;width:2px;
     background:linear-gradient(180deg,transparent,var(--accent),transparent);
     animation:sweep var(--scan-dur,2.4s) linear forwards}
@@ -189,10 +186,25 @@
     border:1px solid var(--line);background:var(--card);opacity:0;transform:translateY(8px);transition:.45s}
   .chip.show{opacity:1;transform:none}
   .chip b{color:var(--accent)}
+  .chip b.grn{color:var(--green)}
   .letter{margin-top:20px;animation:qIn .5s ease both}
   .letter-head{font-size:12.5px;letter-spacing:3px;color:var(--ink-soft);margin-bottom:12px;
     display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-  .letter-head .acts{display:flex;gap:16px}
+  .letter-head .acts{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .ai-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;letter-spacing:1px;
+    padding:4px 12px;border-radius:999px;border:1px solid var(--line);color:var(--ink-soft)}
+  .ai-badge .dot{width:7px;height:7px;border-radius:50%;background:var(--line)}
+  .ai-badge.on{border-color:rgba(51,84,74,.45);color:var(--green)}
+  .ai-badge.on .dot{background:var(--green)}
+  .ai-badge.off{border-color:rgba(194,104,59,.45)}
+  .ai-badge.off .dot{background:var(--accent)}
+  .ai-loading{display:flex;align-items:center;gap:10px;color:var(--ink-soft);
+    font-size:15px;letter-spacing:2px;padding:8px 0}
+  .ai-loading i{width:6px;height:6px;border-radius:50%;background:var(--accent);
+    animation:dotJump 1.2s infinite}
+  .ai-loading i:nth-child(3){animation-delay:.15s}
+  .ai-loading i:nth-child(4){animation-delay:.3s}
+  @keyframes dotJump{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-5px);opacity:1}}
   .letter-body{white-space:pre-wrap;line-height:2.15;font-size:16.5px;
     max-height:48vh;overflow-y:auto;padding-right:6px;color:#3E382E}
   .letter-body.typing::after{content:'';display:inline-block;width:2px;height:1em;
@@ -224,8 +236,6 @@
     font-weight:700;transform:rotate(-12deg) scale(1.6);opacity:0;
     box-shadow:inset 0 0 0 2px rgba(181,65,43,.3);transition:all .5s cubic-bezier(.2,1.4,.4,1)}
   .seal.on{transform:rotate(-12deg) scale(1);opacity:.92}
-
-  /* ============ 化萤仪式 ============ */
   #ffCanvas{position:absolute;inset:0;width:100%;height:100%}
   .ff-ui{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;padding:20px}
   .ff-textarea{width:100%;border:1px solid rgba(255,217,142,.28);outline:none;resize:none;
@@ -261,12 +271,34 @@
     border-top:1px dashed #D8C295;padding-top:12px}
   .scatter-ch{position:fixed;z-index:40;display:inline-block;will-change:transform,opacity;
     color:#F2E9D4;font-size:16.5px;letter-spacing:1px;white-space:pre}
-
-  /* 终点 */
+  /* ============ 房树人花园 ============ */
+  .htp-aurora{position:relative;height:280px;border-radius:24px;overflow:hidden;
+    background:linear-gradient(160deg,#0E1F1C,#12291F 55%,#0B1A16);margin:26px 0 18px;
+    border:1px solid rgba(255,255,255,.06)}
+  .h-orb{position:absolute;border-radius:50%;filter:blur(46px);opacity:.55}
+  .h-orb.a{width:300px;height:300px;left:6%;top:8%;
+    background:radial-gradient(circle,#3E6E5A,transparent 70%);
+    animation:orbA 14s ease-in-out infinite alternate}
+  .h-orb.b{width:360px;height:360px;right:2%;bottom:-25%;
+    background:radial-gradient(circle,#2F5B6E,transparent 70%);
+    animation:orbB 18s ease-in-out infinite alternate}
+  .h-orb.c{width:180px;height:180px;left:44%;top:34%;opacity:.35;
+    background:radial-gradient(circle,#C9A96A,transparent 70%);
+    animation:orbA 11s ease-in-out infinite alternate-reverse}
+  @keyframes orbA{from{transform:translate(0,0) scale(1)}to{transform:translate(56px,-28px) scale(1.22)}}
+  @keyframes orbB{from{transform:translate(0,0) scale(1.08)}to{transform:translate(-64px,18px) scale(.9)}}
+  .htp-img{margin:22px 0 6px;text-align:center}
+  .htp-img img,#htpImgCanvas{width:100%;max-width:520px;height:auto;border-radius:18px;
+    box-shadow:0 18px 44px rgba(80,66,40,.22);border:1px solid var(--line);display:block;margin:0 auto}
+  .htp-img .cap{font-size:12px;color:var(--ink-soft);letter-spacing:2px;margin-top:10px}
+  .tag-pill{display:inline-block;background:var(--accent-soft);color:#A04E24;
+    border-radius:999px;padding:6px 16px;font-size:14px;letter-spacing:2px;margin:0 8px 8px 0}
+  .nurture{background:linear-gradient(160deg,#FBF3DF,#F3E4C2);border:1px solid #E3D2A8}
+  .nurture p{font-size:19px !important;color:#6A5330 !important;text-align:center;
+    font-weight:700;letter-spacing:1px}
   #scene-end .wrap{text-align:center}
   .end-quote{font-size:19px;line-height:2.1;margin:18px 0 6px;color:#4A443A}
   .end-rule{width:52px;height:2px;background:var(--accent);margin:22px auto}
-
   @media (max-width:520px){
     header{padding:12px 16px}
     .g1-hud{top:46px;right:16px}
@@ -277,6 +309,11 @@
 </style>
 </head>
 <body>
+<!-- 🔊 用户自备催眠音频播放器：请将 audio.m4a 与本网页放在同一目录 -->
+<div id="extAudioWrap">
+  <button id="extAudioMin" title="收起 / 展开">−</button>
+  <audio controls src="audio.m4a" style="width: 100%; max-width:400px;"></audio>
+</div>
 <div id="journey"><i></i></div>
 <header>
   <div class="logo">心 屿</div>
@@ -290,15 +327,16 @@
       <div class="kicker">SELF · CHECK · IN</div>
       <h1>这一阵子，<br>你的心过得好吗？</h1>
       <div class="hero-rule"></div>
-      <p class="sub">这是一场大约八分钟的自我觉察之旅：两个安静的小游戏，一份国际通用的 PHQ-9 抑郁筛查问卷，一间会逐字读你文字的解忧回声室，和一场把心事交给夜空的化萤仪式。它不评判你，只陪你诚实地看一看此刻的内心天气。</p>
+      <p class="sub">这是一场大约十分钟的自我觉察之旅：两个安静的小游戏，一份国际通用的 PHQ-9 问卷，一间会「读情景」的解忧回声室，一场把心事交给夜空的化萤仪式，还有一次潜入潜意识的房树人花园。它不评判你，只陪你诚实地看一看此刻的内心天气。</p>
       <div class="intro-cards">
         <div class="card"><div class="num">2</div><div class="lab">个小游戏</div></div>
         <div class="card"><div class="num">9</div><div class="lab">道专业题目</div></div>
-        <div class="card"><div class="num">1</div><div class="lab">间回声室</div></div>
+        <div class="card"><div class="num">1</div><div class="lab">间回声室 · AI</div></div>
         <div class="card"><div class="num">1</div><div class="lab">场化萤仪式</div></div>
+        <div class="card"><div class="num">1</div><div class="lab">次房树人</div></div>
       </div>
       <button class="btn accent" id="btnStart">开 始 觉 察</button>
-      <p class="privacy">· 问卷部分参考国际通用抑郁自评量表 PHQ-9（患者健康问卷）<br>· 回声室的分析与回应全部在你的浏览器本地完成，不会被上传或保存<br>· 本工具仅供自我觉察参考，不能替代精神科医生或心理咨询师的诊断</p>
+      <p class="privacy">· 问卷部分参考国际通用抑郁自评量表 PHQ-9（患者健康问卷）<br>· 回声室与房树人由智谱 GLM 大模型（文字）与 CogView（绘图）结合本地分析生成；你写下的文字会被发送至模型服务，请勿填写可识别身份的敏感信息<br>· 其余部分（问卷、游戏、报告）全部在本地运行，不会被上传<br>· 本工具仅供自我觉察参考，不能替代精神科医生或心理咨询师的诊断</p>
     </div>
   </section>
 
@@ -433,13 +471,13 @@
         <div class="hotline"><b>400-161-9995</b><span>希望24热线 · 24 小时</span></div>
         <div class="hotline"><b>医院精神科 / 心理科</b><span>带上这份报告，会很有帮助</span></div>
       </div>
-      <p class="echo-invite">如果心里还有一句话，堵着不好受——<br>下一站有一间回声室，它会逐字读你的文字，认真回应你。</p>
+      <p class="echo-invite">如果心里还有一句话，堵着不好受——<br>下一站有一间回声室：哪怕只说发生了什么、不说心情，它也读得懂。</p>
       <div class="result-btns">
         <button class="btn accent" id="btnToEcho">去解忧回声室 →</button>
         <button class="btn" id="btnCopy">复制文字报告</button>
         <button class="btn ghost" id="btnRestart1">重新觉察一遍</button>
       </div>
-      <p class="disclaimer">本工具参考 PHQ-9 量表编制，仅供自我觉察参考，不构成任何医学诊断或治疗建议。<br>所有数据仅在本地浏览器计算，不会上传。</p>
+      <p class="disclaimer">本工具参考 PHQ-9 量表编制，仅供自我觉察参考，不构成任何医学诊断或治疗建议。<br>AI 回信仅是陪伴性质的文字回应，不构成医疗建议。</p>
     </div>
   </section>
 
@@ -447,18 +485,18 @@
   <section class="scene" id="scene-echo">
     <div class="wrap">
       <div id="echoIntro">
-        <div class="kicker">解 忧 回 声 室</div>
+        <div class="kicker">解 忧 回 声 室 · AI 执 笔</div>
         <h2>把心事说给它听</h2>
-        <p class="sub">在下面的信纸上写下最近困扰你的事——有多少，说多少。<br>回声室会逐字读你的文字：听出情绪的轻重、句子里的时间与人、身体的信号、<br>没说完的省略号，还有藏在话里的思维陷阱——<br>然后为你写一封只属于这封信的回信。同样的心事，每次的回应都不一样。</p>
+        <p class="sub">不用组织好语言，也不用说出"我很难过"——<br>你只需要写下<b>发生了什么</b>：什么时间、在哪里、谁在场、发生了什么。<br>回声室会从你的情景里读出没说出口的心情，由 GLM 大模型现场写一封回信。<br>同一个情景，每次的回应都不一样。</p>
         <div class="starter-chips" id="starterChips">
-          <button>我最近总是睡不好，心里很乱，感觉自己什么都做不好……</button>
-          <button>工作压力太大了，老板天天催，我真的快撑不住了！</button>
-          <button>和爸妈吵架了，他们从来都不听我说话，好委屈</button>
-          <button>分手一个月了，还是每天都会想她，是不是我特别失败？</button>
-          <button>心里空空的，对什么都提不起劲，这样下去还有意义吗……</button>
+          <button>凌晨两点，室友都睡了，只有我还睁着眼。明天还有早八，可我一点都不困……</button>
+          <button>今天组会上，我做了两个星期的方案被当众否了。散会后我一个人在工位坐到十点。</button>
+          <button>饭桌上他们又聊起表哥考上公务员的事，我低头扒饭，一句话也没说。</button>
+          <button>她把我所有联系方式都删了。我们没有吵架，连一句再见都没说。</button>
+          <button>我妈今天第三次翻我书包。我摔门进了房间，现在门外一点声音都没有。</button>
         </div>
         <div class="letter-paper">
-          <textarea id="echoText" placeholder="写下最近的困扰。这里是回声室——你说的每一个字，都会被认真接住。"></textarea>
+          <textarea id="echoText" placeholder="只描述情景就好：几点、在哪里、谁在场、发生了什么、后来怎样。心情，交给回声室来读。"></textarea>
           <div class="paper-foot"><span>心屿信纸 · 甲辰年</span><span id="echoCount">0 字</span></div>
         </div>
         <div style="margin-top:24px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
@@ -466,21 +504,20 @@
           <button class="link" id="btnEchoSkip">今晚不想说，先去下一站 →</button>
         </div>
       </div>
-
       <div id="echoScan" style="display:none">
         <div class="kicker">回 声 室 · 正 在 倾 听</div>
         <h2>你的信，正在被逐字读过</h2>
         <div class="scan-box" id="scanBox"></div>
         <div class="found-chips" id="foundChips"></div>
       </div>
-
       <div id="echoLetter" style="display:none">
         <div class="letter">
           <div class="letter-head">
             <span>来自回声室的回信 · 慢慢读</span>
             <span class="acts">
+              <span class="ai-badge" id="aiBadge"><span class="dot"></span><span id="aiBadgeText">AI 连接中…</span></span>
               <button class="link" id="btnLetterRetype">换一种回应 ↻</button>
-              <button class="link" id="btnLetterSkip">跳过打字 →</button>
+              <button class="link" id="btnLetterSkip" style="display:none">跳过打字 →</button>
             </span>
           </div>
           <div class="card"><div class="letter-body" id="letterBody"></div></div>
@@ -537,13 +574,101 @@
         </div>
         <div style="margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
           <button class="btn ghost" style="color:#F2E9D4;border-color:rgba(255,217,142,.4)" id="btnFFAgain">再抽一支</button>
-          <button class="btn" style="background:var(--starlight);color:#3A2E14" id="btnToEnd">走向旅程终点 →</button>
+          <button class="btn" style="background:var(--starlight);color:#3A2E14" id="btnToEnd">走进「房树人花园」→</button>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ⑨ 终点 -->
+  <!-- ⑨ 房树人花园 -->
+  <section class="scene" id="scene-htp">
+    <div class="wrap">
+      <div id="htpIntro">
+        <div class="kicker">房 树 人 · H T P · 潜 意 识 花 园</div>
+        <h2>一座房子，一棵树，一个人</h2>
+        <p class="sub">「房树人」是经典的心理投射测验：当你放松下来，意识让位给想象，<br>你「看见」的房子、树和人，往往是内心世界的一幅自画像。<br>接下来，请戴上耳机，播放<b>页面上方的催眠音频（audio.m4a）</b>，<br>让它带你走进林间小屋。听完之后，把你看到的写下来，<br>AI 会先把画面画出来，再为你解读这张「心灵的自画像」。</p>
+        <div class="card" style="margin-top:22px;text-align:left">
+          <p style="font-size:14.5px;line-height:2.1;color:var(--ink-soft)">
+            🎧 建议使用耳机，找一个不被打扰的地方<br>
+            📁 请确认 <b>audio.m4a</b> 文件与本网页在同一文件夹，页面上方的播放器可以正常播放<br>
+            🌙 播放时请闭上眼睛，跟着声音走——看见什么就是什么，不必修饰，不必分析
+          </p>
+        </div>
+        <div style="margin-top:26px;display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+          <button class="btn accent" id="btnHtpStart">🎧 戴上耳机，开始潜意识引导</button>
+          <button class="link" id="btnHtpSkipAudio">跳过音频，直接进入书写 →</button>
+        </div>
+      </div>
+
+      <div id="htpAudio" style="display:none;text-align:center">
+        <div class="kicker">引 导 进 行 中</div>
+        <div class="htp-aurora"><div class="h-orb a"></div><div class="h-orb b"></div><div class="h-orb c"></div></div>
+        <h2>请播放页面上方的催眠音频</h2>
+        <p class="sub">点击屏幕最上方的播放器 ▶，让它带你走过林间小路——<br>房子、树和人，会随着声音慢慢浮现。<br>现在可以闭上眼睛，完全交给它。</p>
+        <div style="margin-top:14px">
+          <button class="btn" id="btnHtpPlayExt">🔊 播放催眠音频（页面上方）</button>
+        </div>
+        <div style="margin-top:18px"><button class="link" id="btnHtpStop">我听完了，写下看到的画面 →</button></div>
+      </div>
+
+      <div id="htpDescribe" style="display:none">
+        <div class="kicker">画 面 记 录</div>
+        <h2>你看见了什么？</h2>
+        <p class="sub">把你脑海里那幅画描述出来：房子什么样（大小、材质、门窗）？<br>树什么样（茂盛还是枯萎、开花结果）？人是谁、在做什么、心情怎样？<br>细节越具体，AI 画得越像、读得越准。</p>
+        <div class="starter-chips" id="htpChipsIn">
+          <button>房子是木头的，不大，门半开着，烟囱里冒着淡淡的烟</button>
+          <button>树很高大，枝叶很茂盛，好像还开着白色的小花</button>
+          <button>有个人安静地站在门口，好像在等人，神情很平静</button>
+          <button>树有点枯，叶子稀稀拉拉的，人背对着我坐着</button>
+          <button>整个画面是黄昏的颜色，很安静，很远</button>
+        </div>
+        <div class="letter-paper">
+          <textarea id="htpText" placeholder="例如：我看见一座小木屋，门是关着的，窗户拉着窗帘，烟囱冒着烟。旁边一棵很高大的树，很茂盛。有个人坐在树底下休息，看起来很平静……"></textarea>
+          <div class="paper-foot"><span>心屿画布 · 房树人</span><span>潜意识的画，不着急</span></div>
+        </div>
+        <div style="margin-top:24px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+          <button class="btn accent" id="btnHtpGo">交给 AI · 画出来并解读</button>
+          <button class="link" id="btnHtpSkipAll">先跳过，抵达旅程终点 →</button>
+        </div>
+      </div>
+
+      <div id="htpLoading" style="display:none;text-align:center">
+        <div class="kicker">解 读 中</div>
+        <h2>AI 正在看你的画</h2>
+        <div class="htp-aurora" style="height:200px"><div class="h-orb a"></div><div class="h-orb b"></div></div>
+        <div style="display:flex;justify-content:center">
+          <div class="ai-loading"><span id="htpLoadText">正在读你画里的房子…</span><i></i><i></i><i></i></div>
+        </div>
+      </div>
+
+      <div id="htpResult" style="display:none">
+        <div class="letter-head">
+          <span>你的房树人 · 潜意识自画像</span>
+          <span class="acts">
+            <span class="ai-badge" id="htpBadge"><span class="dot"></span><span id="htpBadgeText">AI 连接中…</span></span>
+            <button class="link" id="btnHtpSave">保存画面</button>
+            <button class="link" id="btnHtpRetype">换一种解读 ↻</button>
+          </span>
+        </div>
+        <div class="htp-img" id="htpImageHolder"><canvas id="htpImgCanvas" style="display:none"></canvas></div>
+        <div class="found-chips" id="htpChips"></div>
+        <div class="card result-sec"><h3>🏠 房子 · 你的内在居所</h3><p id="htpHouse"></p></div>
+        <div class="card result-sec"><h3>🌳 树 · 你的生命力</h3><p id="htpTree"></p></div>
+        <div class="card result-sec"><h3>🚶 人 · 你与自己的关系</h3><p id="htpPerson"></p></div>
+        <div class="card result-sec"><h3>人格侧写</h3><div id="htpTags" style="margin-bottom:12px"></div><p id="htpOverall"></p></div>
+        <div class="card result-sec"><h3>给画主人的建议</h3><ul id="htpAdvice"></ul></div>
+        <div class="card result-sec nurture"><p id="htpNurture"></p></div>
+        <div style="margin-top:26px;display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+          <button class="btn accent" id="btnHtpEnd">抵达旅程终点 →</button>
+          <button class="btn ghost" id="btnHtpReplay">再听一次引导</button>
+          <button class="btn ghost" id="btnHtpCopy">复制解读报告</button>
+        </div>
+        <p class="disclaimer">房树人（HTP）是经典投射测验，用于自我探索与觉察；解读仅供参考，无好坏对错，<br>不构成任何心理诊断。真正的诊断，请交给专业人士。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑩ 终点 -->
   <section class="scene" id="scene-end">
     <div class="wrap">
       <div class="kicker">JOURNEY · COMPLETE</div>
@@ -566,19 +691,47 @@
 </main>
 
 <script>
-/* ================= 全局状态 ================= */
+/* ================= AI 配置（智谱 GLM 开放平台） =================
+   ⚠️ 安全提醒：密钥写在前端文件中属于明文存储——
+   请勿将本文件发布到公网或发给不信任的人；泄露后请立刻到平台「重置密钥」。
+   · 文本：glm-4-flash（免费）· 绘图：cogview-3-flash（免费）
+   · Z.AI 国际站请把两个 endpoint 换为 https://api.z.ai/api/paas/v4/... */
+const AI_CONFIG = {
+  endpoint: 'https://open.bigmodel.cn/api/paas/v4/chat/completions',
+  model: 'glm-4-flash',
+  imageEndpoint: 'https://open.bigmodel.cn/api/paas/v4/images/generations',
+  imageModel: 'cogview-3-flash',
+  apiKey: 'c1d01a23f2874e5cb2e5b5e0caaf2696.R8gyMmONeMrJCFE1',
+  temperature: 0.9,
+  timeout: 45000
+};
+
 const S = {
   g1:{stars:0,gaps:[],hits:0,clicks:0},
   g2:{answers:[],pos:0,neg:0,linger:0},
   quiz:{answers:[null,null,null,null,null,null,null,null,null], idx:0},
   echo:{logs:[], last:null},
   ff:{fortune:null, released:false},
+  htp:{done:false,tags:null,img:null},
   ac:null
 };
 const rnd = arr => arr[Math.floor(Math.random()*arr.length)];
-const G1_DURATION = 5;   /* 寻光时长（秒） */
+const G1_DURATION = 5;
 
-/* ================= 场景切换 ================= */
+/* ================= 外置催眠音频播放器 ================= */
+const extAudioEl=document.querySelector('#extAudioWrap audio');
+const extWrap=document.getElementById('extAudioWrap');
+document.getElementById('extAudioMin').onclick=()=>{
+  const min=extWrap.classList.toggle('min');
+  document.getElementById('extAudioMin').textContent = min ? '🎧' : '−';
+};
+function pulseExtAudio(){
+  extWrap.classList.remove('min');
+  extWrap.classList.add('pulse');
+  setTimeout(()=>extWrap.classList.remove('pulse'),1800);
+}
+function htpStopAudio(){ if(extAudioEl){ try{extAudioEl.pause();}catch(e){} } }
+
 const scenes = document.querySelectorAll('.scene');
 function goScene(id, progress, label){
   scenes.forEach(s=>s.classList.toggle('active', s.id===id));
@@ -587,9 +740,8 @@ function goScene(id, progress, label){
   document.body.classList.toggle('on-dark', id==='scene-game1' || id==='scene-firefly');
   document.getElementById(id).scrollTop = 0;
 }
-document.getElementById('btnStart').onclick = ()=>{ goScene('scene-breath', 8, '第 0 站 · 深呼吸'); startBreath(); };
+document.getElementById('btnStart').onclick = ()=>{ goScene('scene-breath', 6, '第 0 站 · 深呼吸'); startBreath(); };
 
-/* ================= 呼吸 ================= */
 let breathTimers = [];
 function startBreath(){
   breathTimers.forEach(clearTimeout); breathTimers=[];
@@ -811,7 +963,7 @@ const LEVELS=[
  {min:20, tag:'重度 · 风暴中心', motto:'你现在一定很辛苦。你值得被全力帮助。',
   desc:'你此刻的痛苦是真实而沉重的，请务必尽快前往医院精神科 / 心理科就诊，并让一位你信任的人陪伴你、知晓你的状态。请记住：抑郁会扭曲你看世界的方式，让你以为毫无出路——而那是症状在说话，不是事实。治疗真的有效。'}];
 function showResult(){
-  goScene('scene-result', 72, '觉察报告');
+  goScene('scene-result', 66, '觉察报告');
   const score=S.quiz.answers.reduce((a,b)=>a+b,0);
   const lv=[...LEVELS].reverse().find(l=>score>=l.min);
   document.getElementById('rLevel').textContent=lv.tag;
@@ -860,7 +1012,7 @@ function doCopy(txt, btn){
 }
 
 /* ================================================================
-   解忧回声室 · 逐词分析引擎
+   解忧回声室 · 本地情景分析引擎
 ================================================================ */
 const RISK_WORDS=['不想活','活不下去','想死','去死','了结','解脱','自杀','轻生','伤害自己','自残','割腕','撑不下去','没有意义','消失算了'];
 const EMO_LEX=[
@@ -877,6 +1029,44 @@ const TIME_WORDS=['每天','天天','总是','一直','反复','整夜','每晚'
 const PEOPLE_WORDS=['爸妈','父母','妈妈','爸爸','家里人','家人','老公','老婆','男朋友','女朋友','对象','暗恋','老板','领导','老师','同事','同学','舍友','室友','朋友','婆婆','孩子','前任'];
 const INTENS=['特别','真的','超级','非常','越来越','明明','根本','简直','彻底','完全','快疯了','受够了'];
 const HOPE=['想好起来','好起来','希望','努力','试试','想改变','坚持','撑下去','加油','自救','想开心','想振作'];
+const SITUATION_LEX=[
+ {name:'深夜失眠', keys:['凌晨','两点','三点','四点','天亮','睡不着','失眠','睁着眼','又醒了','半夜','熬夜'],
+  feel:'疲惫、翻涌的思绪，和白昼撑不住的假面',
+  line:'深夜是情绪最不设防的时刻——白天的盔甲卸下来，那些被日程按住的念头就全浮上来了。睡不着的不只是身体，是心里有事没处安放。'},
+ {name:'当众被否定', keys:['被否','否了','当众','组会','批评','被骂','被说','训','嘲笑','下不来台','被怼','质问','否认'],
+  feel:'难堪、委屈，和一点没处申辩的愤',
+  line:'当众被否定最伤人的地方，是连辩解都显得像狡辩。你事后独处时的沉默，不是认输——是自尊在独自包扎。'},
+ {name:'饭桌比较', keys:['表哥','表姐','别人家','比较','隔壁','同学都','同龄人','人家','饭桌','低头扒饭'],
+  feel:'隐秘的自卑，和"我在他们眼里不够好"的刺',
+  line:'饭桌上的比较，最让人无处可逃——不能摔筷子，不能离开，只能低头。可你要知道：他们嘴里的那个人，从来不是衡量你的尺子。'},
+ {name:'无声的告别', keys:['删了','拉黑','没说再见','没有告别','断了','不回','已读不回','删除','联系方式'],
+  feel:'错愕、悬置的悲伤，和一个没有句号的问号',
+  line:'没有争吵、没有告别的结束，比吵散更疼——因为你连"把话说完"的机会都没有。悬在半空的关系，心也跟着悬着。'},
+ {name:'领地被侵犯', keys:['翻我','翻书包','翻手机','偷看','日记','隐私','查我','监视','进门不敲','摔门'],
+  feel:'被冒犯的愤怒，和"不被信任"的凉',
+  line:'被翻看的不只是物品，是不设防的内心领地。摔门不是脾气差——那是边界被踩碎后，本能的自卫。'},
+ {name:'考试失利', keys:['考砸','挂科','没考好','不及格','落榜','补考','成绩','排名掉了','分数'],
+  feel:'挫败、羞愧，和对未来的怕',
+  line:'分数落下来的那一刻，砸到的从来不只是卷子，还有你对自己"行不行"的确认。但一次成绩是快照，不是人生纪录片。'},
+ {name:'职场耗竭', keys:['加班','裁员','辞职','绩效','背锅','汇报','方案','会议','kpi','赶工','离职','工位'],
+  feel:'耗竭、不公感，和"这样下去值不值"的自我盘问',
+  line:'一个人加班到深夜的工位，灯光再亮也是冷的。工作透支的不只是时间，还有"我为什么在这里"的答案。'},
+ {name:'社交孤立', keys:['没人约','一个人吃饭','独来独往','被排挤','孤立','没朋友','没人找我','独自'],
+  feel:'孤独，和"我是不是多余"的自我怀疑',
+  line:'人群里最孤独的，不是身边没人，是那种"热闹与我无关"的隔着一层玻璃的感觉。它不是你的错，只是暂时没遇到同频的人。'},
+ {name:'丧失与离别', keys:['去世','走了','离世','病重','葬礼','遗物','离开我们','病危'],
+  feel:'哀伤、思念，和"还有好多话没说"的憾',
+  line:'丧失带来的疼，是爱没有地方安放了。想念不是软弱——那是你们之间真实存在过的证据。'},
+ {name:'经济压力', keys:['没钱','欠','贷款','房租','花呗','还款','工资','穷','存款','开销'],
+  feel:'焦虑、羞耻，和不敢喊累的硬撑',
+  line:'钱的事，最磨人的不是数字本身，是它背后那句"我是不是不够好"。可生活的难，从来不是一个人的品格问题。'},
+ {name:'重大抉择', keys:['考研还是','辞职还是','怎么办','两条路','选择','纠结','摇摆','不知道该'],
+  feel:'犹豫、怕选错，和"没人能替我拿主意"的孤军感',
+  line:'站在岔路口的人，最怕的不是路难走，是怕走错后没人说"没关系"。可你已经认真到会为选择失眠——这份认真本身，就是答案的一部分。'},
+ {name:'被期待压着', keys:['为我好','期望','期待','不能让他们失望','他们希望','全家的','指望'],
+  feel:'沉重、窒息，和不敢喊停的负罪感',
+  line:'"为你好"三个字，有时候是世界上最沉的礼物——收下，喘不过气；拒绝，于心不安。你被夹在中间的左右为难，都是真的。'}
+];
 const DIS=[
  {name:'非黑即白',re:/(总是|永远|从来|从不|完全不|根本不|一点都不|一点也不|每次都)/,
   descs:[w=>`我注意到你用了「${w}」这样的词。它们把世界分成了"全好"或"全坏"，可真实的生活，大多发生在中间地带。`,
@@ -915,75 +1105,26 @@ const DIS=[
         w=>`找出三个反例：过去做得不差的三件事。它们也是你。`]}
 ];
 const TOPICS=[
- {name:'学业压力',keys:['考','学','学校','作业','成绩','论文','老师','挂科','排名','补考','考研','上课','高考','竞赛','保研']},
- {name:'工作与职场',keys:['上班','工作','老板','领导','加班','同事','辞职','裁员','工资','面试','汇报','绩效','kpi','职场']},
- {name:'感情关系',keys:['分手','前任','恋爱','喜欢','男朋友','女朋友','异地','结婚','暗恋','表白','拒绝','离婚','暧昧','失恋','她','他']},
- {name:'家庭',keys:['爸妈','父母','妈妈','爸爸','家人','家里','吵架','唠叨','控制','婆婆','亲戚','催婚','原生家庭']},
+ {name:'学业压力',keys:['考','学','学校','作业','成绩','论文','老师','挂科','排名','补考','考研','上课','高考','竞赛','保研','早八','组会']},
+ {name:'工作与职场',keys:['上班','工作','老板','领导','加班','同事','辞职','裁员','工资','面试','汇报','绩效','kpi','职场','工位','方案','会议']},
+ {name:'感情关系',keys:['分手','前任','恋爱','喜欢','男朋友','女朋友','异地','结婚','暗恋','表白','拒绝','离婚','暧昧','失恋','她','他','删了','拉黑']},
+ {name:'家庭',keys:['爸妈','父母','妈妈','爸爸','家人','家里','吵架','唠叨','控制','婆婆','亲戚','催婚','原生家庭','饭桌','翻我']},
  {name:'自我价值',keys:['没用','失败','废物','差劲','自卑','比不上','不配','一事无成','看不起自己']},
- {name:'孤独感',keys:['孤独','孤单','寂寞','没朋友','没人','没人在乎']},
- {name:'睡眠与身体',keys:['失眠','睡不着','熬夜','噩梦','头疼','胃疼','吃不下','没胃口','生病','累']},
+ {name:'孤独感',keys:['孤独','孤单','寂寞','没朋友','没人','没人在乎','一个人','独来独往']},
+ {name:'睡眠与身体',keys:['失眠','睡不着','熬夜','噩梦','头疼','胃疼','吃不下','没胃口','生病','累','凌晨']},
  {name:'对未来的迷茫',keys:['迷茫','未来','出路','方向','意义','不知道','选择','毕业','走不下去']},
  {name:'人际关系',keys:['朋友','舍友','室友','同学','讨好','排挤','误会','社交']}];
-
-const OPENINGS=['谢谢你愿意把这些写下来——打字的过程并不轻松，但你做到了。',
- '我逐字读完了你的信，不止一遍。',
- '这些话从心里搬到纸上，你已经完成了最勇敢的那一步。',
- '现在，回声开始反送给你——请慢慢读。',
- '你的每一个字，我都逐字读过了，包括那些打了又删的。'];
-const OPENINGS_HEAVY=['这封信，我读得很慢。因为里面的每一个字，都不轻。',
- '先陪你深呼吸一下——你写下的这些，分量很重，而我正在认真接住。'];
-const OPEN_LONG='写了这么长——能感觉到这些话在心里憋了太久。没关系，今天让它们都倒出来，我一处都不会跳过。';
-const OPEN_SHORT='信不长，但我知道，把哪怕一句话写出来，也可能用光了今天的力气。谢谢你。';
-const CLOSINGS=['最后想说：情绪是天气，不是气候。今天的阴雨，改变不了你心里那片海的辽阔。',
- '你不需要立刻好起来，只需要今天比昨天多照顾自己一点点。剩下的，交给时间和专业的人。',
- '请把这段话读给自己听一遍——用你安慰好朋友时的那种语气。你值得同样的温柔。',
- '天黑有星星，心里有回声。你不是一个人。',
- '把灯调暖一点，把肩膀放下来。今晚，你已经被认真倾听过了。',
- '回声室一直都在——下次心里堵了，随时回来。夜安。'];
-
-const EMPATHY={
- '疲惫':[c=>`你说到了「${c.w1}」${c.w2?`，还有「${c.w2}」`:''}。这不是睡一觉就能散去的累——是心里的电量早就见底，却还在硬撑的那种。疲惫到某个程度，人会先于意识承认：我需要停下来。你现在意识到了，这很好。`,
-   c=>`「${c.w1}」这个词，我从你的信里轻轻拿了出来，放在手心看了看——它比你写下的更重。心累的人最常被误解为懒，可你分明一直在撑。这份累，值得被休息，而不是被责怪。`,
-   c=>`读到你写「${c.w1}」的时候，我停顿了很久。会喊累的人，其实一直在负重前行。请把这份累当作身体发来的加急信件——它要的不是坚强，是休息。`],
- '低落':[c=>`信里那片湿漉漉的「${c.w1}」${c.w2?`和「${c.w2}」`:''}，我都读到了。难过不需要理由，也不需要立刻被解决——它先需要被允许存在。你现在做的，正是允许它存在。`,
-   c=>`「${c.w1}」——这个词放进信里，让整封信的语气都沉了下来。我想告诉你：情绪低落不是你的错，也不是矫情，它是心在说"我需要被照顾了"。`,
-   c=>`你写下的「${c.w1}」，像屋檐下的雨。我不会急着催你"振作"——雨有雨的节奏，你有你的。我陪你等它，慢慢下完。`],
- '焦虑':[c=>`我读到那颗悬着的心——「${c.w1}」${c.w2?`、「${c.w2}」`:''}。焦虑其实是个太想保护你的老朋友，只是它说话的方式总在喊。我们可以在下面的处方里，教它小声一点。`,
-   c=>`「${c.w1}」这个词后面，藏着一根一直绷着的弦。绷太久的弦会疼。深呼吸不是敷衍——它是在用身体告诉大脑：此刻是安全的。`,
-   c=>`你说「${c.w1}」。焦虑最擅长把"可能"说成"一定"，把"明天"说成"马上"。可事实是：你担心过的事，大多数都没有发生——这一次，大概率也不会。`],
- '孤独':[c=>`你写「${c.w1}」${c.w2?`，还说「${c.w2}」`:''}。那种"人很多，却没人接住我"的感觉，比一个人待着更沉。此刻你的话被我完整地接住了——被听见的这一刻，它会轻一克。`,
-   c=>`「${c.w1}」不是你的错。它只是提醒你：你渴望连接——这恰恰说明你的心还热着，还在期待。冷掉的心是不会孤独的。`,
-   c=>`读到「${c.w1}」，我想先隔着屏幕握一下你的手。孤独感最会撒谎，它说"没人在乎"，可你把话写下来给了我——连接，已经发生了。`],
- '自责':[c=>`你对自己说的那些话——「${c.w1}」${c.w2?`、「${c.w2}」`:''}——我读到了，也想请你对它们喊停。请做个实验：如果你的好朋友遇到同样的事，你会这样骂 TA 吗？不会的。所以，也请别这样骂你。`,
-   c=>`「${c.w1}」——你把自己审判得太快、太重了。可法官也应该听取辩护：你当时已经做了当时能做到的最好选择。人不是用"完美"来计分的。`,
-   c=>`信里的「${c.w1}」像一根刺，扎向写它的人。请把这句话的箭头调转方向看看：它该指向那件"事"，而不是"你"。事可以改进，你不该被攻击。`],
- '空虚':[c=>`你写「${c.w1}」${c.w2?`、「${c.w2}」`:''}。心理学里，麻木往往是心在超载后自动调暗了灯——不是没有感觉了，是在省电。灯还亮着，只是很微弱，我们可以一起把旋钮慢慢拧回来。`,
-   c=>`「${c.w1}」——那种空落落的状态，比难过更磨人，因为连痛苦都感觉不到。但请留意：你会为这种"没感觉"而难受，恰恰证明你还有感觉。`,
-   c=>`你说自己「${c.w1}」。心空的时候，不必急着填满它——先点一盏很小的灯：一首歌、一杯热饮、窗外五分钟。火种不需要盛大。`],
- '愤怒':[c=>`信里的火气——「${c.w1}」${c.w2?`、「${c.w2}」`:''}——我读到了，而且我认为它合理。愤怒常常是"我在乎"的变形记：越在乎，火越大。这不丢人。`,
-   c=>`你写「${c.w1}」。委屈攒多了就会变成火。与其压住它变成对自己的攻击，不如承认：你受伤了，你生气了——这两件事都是真的，也都被允许。`,
-   c=>`「${c.w1}」这个词烧得很旺。但火焰下面往往是没被听见的需求。等火小一点，我们可以看看它到底在替你喊什么。`]};
 const TOPIC_TEXT={
- '学业压力':['成绩和排名把人变成了数字，可你从来不是一张试卷能概括的。你背着这么重的书包走了这么远，这件事本身，就值得被看见。',
-   '学业这条路，常常让人觉得"掉一步就全完了"——但人生不是独木桥，它是旷野。一道题、一次考试，都只是旷野里的一个路标。'],
- '工作与职场':['工作可以占领你的八小时，但不必占领你这个人。你的价值，不由绩效单方面定义——下班后的你，同样是完整而珍贵的。',
-   '职场里最难的不是任务本身，而是那些悬而未决的评价和关系。把它们和"我是谁"分开：事是事，你是你。'],
- '感情关系':['心碎不是矫情，它是真实的丧失——值得像悼念一样，被认真对待。你有权为一段关系的落幕，好好难过一场。',
-   '爱过、期待过、失望过——这些经历证明你认真地活过、爱过。它们不会白费，它们会变成你识人和爱人的能力。'],
- '家庭':['最亲近的人带来的伤，往往最深，也最难说出口。你的为难与撕裂，都是正当的——不必因为"他们是为我好"而否定自己的感受。',
-   '家人的爱和伤害，常常装在同一个包裹里。你可以爱他们，同时为某些部分设立边界——这两件事不矛盾。'],
- '自我价值':['你一直在用别人的尺子量自己，难怪总觉得自己不够。从今天起，换一把你自己的尺子——上面刻的是"今天我照顾好自己了吗"，而不是"今天我赢了吗"。',
-   '低自我价值感是个熟练的骗子：它只给你看证据的一半。你做成过的事、熬过的夜、帮过的人——另一半证据，我们一起补齐。'],
- '孤独感':['孤独不是性格缺陷，它是人类最古老的信号——和饥饿一样，它在说"我需要连接"。这不是矫情，是需求。',
-   '感觉"没人在乎"的时候，请记得：在乎是双向的信号，有时候只是频道暂时没对上。你的信号，值得继续发送。'],
- '睡眠与身体':['身体和情绪是连通器。心累久了，身体会替心喊疼。先把身体照顾好，情绪会跟着松一点——这不是本末倒置，是聪明的顺序。',
-   '睡不好的人，白天的勇气会打对折。所以"睡个好觉"不是小事，它是你恢复力的补给站。我们从今晚开始修它。'],
- '对未来的迷茫':['看不清方向不是失败——是人生本来就该有雾。雾里也能走路，只是慢一点。慢一点，没关系。',
-   '你不需要现在就找到"人生方向"。先找"下个月有点期待的一件小事"，路是走着走着，从雾里显出来的。'],
- '人际关系':['关系里的委屈最磨人——既要呼吸，又怕伤人。你的分寸感，已经是很珍贵的温柔；但温柔也该给自己留一份。',
-   '讨好换不来真正的靠近，只会换来更累的自己。试着把一份讨好收回来，换成一次诚实的"我其实不太想"——观察天会不会塌。'],
- '生活本身':['没有具体名字的烦恼，往往是最沉的——它没法被一句话概括，却压在每一天里。没关系，我们把它拆开来看。',
-   '生活有时候就是会莫名地沉。这不是你的问题，是"活着"这项任务自带的重量。累了就卸下一会儿，不丢人。']};
+ '学业压力':'成绩和排名把人变成了数字，可你从来不是一张试卷能概括的。你背着这么重的书包走了这么远，这件事本身，就值得被看见。',
+ '工作与职场':'工作可以占领你的八小时，但不必占领你这个人。你的价值，不由绩效单方面定义——下班后的你，同样是完整而珍贵的。',
+ '感情关系':'心碎不是矫情，它是真实的丧失——值得像悼念一样，被认真对待。你有权为一段关系的落幕，好好难过一场。',
+ '家庭':'最亲近的人带来的伤，往往最深，也最难说出口。你的为难与撕裂，都是正当的——不必因为"他们是为我好"而否定自己的感受。',
+ '自我价值':'你一直在用别人的尺子量自己，难怪总觉得自己不够。从今天起，换一把你自己的尺子——上面刻的是"今天我照顾好自己了吗"，而不是"今天我赢了吗"。',
+ '孤独感':'孤独不是性格缺陷，它是人类最古老的信号——和饥饿一样，它在说"我需要连接"。这不是矫情，是需求。',
+ '睡眠与身体':'身体和情绪是连通器。心累久了，身体会替心喊疼。先把身体照顾好，情绪会跟着松一点——这不是本末倒置，是聪明的顺序。',
+ '对未来的迷茫':'看不清方向不是失败——是人生本来就该有雾。雾里也能走路，只是慢一点。慢一点，没关系。',
+ '人际关系':'关系里的委屈最磨人——既要呼吸，又怕伤人。你的分寸感，已经是很珍贵的温柔；但温柔也该给自己留一份。',
+ '生活本身':'没有具体名字的烦恼，往往是最沉的——它没法被一句话概括，却压在每一天里。没关系，我们把它拆开来看。'};
 const RX_SLEEP=['固定起床时间比固定入睡更重要：先只把这一件事定死','睡前 1 小时把手机放到卧室外，用纸质书或白噪音填满那 60 分钟','下午 2 点后不碰咖啡因，给褪黑素让路'];
 const RX_EAT=['没胃口也定时吃一点点：三口饭、一根香蕉都算数，身体需要知道"还有人管我"','喝一杯温的东西，双手捧着，慢慢喝完——温度会顺着双手传到心里'];
 const RX_RUMIN=['给担心开一个「办公时间」：每天固定 15 分钟只用来想它，其他时间来访一律"请到办公时间再来"','把脑子里盘旋的念头全部写在纸上——写下来的念头，会比在脑子里转圈时安静 30%'];
@@ -999,7 +1140,7 @@ const RX_LIB={
  '家庭':['试着用「我感到…我希望…」造一个句子，代替「你们总是…」','本周练一条最小边界：对一次不合理要求说「我需要想一想」'],
  '自我价值':['写下 5 件「我做成过的事」，再小也算——你对自己的印象需要证据更新','把「我不行」改成「我还不熟练」：事实没变，但门开了'],
  '孤独感':['主动发出一条消息：不需要理由，就问一句「最近怎么样」','领养一个「需要你」的小东西：一盆植物、一缸鱼，被需要会生根'],
- '睡眠与身体':['白天晒 15 分钟太阳，给身体的生物钟一个「白天的证据」','睡前把明天的烦恼写在纸上合起来——物理上把它们关进抽屉'],
+ '睡眠与身体':['白天晒 15 分钟太阳，给身体的生物钟一个「白天」的证据','睡前把明天的烦恼写在纸上合起来——物理上把它们关进抽屉'],
  '对未来的迷茫':['写下 3 个哪怕很小、但想去的地方或想试的事，为其中 1 个查查攻略','找一位比你年长 10 岁的人聊聊 TA 的当年——路都是弯着走的'],
  '人际关系':['练一练「课题分离」：别人怎么想是别人的课题，你怎么活是你的课题','拒绝一次你最不想去的邀约，观察天有没有塌——多半不会'],
  '_default':['今晚睡前，写下今天三件「最小的好事」——哪怕是「午饭很好吃」','出门走 15 分钟，不看手机，只看路边的树和光','把明天「最重要的 1 件事」写在纸上，替大脑卸下排练的负担']};
@@ -1021,6 +1162,19 @@ function analyze(text){
     while((i=text.indexOf(w,i))!==-1){arr.push(i); i+=1;} return arr; };
   const risks=[];
   RISK_WORDS.forEach(w=>findAll(w).forEach(idx=>{ if(claim(idx,w.length,'risk')) risks.push(w); }));
+  const situations=[];
+  SITUATION_LEX.forEach(s=>{
+    const matched=s.keys.filter(k=>text.includes(k));
+    if(matched.length){
+      let at=-1;
+      for(const k of matched){ const i=text.indexOf(k); if(i!==-1&&(at===-1||i<at)) at=i; }
+      situations.push({...s, matched, c:matched.length, at});
+    }
+  });
+  situations.sort((a,b)=>b.c-a.c||a.at-b.at);
+  situations.slice(0,3).forEach(s=>{
+    for(const k of s.matched) findAll(k).forEach(idx=>claim(idx,k.length,'sit'));
+  });
   const emoAll=[];
   EMO_LEX.forEach(g=>g.words.forEach(([w,wt])=>emoAll.push({w,cat:g.cat,wt})));
   emoAll.sort((a,b)=>b.w.length-a.w.length);
@@ -1052,7 +1206,9 @@ function analyze(text){
   const topics=TOPICS.map(t=>({name:t.name,c:t.keys.filter(k=>low.includes(k)).length}))
     .filter(t=>t.c>0).sort((a,b)=>b.c-a.c);
   return {chars,mark,emos,stat,topCats:topCats.slice(0,2),
-    dis:dis.slice(0,2), topic:topics.length?topics[0].name:'生活本身',
+    situations:situations.slice(0,2),
+    dis:dis.slice(0,2),
+    topic:topics.length?topics[0].name:(situations.length?situations[0].name:'生活本身'),
     body,times,people,hopes,intens,ellipsis,excl,question,
     risks:[...new Set(risks)],intensity,len:text.length};
 }
@@ -1063,19 +1219,137 @@ function pickFragment(text,A){
   clauses.forEach(c=>{
     let sc=c.length;
     if(A.emos.some(e=>c.includes(e.w))) sc+=30;
+    if(A.situations.some(s=>s.matched.some(k=>c.includes(k)))) sc+=25;
     if(A.risks.some(r=>c.includes(r))) sc+=60;
     if(sc>score){score=sc;best=c;}
   });
   return best.length>20? best.slice(0,19)+'…':best;
 }
 
+/* ================================================================
+   AI 大模型接入（GLM · 情景优先）
+================================================================ */
+const AI_SYSTEM_PROMPT = `你是「心屿」心理陪伴小站里「解忧回声室」的主理人。你说话温和、真诚、有文学气息，融合了认知行为疗法（CBT）、行为激活与自我关怀的技巧。你正在给一位刚刚写下心事的用户回一封信。
+
+【情景优先原则——这是你最重要的工作方式】
+用户很可能只描述"发生了什么"，完全不提自己的感受。你绝不能因此只回应"事情"，更绝不能反问"那你有什么感受"。你要做的是：
+1. 在心中还原画面：什么时间、什么地点、谁在场、发生了什么、后来怎样。注意细节的心理含义。
+2. 主动替用户说出那句没说出口的话。用类似"你没有一个字写自己的心情，但如果我没猜错……"的开头给出推断。推断要具体到情景细节，用"也许、大概、我猜"留有余地，绝不武断。
+3. 先回应未言明的感受，再回应事件本身；并尝试指出表层情绪之下更深的一层。
+
+其余回信要求：
+1. 先共情、后建议；全文 320~460 字，段落之间用 \\n\\n 分隔。
+2. 至少一次引用用户原话中的场景细节（用「」括起来）。
+3. 如果分析材料标注了思维陷阱，用一两句温和地点破，并附一个苏格拉底式的小问题。
+4. 给出 2~3 个非常具体、当天就能完成的小行动（自然地写进信里，不要用条目罗列）。
+5. 不要说"作为AI/我是机器人"这类套话；不做医学诊断；不说教；不堆砌空泛鸡汤。
+6. 若安全提示显示用户有自伤/轻生风险，必须在信的开头认真、直接地回应：表达关心，明确建议立刻联系信任的人并拨打 12356 心理援助热线。
+7. 结尾用一句温柔的祝福收束。
+
+输出格式：只输出一个 JSON 对象，不要输出任何 JSON 以外的文字（不要用 markdown 代码块包裹）：
+{"letter":"回信全文（段落间用\\n\\n分隔）","rx":["第一条处方建议，一句话，具体可执行，不超过40字","第二条","第三条"]}`;
+
+const AI_LOADING=['回声室正在为你手写这封回信','墨水正在纸上慢慢洇开','它读完了你的信，正在还原那个场景','星火汇聚中，回信即将落笔'];
+let echoEpoch=0, aiCtrl=null;
+
+function setBadge(on, label){
+  const b=document.getElementById('aiBadge');
+  b.classList.remove('on','off');
+  b.classList.add(on?'on':'off');
+  document.getElementById('aiBadgeText').textContent=label;
+}
+function buildAIMessages(A, text, frag){
+  const score=S.quiz.answers.reduce((a,b)=>a+(b||0),0);
+  const statStr=A.topCats.map(c=>c+'（'+A.stat[c].ws.join('/')+'）').join('、')||null;
+  const L=['【本地情景分析参考（由程序分析，供你参考，你的推断可以更进一步）】'];
+  if(A.situations.length){
+    L.push('识别到的情景：'+A.situations.map(s=>s.name+'（线索词：'+s.matched.join('/')+'）').join('；'));
+    L.push('推测未言明的感受：'+A.situations.map(s=>s.name+'→'+s.feel).join('；')+'（请结合来信细节自行验证与深化，不要照抄）');
+  }
+  if(statStr) L.push('用户明确使用的情绪词：'+statStr);
+  L.push('关键细节：'+(A.emos.slice(0,5).map(e=>e.w).join('、')||'（无情绪词——请完全依赖情景推断）'));
+  if(A.times.length) L.push('时间表述：'+A.times.join('、'));
+  if(A.people.length) L.push('在场的人：'+A.people.join('、'));
+  if(A.body.length) L.push('身体信号：'+A.body.join('、'));
+  if(A.dis.length) L.push('思维陷阱：'+A.dis.map(d=>d.name+'（原句词：'+d.word+'）').join('；'));
+  L.push('话题主题：'+A.topic);
+  L.push('PHQ-9 背景得分：'+score+'/27（仅作背景，不要在信中直接讨论分数）');
+  if(A.intens) L.push('加重语气 '+A.intens+' 处');
+  if(A.ellipsis>=2) L.push('省略号 '+A.ellipsis+' 处（可能有没说出口的话）');
+  if(A.question) L.push('用户提出的问题：'+A.question);
+  if(A.risks.length)
+    L.push('⚠️ 安全提示：来信中出现表达自伤/轻生风险的话语（'+A.risks.join('、')+'），请优先认真回应，并建议联系 12356 热线与信任的人。');
+  const parts=['【用户来信】\n'+text];
+  if(frag) parts.push('【用户原话中最核心的一句】\n'+frag);
+  parts.push(L.join('\n'));
+  return [
+    {role:'system', content:AI_SYSTEM_PROMPT},
+    {role:'user', content:parts.join('\n\n')}
+  ];
+}
+function parseAIJSON(raw){
+  const m=raw.match(/\{[\s\S]*\}/);
+  if(m){
+    try{
+      const o=JSON.parse(m[0]);
+      if(o.letter){
+        const rx=Array.isArray(o.rx)? o.rx.filter(x=>typeof x==='string'&&x.trim()).slice(0,4):null;
+        return {letter:String(o.letter).trim(), rx:(rx&&rx.length)?rx:null};
+      }
+    }catch(e){}
+  }
+  return {letter:raw.trim(), rx:null};
+}
+async function callAI(messages){
+  aiCtrl=new AbortController();
+  const timer=setTimeout(()=>aiCtrl.abort(), AI_CONFIG.timeout);
+  try{
+    const res=await fetch(AI_CONFIG.endpoint,{
+      method:'POST',
+      headers:{'Content-Type':'application/json',
+               'Authorization':'Bearer '+AI_CONFIG.apiKey},
+      body:JSON.stringify({model:AI_CONFIG.model, messages,
+        temperature:AI_CONFIG.temperature, max_tokens:1600, stream:false}),
+      signal:aiCtrl.signal
+    });
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const data=await res.json();
+    const txt=data?.choices?.[0]?.message?.content;
+    if(!txt) throw new Error('模型返回为空');
+    return txt;
+  }finally{ clearTimeout(timer); aiCtrl=null; }
+}
+async function callImage(prompt){
+  const ctrl=new AbortController();
+  const timer=setTimeout(()=>ctrl.abort(), 90000);
+  try{
+    const res=await fetch(AI_CONFIG.imageEndpoint,{
+      method:'POST',
+      headers:{'Content-Type':'application/json',
+               'Authorization':'Bearer '+AI_CONFIG.apiKey},
+      body:JSON.stringify({model:AI_CONFIG.imageModel, prompt, size:'1024x1024'}),
+      signal:ctrl.signal
+    });
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const data=await res.json();
+    const url=data?.data?.[0]?.url;
+    if(!url) throw new Error('未返回图片');
+    return url;
+  }finally{ clearTimeout(timer); }
+}
+
+/* ================================================================
+   回声室 · 回信流程
+================================================================ */
 const echoTA=document.getElementById('echoText');
 echoTA.addEventListener('input',()=>document.getElementById('echoCount').textContent=echoTA.value.length+' 字');
 document.querySelectorAll('#starterChips button').forEach(b=>{
   b.onclick=()=>{ echoTA.value=b.textContent; echoTA.dispatchEvent(new Event('input')); echoTA.focus(); };
 });
-function enterEcho(){ goScene('scene-echo', 76, '解忧回声室 · 倾诉'); echoReset(); }
+function enterEcho(){ goScene('scene-echo', 72, '解忧回声室 · 倾诉'); echoReset(); }
 function echoReset(){
+  echoEpoch++; if(aiCtrl){aiCtrl.abort(); aiCtrl=null;}
+  if(typer)typer.cancel();
   document.getElementById('echoIntro').style.display='block';
   document.getElementById('echoScan').style.display='none';
   document.getElementById('echoLetter').style.display='none';
@@ -1083,7 +1357,7 @@ function echoReset(){
   echoTA.value=''; document.getElementById('echoCount').textContent='0 字';
 }
 document.getElementById('btnEchoSkip').onclick=enterFirefly;
-document.getElementById('btnEchoAgain').onclick=()=>{ goScene('scene-echo', 76, '解忧回声室 · 倾诉'); echoReset(); };
+document.getElementById('btnEchoAgain').onclick=()=>{ goScene('scene-echo', 72, '解忧回声室 · 倾诉'); echoReset(); };
 document.getElementById('btnEchoSend').onclick=()=>{
   const text=echoTA.value.trim();
   if(text.length<4){ echoTA.focus(); echoTA.placeholder='再多写一点点吧，哪怕一句也行。'; return; }
@@ -1091,12 +1365,13 @@ document.getElementById('btnEchoSend').onclick=()=>{
 };
 let scanRAF=null;
 function startEchoScan(text){
+  echoEpoch++; if(aiCtrl){aiCtrl.abort(); aiCtrl=null;}
   const A=analyze(text);
   const frag=pickFragment(text,A);
-  S.echo.last={text,A,frag,letter:null,rx:null};
+  S.echo.last={text,A,frag,letter:null,rx:null,aiRx:null,aiOk:false};
   document.getElementById('echoIntro').style.display='none';
   document.getElementById('echoScan').style.display='block';
-  goScene('scene-echo', 79, '回声室 · 正在倾听');
+  goScene('scene-echo', 75, '回声室 · 正在倾听');
   const box=document.getElementById('scanBox'); box.innerHTML='';
   const spans=[];
   A.chars.forEach(ch=>{
@@ -1114,6 +1389,7 @@ function startEchoScan(text){
       s.classList.add('on');
       if(A.mark[i]==='emo')s.classList.add('emo');
       if(A.mark[i]==='dis')s.classList.add('dis');
+      if(A.mark[i]==='sit')s.classList.add('sit');
       if(A.mark[i]==='risk')s.classList.add('risk');
     }
     if(upto<A.chars.length) scanRAF=requestAnimationFrame(step);
@@ -1125,16 +1401,18 @@ function showChips(A){
   const holder=document.getElementById('foundChips'); holder.innerHTML='';
   const chips=[];
   if(A.risks.length) chips.push(`<b style="color:#B5412B">安全提醒</b> · 有些话需要被认真对待`);
+  A.situations.forEach(s=>chips.push(`<b class="grn">情景</b> · ${s.name}`));
+  if(A.situations.length) chips.push(`<b class="grn">未言明</b> · ${A.situations[0].feel}`);
   A.topCats.forEach(c=>chips.push(`<b>听见</b> · ${c}`));
   if(A.intens) chips.push(`<b>浓度</b> · ${A.intens} 处加重语气`);
   if(A.times.length) chips.push(`<b>时间</b> · 「${A.times.join('」「')}」`);
-  if(A.people.length) chips.push(`<b>提到的人</b> · ${A.people.join('、')}`);
+  if(A.people.length) chips.push(`<b>在场的人</b> · ${A.people.join('、')}`);
   if(A.body.length) chips.push(`<b>身体信号</b> · ${A.body.join('、')}`);
   A.emos.slice(0,3).forEach(e=>chips.push(`<b>关键词</b> · 「${e.w}」`));
   if(A.question) chips.push(`<b>你在问</b> · 一个问题`);
   if(A.ellipsis>=2) chips.push(`<b>标点</b> · ${A.ellipsis} 处省略号`);
   else if(A.excl>=2) chips.push(`<b>标点</b> · ${A.excl} 个感叹号`);
-  if(A.topic!=='生活本身') chips.push(`<b>主题</b> · ${A.topic}`);
+  if(A.topic&&A.topic!=='生活本身'&&A.topic!==A.situations[0]?.name) chips.push(`<b>主题</b> · ${A.topic}`);
   A.dis.forEach(d=>chips.push(`<b>思维陷阱</b> · ${d.name}`));
   if(!chips.length) chips.push(`<b>听见</b> · 你此刻的心情`);
   chips.forEach((c,i)=>{
@@ -1143,53 +1421,68 @@ function showChips(A){
   });
   setTimeout(buildLetter, chips.length*320+700);
 }
-function wordsLine(A){
-  const ws=[...new Set(A.emos.map(e=>e.w))].slice(0,3);
-  if(!ws.length) return null;
-  const list=ws.map(w=>'「'+w+'」').join('、');
+
+const OPENINGS=['谢谢你愿意把这些写下来——打字的过程并不轻松，但你做到了。',
+ '我逐字读完了你的信，不止一遍。',
+ '这些话从心里搬到纸上，你已经完成了最勇敢的那一步。',
+ '你的每一个字，我都逐字读过了，包括那些打了又删的。'];
+const CLOSINGS=['最后想说：情绪是天气，不是气候。今天的阴雨，改变不了你心里那片海的辽阔。',
+ '你不需要立刻好起来，只需要今天比昨天多照顾自己一点点。剩下的，交给时间和专业的人。',
+ '请把这段话读给自己听一遍——用你安慰好朋友时的那种语气。你值得同样的温柔。',
+ '天黑有星星，心里有回声。你不是一个人。'];
+const EMPATHY={
+ '疲惫':[c=>`你说到了「${c.w1}」。这不是睡一觉就能散去的累——是心里的电量早就见底，却还在硬撑的那种。疲惫到某个程度，人会先于意识承认：我需要停下来。你现在意识到了，这很好。`],
+ '低落':[c=>`信里那片湿漉漉的「${c.w1}」，我都读到了。难过不需要理由，也不需要立刻被解决——它先需要被允许存在。你现在做的，正是允许它存在。`],
+ '焦虑':[c=>`我读到那颗悬着的心——「${c.w1}」。焦虑其实是个太想保护你的老朋友，只是它说话的方式总在喊。我们可以在下面的处方里，教它小声一点。`],
+ '孤独':[c=>`你写「${c.w1}」。那种"人很多，却没人接住我"的感觉，比一个人待着更沉。此刻你的话被我完整地接住了——被听见的这一刻，它会轻一克。`],
+ '自责':[c=>`你对自己说的那些话——「${c.w1}」——我读到了，也想请你对它们喊停。如果你的好朋友遇到同样的事，你会这样骂 TA 吗？不会的。所以，也请别这样骂你。`],
+ '空虚':[c=>`你写「${c.w1}」。心理学里，麻木往往是心在超载后自动调暗了灯——不是没有感觉了，是在省电。灯还亮着，只是很微弱，我们可以一起把旋钮慢慢拧回来。`],
+ '愤怒':[c=>`信里的火气——「${c.w1}」——我读到了，而且我认为它合理。愤怒常常是"我在乎"的变形记：越在乎，火越大。这不丢人。`]};
+function situationPara(A){
+  const s=A.situations[0];
+  const w=s.matched[0]||'这件事';
   return rnd([
-    `我把你信里的词，一个一个捡了出来：${list}。${ws.length>=3?'几个词叠在一起，重量几乎能压弯脊背——你已经扛了太久了。':'它们不是随手一写，是心里真实的天气。'}`,
-    `有 ${ws.length} 个词让我的光标停了下来：${list}。词语是内心的指纹——它们告诉我，你最近过的是什么日子。`,
-    `注意到了吗？你在用「${ws[0]}」形容自己的状态。这些词是心里发出来的信号，不是矫情，更不是夸张。`
+    `你的信里没有一个"心情词"，只是平静地记下了「${w}」。可正是这种平静让我在意——当一个人把自己的日子说得像在转述别人的故事时，往往是疼得太久，已经学会了不动声色。如果我没猜错，此刻压在你心口的，是${s.feel}。它们没说出口，也一样作数。\n\n${s.line}`,
+    `你没有写自己是什么感受，只记录了「${w}」。但深夜里愿意把它写下来的人，心里一定不轻松——我猜那大概是${s.feel}。没关系，你不用组织好语言，我先替你把它们接住了。\n\n${s.line}`
   ]);
 }
-function empathyPara(cat,ws){
-  const tpl=EMPATHY[cat]||EMPATHY['低落'];
-  const w1=ws[0]||'低落', w2=ws[1]||null;
-  return rnd(tpl)({w1,w2,ws});
+function buildLocalLetter(){
+  const A=S.echo.last.A, frag=S.echo.last.frag;
+  const P=[];
+  P.push(rnd(OPENINGS));
+  if(A.risks.length){
+    P.push(`有一句话，我想从信里单独拿出来，认真回应——你写到了「${A.risks[0]}」。\n请先答应我三件事：今晚不要独自做任何重大决定；现在就把此刻的感受告诉一个能立刻联系到的人；把 12356 存进手机（24 小时心理援助热线）。\n你把这句话写下来而不是憋着，说明你还在寻找出口——这就是最重要、最珍贵的信号。`);
+  }
+  if(frag) P.push(`你说：「${frag}」——这句话，我收到了。`);
+  if(A.topCats.length){
+    const ws=A.stat[A.topCats[0]].ws;
+    const tpl=EMPATHY[A.topCats[0]]||EMPATHY['低落'];
+    P.push(rnd(tpl)({w1:ws[0]||'低落',w2:ws[1]||null}));
+    if(A.situations.length) P.push(A.situations[0].line);
+  }else if(A.situations.length){
+    P.push(situationPara(A));
+  }else{
+    P.push(`你的信里没有出现情绪词，只有一段被记下来的日子。可是能把日子这样记下来的人，心里一定在称量着什么。没关系——你已经把它交出来了，剩下的我们一起看。`);
+  }
+  if(A.times.length){
+    const heavy=A.times.some(w=>['每天','天天','总是','一直','反复','整夜','每晚','从来不','从来没有'].includes(w));
+    P.push(`你提到${A.times.map(w=>'「'+w+'」').join('、')}。`+(heavy
+      ?'天天如此的事，最能磨损一个人——不是你不够坚强，是它持续得太久了。'
+      :'时间会让感受变得黏稠。被同一件事困这么久，累是必然的，不是你的错。'));
+  }
+  if(A.people.length) P.push(`信里出现了「${A.people[0]}」。和重要的人之间的事，往往最难——因为既要守住自己，又不想弄伤关系。你卡在中间的为难，是正常的，也是在乎的证明。`);
+  if(A.body.length) P.push(`你还写到了身体：「${A.body.join('」「')}」。情绪从来不只是心情——它会顺着神经，住进睡眠、胃和肩膀里。所以接下来照顾身体，就是在照顾情绪。`);
+  if(A.question) P.push(`你还在信里问：「${A.question}」。我不想用一句漂亮话敷衍你——但能把问题问出口的人，已经站在答案的门边了。`);
+  if(A.ellipsis>=2) P.push(`数了一下，你的信里有 ${A.ellipsis} 处省略号。那些打了又删、最终变成"……"的话，我也一并听见了。`);
+  else if(A.excl>=2) P.push(`信里那 ${A.excl} 个感叹号，是你压不住的情绪在敲门。它们有权被喊出来，而不是被摁回去。`);
+  P.push(TOPIC_TEXT[A.topic]||TOPIC_TEXT['生活本身']);
+  if(A.dis.length) P.push(rnd(A.dis[0].descs)(A.dis[0].word));
+  if(A.hopes.length) P.push(`另外，我在这封信里发现了「${A.hopes[0]}」这样的词。在这么沉的日子里还留着想好起来的念头——这是你的心在自救，请保护好它。`);
+  P.push(rnd(CLOSINGS));
+  P.push(`—— 心屿回声室 · ${new Date().toLocaleDateString('zh-CN')}`);
+  return P.join('\n\n');
 }
-function timePara(times){
-  const t=times.map(w=>'「'+w+'」').join('、');
-  const heavy=times.some(w=>['每天','天天','总是','一直','反复','整夜','每晚','从来不','从来没有'].includes(w));
-  return `你提到${t}。`+(heavy
-    ?'天天如此的事，最能磨损一个人——不是你不够坚强，是它持续得太久了。'
-    :'时间会让感受变得黏稠。被同一件事困这么久，累是必然的，不是你的错。');
-}
-function peoplePara(people){
-  return `信里出现了「${people[0]}」。和重要的人之间的事，往往最难——因为既要守住自己，又不想弄伤关系。你卡在中间的为难，是正常的，也是在乎的证明。`;
-}
-function bodyPara(body){
-  return `你还写到了身体：「${body.join('」「')}」。情绪从来不只是心情——它会顺着神经，住进睡眠、胃和肩膀里。所以接下来照顾身体，就是在照顾情绪，这不是绕远路。`;
-}
-function questionPara(q){
-  return `你还在信里问：「${q}」。我不想用一句漂亮话敷衍你——这个问题也许暂时没有标准答案。但请留意：能把问题问出口的人，已经站在答案的门边了。`;
-}
-function metaPara(n){
-  return `数了一下，你的信里有 ${n} 处省略号。那些打了又删、最终变成"……"的话，我也一并听见了——不必现在补上，留给你想说的时机就好。`;
-}
-function exclPara(n){
-  return `信里那 ${n} 个感叹号，是你压不住的情绪在敲门。它们有权被喊出来，而不是被摁回去。`;
-}
-function strengthPara(A){
-  if(A.hopes.length)
-    return `另外，我在这封信里发现了「${A.hopes[0]}」这样的词。在这么沉的日子里还留着想好起来的念头——这不是理所当然，这是你的心在自救。请保护好它。`;
-  if(A.len>140)
-    return `还有一件事：你写了这么长的一封信。能把这么重的事情完整写下来的人，远比自己以为的更有力量。`;
-  return `愿意面对自己、把心事交给一张纸的人，都自带一种安静的力量。你刚刚就做到了。`;
-}
-function riskPara(risks){
-  return `有一句话，我想从信里单独拿出来，认真回应——你写到了「${risks[0]}」。\n请先答应我三件事：今晚不要独自做任何重大决定；现在就把此刻的感受告诉一个能立刻联系到的人；把 12356 存进手机（24 小时心理援助热线）。\n你把这句话写下来而不是憋着，说明你还在寻找出口——这就是最重要、最珍贵的信号。我们陪着你。`;
-}
+
 let typer=null;
 function typeInto(el,text,speed){
   if(typer)typer.cancel();
@@ -1210,40 +1503,40 @@ function typeInto(el,text,speed){
       document.getElementById('btnLetterSkip').style.display='none';
       afterLetter(); } };
 }
-function buildLetter(){
+async function buildLetter(){
+  const epoch=echoEpoch;
   if(typer)typer.cancel();
   const A=S.echo.last.A, text=S.echo.last.text, frag=S.echo.last.frag;
   document.getElementById('echoInsight').innerHTML='';
   document.getElementById('rxHolder').innerHTML='';
-  document.getElementById('btnLetterSkip').style.display='';
-  const P=[];
-  let pool=[...OPENINGS];
-  if(A.risks.length||A.intensity>=6) pool=[...OPENINGS_HEAVY,...pool];
-  if(A.len>120) pool.push(OPEN_LONG);
-  if(A.len<20) pool.push(OPEN_SHORT);
-  P.push(rnd(pool));
-  if(A.risks.length) P.push(riskPara(A.risks));
-  if(frag) P.push(`你说：「${frag}」——这句话，我收到了。`);
-  const wl=wordsLine(A); if(wl) P.push(wl);
-  if(A.topCats.length) P.push(empathyPara(A.topCats[0], A.stat[A.topCats[0]].ws));
-  if(A.times.length) P.push(timePara(A.times));
-  if(A.people.length) P.push(peoplePara(A.people));
-  if(A.body.length) P.push(bodyPara(A.body));
-  if(A.question) P.push(questionPara(A.question));
-  if(A.ellipsis>=2) P.push(metaPara(A.ellipsis));
-  else if(A.excl>=2) P.push(exclPara(A.excl));
-  P.push(rnd(TOPIC_TEXT[A.topic]||TOPIC_TEXT['生活本身']));
-  if(A.dis.length) P.push(rnd(A.dis[0].descs)(A.dis[0].word));
-  P.push(strengthPara(A));
-  P.push(rnd(CLOSINGS));
-  P.push(`—— 心屿回声室 · ${new Date().toLocaleDateString('zh-CN')}`);
-  const letter=P.join('\n\n');
-  S.echo.last.letter=letter;
   document.getElementById('echoScan').style.display='none';
   document.getElementById('echoLetter').style.display='block';
-  goScene('scene-echo', 82, '回声室 · 回信');
+  goScene('scene-echo', 78, '回声室 · 回信');
   document.getElementById('letterBody').parentElement.scrollIntoView({behavior:'smooth',block:'start'});
-  typer=typeInto(document.getElementById('letterBody'),letter,16);
+  const body=document.getElementById('letterBody');
+  const skip=document.getElementById('btnLetterSkip');
+  skip.style.display='none';
+  body.classList.remove('typing');
+  body.innerHTML=`<div class="ai-loading"><span>${rnd(AI_LOADING)}</span><i></i><i></i><i></i></div>`;
+  setBadge(true, AI_CONFIG.model+' · 连接中…');
+  let letterText, rx=null, ok=false, err=null;
+  try{
+    const raw=await callAI(buildAIMessages(A, text, frag));
+    if(epoch!==echoEpoch) return;
+    const parsed=parseAIJSON(raw);
+    letterText=parsed.letter; rx=parsed.rx; ok=true;
+  }catch(e){
+    if(epoch!==echoEpoch) return;
+    err=e&&e.name==='AbortError'?'请求超时':(e&&e.message||'网络错误');
+    letterText=buildLocalLetter();
+  }
+  S.echo.last.letter=letterText;
+  S.echo.last.aiRx=rx;
+  S.echo.last.aiOk=ok;
+  setBadge(ok, ok ? ('GLM · AI 回应') : ('本地回声 · AI 未连（'+err+'）'));
+  body.textContent='';
+  typer=typeInto(body, letterText, 16);
+  skip.style.display='';
 }
 document.getElementById('btnLetterSkip').onclick=()=>{ if(typer)typer.finish(); };
 document.getElementById('btnLetterRetype').onclick=()=>{ if(S.echo.last) buildLetter(); };
@@ -1256,52 +1549,60 @@ function afterLetter(){
       <p>${rnd(d.descs)(d.word)} 比如你写下的「${d.word}」。</p>
       <p class="ask">留给你一个问题：${rnd(d.asks)(d.word)}</p></div>`);
   });
-  const pool=[];
-  const push=arr=>arr.forEach(x=>pool.push(x));
-  if(A.risks.length) pool.push('今晚不要独自待着：现在就联系一位能立刻找到的人，或拨打 12356（24 小时心理援助热线）');
-  if(A.body.some(b=>['睡不着','失眠','熬夜','噩梦','整夜'].includes(b))) push(RX_SLEEP);
-  if(A.body.some(b=>['没胃口','吃不下','吃太多'].includes(b))) push(RX_EAT);
-  if(/(反复|一直想|脑子里|停不下来|想个不停|翻来覆去)/.test(S.echo.last.text)) push(RX_RUMIN);
-  if(A.topCats.includes('自责')) push(RX_BLAME);
-  if(A.topCats.includes('焦虑')) push(RX_ANX);
-  if(A.topCats.includes('低落')||A.topCats.includes('空虚')) push(RX_LOW);
-  if(A.topCats.includes('孤独')) push(RX_LONE);
-  if(A.emos.some(e=>e.w.includes('哭'))) push(RX_CRY);
-  push((RX_LIB[A.topic]||[]).slice(0,2));
-  push(RX_LIB['_default']);
-  const seen=new Set(), rxItems=[];
-  for(const it of pool){ if(!seen.has(it)){seen.add(it);rxItems.push(it);} if(rxItems.length>=5)break; }
-  const cats=(A.topCats.length?A.topCats.join('、'):'复杂而真实')
+  let rxItems=[];
+  if(S.echo.last.aiRx&&S.echo.last.aiRx.length){
+    rxItems=[...S.echo.last.aiRx];
+    if(A.risks.length && !rxItems.some(x=>x.includes('12356')||x.includes('热线')))
+      rxItems.unshift('今晚不要独自待着：联系一位能立刻找到的人，或拨打 12356（24 小时心理援助热线）');
+  }else{
+    const pool=[];
+    const push=arr=>arr.forEach(x=>pool.push(x));
+    if(A.risks.length) pool.push('今晚不要独自待着：现在就联系一位能立刻找到的人，或拨打 12356（24 小时心理援助热线）');
+    if(A.body.some(b=>['睡不着','失眠','熬夜','噩梦','整夜','凌晨'].includes(b))) push(RX_SLEEP);
+    if(A.body.some(b=>['没胃口','吃不下','吃太多'].includes(b))) push(RX_EAT);
+    if(/(反复|一直想|脑子里|停不下来|想个不停|翻来覆去|睁着眼)/.test(S.echo.last.text)) push(RX_RUMIN);
+    if(A.topCats.includes('自责')) push(RX_BLAME);
+    if(A.topCats.includes('焦虑')) push(RX_ANX);
+    if(A.topCats.includes('低落')||A.topCats.includes('空虚')) push(RX_LOW);
+    if(A.topCats.includes('孤独')||A.situations.some(s=>s.name==='社交孤立')) push(RX_LONE);
+    if(A.emos.some(e=>e.w.includes('哭'))) push(RX_CRY);
+    push((RX_LIB[A.topic]||[]).slice(0,2));
+    push(RX_LIB['_default']);
+    const seen=new Set();
+    for(const it of pool){ if(!seen.has(it)){seen.add(it);rxItems.push(it);} if(rxItems.length>=5)break; }
+  }
+  const sitName=A.situations.length?A.situations[0].name:'';
+  const cats=(A.topCats.length?A.topCats.join('、'):(sitName?'情景：'+sitName:'复杂而真实'))
     +(A.body.length?`（身体：${A.body.join('/')}）`:'');
   const no='No.'+Date.now().toString().slice(-8);
   S.echo.last.rx={topic:A.topic,cats,rxItems,no};
   document.getElementById('rxHolder').innerHTML=`<div class="rx" id="rxCard">
     <div class="rx-head"><div class="rx-title">心屿解忧室 · 处方笺</div><div class="rx-no">${no}</div></div>
-    <div class="rx-row"><span>主诉</span><p>${A.topic} · 伴随情绪：${cats}</p></div>
+    <div class="rx-row"><span>主诉</span><p>${A.topic}${sitName?'（情景：'+sitName+'）':''} · ${cats}</p></div>
     <div class="rx-row"><span>处方</span><ol>${rxItems.map(i=>`<li>${i}</li>`).join('')}</ol></div>
     <div class="rx-row"><span>用法</span><p>每日一剂，心情低落时可加服。副作用：可能会感觉被理解。</p></div>
-    <div class="rx-sign">签发：心屿回声室 · ${new Date().toLocaleDateString('zh-CN')}</div>
+    <div class="rx-sign">签发：心屿回声室${S.echo.last.aiOk?' · GLM 协笔':''} · ${new Date().toLocaleDateString('zh-CN')}</div>
     <div class="seal" id="rxSeal">解忧</div></div>`;
   setTimeout(()=>{
     document.getElementById('rxSeal').classList.add('on');
     document.getElementById('rxCard').scrollIntoView({behavior:'smooth',block:'center'});
     chime(true);
   },600);
-  S.echo.logs.push({topic:A.topic,cats,dis:A.dis.map(d=>d.name),frag:S.echo.last.frag});
-  goScene('scene-echo', 86, '回声室 · 处方笺');
+  S.echo.logs.push({topic:A.topic,cats,dis:A.dis.map(d=>d.name),frag:S.echo.last.frag,ai:S.echo.last.aiOk});
+  goScene('scene-echo', 82, '回声室 · 处方笺');
 }
 document.getElementById('btnCopyRx').onclick=()=>{
   const L=S.echo.last; if(!L||!L.rx)return;
   const txt=['【心屿回声室 · 回信与处方】','',
     '你写的：「'+(L.frag||'')+'」','','—— 回信 ——',L.letter||'','',
-    `—— 处方笺 ${L.rx.no} ——`,'主诉：'+L.rx.topic+' · 情绪：'+L.rx.cats,
+    `—— 处方笺 ${L.rx.no} ——`,'主诉：'+L.rx.topic+' · '+L.rx.cats,
     '处方：'+L.rx.rxItems.map((x,i)=>(i+1)+') '+x).join('\n'),
     '用法：每日一剂，低落时可加服。','※ 仅供自我觉察参考，不构成医学建议。'].join('\n');
   doCopy(txt, document.getElementById('btnCopyRx'));
 };
 document.getElementById('btnToFirefly').onclick=enterFirefly;
 
-/* ================= 轻音（WebAudio 本地合成） ================= */
+/* ================= 轻音（UI 反馈音） ================= */
 function chime(soft){
   try{
     const AC=window.AudioContext||window.webkitAudioContext; if(!AC)return;
@@ -1353,7 +1654,7 @@ function drawFF(t){
 }
 function ffLoop(){ if(!ffOn)return; drawFF(performance.now()); requestAnimationFrame(ffLoop); }
 function enterFirefly(){
-  goScene('scene-firefly', 90, '化萤 · 释放仪式');
+  goScene('scene-firefly', 86, '化萤 · 释放仪式');
   document.getElementById('ffIntro').style.display='flex';
   document.getElementById('ffWrite').style.display='none';
   document.getElementById('ffFortune').style.display='none';
@@ -1452,15 +1753,359 @@ function enterFortune(){
   document.getElementById('ffIntro').style.display='none';
   document.getElementById('ffWrite').style.display='none';
   document.getElementById('ffFortune').style.display='flex';
-  goScene('scene-firefly', 94, '化萤 · 萤火签');
+  goScene('scene-firefly', 88, '化萤 · 萤火签');
   if(!ffOn){ ffOn=true; ffLoop(); }
   drawFortune(); chime(true);
 }
 document.getElementById('btnFFAgain').onclick=drawFortune;
-document.getElementById('btnToEnd').onclick=enterEnd;
+document.getElementById('btnToEnd').onclick=enterHTP;
+
+/* ================================================================
+   ⑨ 房树人花园 · HTP
+   音频：由 body 顶部的外置播放器播放用户的 audio.m4a
+   解读：GLM 投射分析（失败→本地 HTP 词典）
+   绘图：CogView（失败→本地意象速写 canvas）
+================================================================ */
+let htpEpoch=0;
+function htpGoState(st){
+  ['Intro','Audio','Describe','Loading','Result'].forEach(k=>{
+    document.getElementById('htp'+k).style.display = (k.toLowerCase()===st)?'block':'none';
+  });
+}
+function enterHTP(){
+  goScene('scene-htp', 92, '房树人 · 潜意识花园');
+  htpGoState('intro');
+}
+document.getElementById('btnHtpStart').onclick=()=>{
+  htpGoState('audio');
+  goScene('scene-htp', 94, '房树人 · 引导中');
+  pulseExtAudio();
+  chime(true);
+};
+document.getElementById('btnHtpPlayExt').onclick=()=>{
+  pulseExtAudio();
+  if(extAudioEl){ extAudioEl.play().catch(()=>{}); }
+};
+document.getElementById('btnHtpStop').onclick=()=>{ htpStopAudio(); htpGoState('describe'); };
+document.getElementById('btnHtpSkipAudio').onclick=()=>{ htpStopAudio(); htpGoState('describe'); };
+document.getElementById('btnHtpSkipAll').onclick=()=>{ htpStopAudio(); enterEnd(); };
+document.getElementById('btnHtpReplay').onclick=()=>{ htpGoState('audio'); pulseExtAudio(); };
+const htpTA=document.getElementById('htpText');
+document.querySelectorAll('#htpChipsIn button').forEach(b=>{
+  b.onclick=()=>{ htpTA.value=(htpTA.value?htpTA.value.replace(/\s*$/,'')+'。':'')+b.textContent;
+    htpTA.focus(); };
+});
+
+/* —— HTP 本地词典（AI 失败降级用） —— */
+const HTP_LEX={
+ house:[
+  {k:['高大','很大','宏伟','壮观'],t:'体量 · 高大',m:'较大的房子常与旺盛的内在能量有关，也可能暗示你对"足够安全的空间"有一种安静的渴望。'},
+  {k:['小巧','很小','矮小','简陋'],t:'体量 · 小巧',m:'小房子有时与内敛、谨慎的能量有关——你也许更习惯把世界收进一个自己能掌控的小角落。'},
+  {k:['木头','木屋','木'],t:'材质 · 木质',m:'木质的房子常指向亲近自然、质朴温和的内在气质，重视真实与温暖。'},
+  {k:['砖','石头','砖石','水泥'],t:'材质 · 砖石',m:'砖石的房子象征稳固与边界感——你重视安全与秩序，也善于为内心筑起保护墙。'},
+  {k:['玻璃','透明'],t:'材质 · 玻璃',m:'玻璃房子暗示开放与透明：你愿意让外界看见真实的自己，也渴望被看见。'},
+  {k:['门开着','门是开的','敞开','开着门','半开'],t:'门 · 敞开',m:'敞开的门是友好的信号：你对外部世界与人际关系保持开放，欢迎靠近。'},
+  {k:['门关着','关着','紧闭','虚掩'],t:'门 · 关闭',m:'关闭的门常与自我保护有关——不是拒绝世界，只是你需要在确定安全之后，才欢迎客人进门。'},
+  {k:['窗帘','拉着帘'],t:'窗 · 有帘',m:'窗帘像一层温柔的过滤网：你敏感、注重隐私，会在开放与守护之间仔细权衡。'},
+  {k:['烟囱','冒烟','炊烟'],t:'烟囱 · 有炊烟',m:'炊烟是"心理温度"的经典意象：你内心有表达情绪与热情的通道，也向往有人气的生活。'},
+  {k:['破旧','荒废','塌'],t:'状态 · 破旧',m:'略带岁月感的房子，也许在诉说一些疲惫或未被安放的记忆——它值得被温柔地修缮，就像你值得被温柔对待。'},
+  {k:['花园','栅栏','院子'],t:'环境 · 有庭园',m:'房子周围的庭园与花木，是对生活情趣的期待——你希望家不只是居所，更是滋养自己的地方。'}],
+ tree:[
+  {k:['茂盛','繁茂','翠绿','生机','葱郁','高大'],t:'生命力 · 茂盛',m:'茂盛的树是充沛生命力的直接表达——你身上有正在生长的能量，即使疲惫，根也扎得很深。'},
+  {k:['枯萎','凋零','光秃','稀疏'],t:'生命力 · 疲惫',m:'略显疲惫的树，常与近期的能量透支有关。它不代表你不行——它只是在提醒：这棵树需要浇水了，你也是。'},
+  {k:['粗壮'],t:'树干 · 粗壮',m:'粗壮的树干代表稳固的自我力量与支撑感——你是能扛事的人，但能扛事的人最容易忘记：自己也需要被撑住。'},
+  {k:['纤细','细瘦'],t:'树干 · 纤细',m:'纤细的树干常常更敏感、更易感知风的方向——你细腻的感知力是天赋，只是请别把自己绷得太紧。'},
+  {k:['开花','花苞'],t:'开花 · 有',m:'正在开花的树，意味着你心里有正在酝酿的表达或期待——有什么东西在悄悄准备绽放。'},
+  {k:['结果','果子','果实'],t:'结果 · 有',m:'挂着的果实是目标与成就的象征——你的努力正在结果，请允许自己为此骄傲。'},
+  {k:['柳','垂柳'],t:'姿态 · 垂柳',m:'垂柳柔韧而忧伤，常属于感受力极强的人：你的情绪像柳条，风一来就会晃动——这不是脆弱，是敏感。'},
+  {k:['树根','根露'],t:'根系 · 外露',m:'外露的树根在提示"接地"的重要：多做一些让脚踩到实地的小事，会让你更安稳。'}],
+ person:[
+  {k:['我自己','是自己','是我'],t:'身份 · 自己',m:'你"看见"的是自己——这份自我觉察本身就很珍贵：你愿意直视此刻的自己。'},
+  {k:['站着','伫立','站在'],t:'姿态 · 站立',m:'安静站立的人，有一种"准备好了"的沉稳——你在等待什么，也在观察什么。'},
+  {k:['走着','走向','散步','走动'],t:'姿态 · 行走',m:'行走的人，代表你的内心仍有向前的动力——哪怕慢一点，方向还在。'},
+  {k:['坐着','休息','躺着','靠着'],t:'姿态 · 休憩',m:'正在休息的人是重要的信号：你的心渴望一段允许停下来的时光——这不是懒惰，是必要的修复。'},
+  {k:['快乐','笑','开心','微笑'],t:'情绪 · 明亮',m:'明亮的表情说明你心里仍保留着一块晴朗的地方——它就是你的能量源。'},
+  {k:['孤独','孤单','落寞'],t:'情绪 · 孤独',m:'孤独感出现在画面里并不可怕——它说明你渴望连接，而渴望，正是改变的起点。'},
+  {k:['平静','安静','平和','宁静'],t:'情绪 · 平静',m:'平静是这个快时代里难得的心境——即使生活有浪，你的内里仍有一处深水区，稳稳托着你。'},
+  {k:['背影','背对','看不清脸'],t:'细节 · 背影',m:'背影常常代表一种"暂时不想被看清"的自我保护——没关系，等你愿意转身的时刻，一直有人愿意看见你。'}],
+ scene:[
+  {k:['离房子很远','很远'],t:'关系 · 有距离',m:'人与房子之间的距离，常映照你与"家/安全感"之间的心理距离——有时我们需要走得更近一点，有时我们需要先成为自己。'},
+  {k:['树底下','坐在树下','靠着树'],t:'关系 · 依偎',m:'人在树下，是依偎与寻求庇护的意象——你心里有一个能给你力量的支点，请常回去坐坐。'}]
+};
+function htpAnalyze(desc){
+  const hits=[];
+  Object.entries(HTP_LEX).forEach(([cat,arr])=>{
+    arr.forEach(item=>{
+      const words=item.k.filter(k=>desc.includes(k));
+      if(words.length) hits.push({cat,t:item.t,m:item.m,words});
+    });
+  });
+  return hits;
+}
+/* —— 本地意象速写 —— */
+function drawHTPFallback(desc,hits){
+  const cat=t=>hits.some(h=>h.t===t);
+  const cv2=document.getElementById('htpImgCanvas');
+  const w=880,h=660; cv2.width=w; cv2.height=h;
+  const x=cv2.getContext('2d');
+  const sky=x.createLinearGradient(0,0,0,h);
+  sky.addColorStop(0,'#FDEBC8'); sky.addColorStop(.55,'#F7D9A0'); sky.addColorStop(1,'#E8C489');
+  x.fillStyle=sky; x.fillRect(0,0,w,h);
+  const sun=x.createRadialGradient(w*.78,h*.2,10,w*.78,h*.2,130);
+  sun.addColorStop(0,'rgba(255,246,218,.95)'); sun.addColorStop(1,'rgba(255,246,218,0)');
+  x.fillStyle=sun; x.beginPath(); x.arc(w*.78,h*.2,130,0,7); x.fill();
+  x.fillStyle='#8FA86B'; x.beginPath();
+  x.moveTo(0,h*.72); x.quadraticCurveTo(w*.5,h*.65,w,h*.72);
+  x.lineTo(w,h); x.lineTo(0,h); x.fill();
+  x.fillStyle='#7C9859'; x.fillRect(0,h*.82,w,h*.18);
+  const big=cat('体量 · 高大'), small=cat('体量 · 小巧');
+  const hw=big?320:small?170:240, hh=big?235:small?130:180;
+  const hx=w*.26-hw/2, hy=h*.72-hh;
+  const glass=cat('材质 · 玻璃'), wood=cat('材质 · 木质'), brick=cat('材质 · 砖石');
+  x.fillStyle= glass? '#BFD8DF' : wood? '#A9805B' : brick? '#C0765A' : '#E7D9BC';
+  x.fillRect(hx,hy,hw,hh);
+  x.strokeStyle='rgba(90,70,50,.5)'; x.lineWidth=3; x.strokeRect(hx,hy,hw,hh);
+  if(brick){ x.strokeStyle='rgba(120,60,40,.3)'; x.lineWidth=1.5;
+    for(let yy=hy+16;yy<hy+hh;yy+=16){ x.beginPath(); x.moveTo(hx,yy); x.lineTo(hx+hw,yy); x.stroke(); } }
+  x.fillStyle= glass? '#8FA6B0' : '#8A5A44';
+  x.beginPath(); x.moveTo(hx-18,hy); x.lineTo(hx+hw/2,hy-(big?110:80)); x.lineTo(hx+hw+18,hy);
+  x.closePath(); x.fill();
+  const open=cat('门 · 敞开');
+  const dw=hw*.18, dh=hh*.5, dx=hx+hw*.2, dy=h*.72-dh;
+  x.fillStyle= open? '#5C4433' : '#6E5240'; x.fillRect(dx,dy,dw,dh);
+  if(open){ x.fillStyle='#F3E2B8'; x.fillRect(dx+dw*.62,dy+6,dw*.3,dh-6); }
+  const curtain=cat('窗 · 有帘'), ww=hw*.14, wh=hh*.22;
+  [[hx+hw*.55,hy+hh*.22],[hx+hw*.76,hy+hh*.22]].forEach(([wx,wy])=>{
+    x.fillStyle='#DDEFF2'; x.fillRect(wx,wy,ww,wh); x.strokeRect(wx,wy,ww,wh);
+    if(curtain){ x.fillStyle='rgba(214,166,120,.8)'; x.fillRect(wx,wy,ww*.36,wh); } });
+  if(cat('烟囱 · 有炊烟')){
+    x.fillStyle='#7A4A38'; x.fillRect(hx+hw*.68,hy-(big?92:66),22,62);
+    x.fillStyle='rgba(255,255,255,.6)';
+    for(let i=0;i<3;i++){ x.beginPath();
+      x.arc(hx+hw*.68+34+Math.sin(i*2)*8, hy-(big?104:78)-i*26, 11+i*5,0,7); x.fill(); } }
+  if(cat('环境 · 有庭园')){
+    x.strokeStyle='#6E5240'; x.lineWidth=4;
+    for(let i=0;i<6;i++){ const fx=hx-28-i*22;
+      x.beginPath(); x.moveTo(fx,h*.72); x.lineTo(fx,h*.72-34); x.stroke(); }
+    ['#E98FA0','#F2C14E','#C97BA0'].forEach((c,i)=>{
+      x.fillStyle=c; x.beginPath(); x.arc(hx+hw+34+i*28,h*.72-8,6,0,7); x.fill(); }); }
+  const lush=cat('生命力 · 茂盛'), wither=cat('生命力 · 疲惫');
+  const thin=cat('树干 · 纤细');
+  const tx=w*.72, tBase=h*.72, tw=thin?14:lush?34:24;
+  x.fillStyle= wither? '#6B5844' : '#7A5A3E';
+  x.beginPath();
+  x.moveTo(tx-tw/2,tBase); x.quadraticCurveTo(tx-tw*.4,tBase-90,tx-tw*.3,tBase-150);
+  x.lineTo(tx+tw*.3,tBase-150); x.quadraticCurveTo(tx+tw*.4,tBase-90,tx+tw/2,tBase);
+  x.fill();
+  const topY=tBase-150;
+  if(wither){
+    x.strokeStyle='#6B5844'; x.lineWidth=3;
+    for(let i=0;i<6;i++){ const a=-Math.PI/2+(i-2.5)*.4;
+      x.beginPath(); x.moveTo(tx,topY);
+      x.lineTo(tx+Math.cos(a)*(68+i*7), topY+Math.sin(a)*(68+i*7)); x.stroke(); }
+  }else{
+    const r=lush?96:70;
+    const g=x.createRadialGradient(tx-r*.3,topY-r*.3,10,tx,topY,r);
+    g.addColorStop(0,'#9CC06F'); g.addColorStop(1,'#5E8C4A');
+    x.fillStyle=g;
+    x.beginPath(); x.arc(tx,topY,r,0,7); x.fill();
+    x.beginPath(); x.arc(tx-r*.72,topY+r*.28,r*.55,0,7); x.fill();
+    x.beginPath(); x.arc(tx+r*.72,topY+r*.28,r*.55,0,7); x.fill();
+    if(cat('开花 · 有')){ x.fillStyle='#F4B8C8';
+      for(let i=0;i<10;i++){ x.beginPath();
+        x.arc(tx+(Math.random()*2-1)*r*.8, topY+(Math.random()*2-1)*r*.6, 5,0,7); x.fill(); } }
+    if(cat('结果 · 有')){ x.fillStyle='#E2694E';
+      for(let i=0;i<7;i++){ x.beginPath();
+        x.arc(tx+(Math.random()*2-1)*r*.7, topY+r*.2+(Math.random()*2-1)*r*.5, 6,0,7); x.fill(); } }
+  }
+  const sit=cat('姿态 · 休憩'), walk=cat('姿态 · 行走');
+  const lone=cat('情绪 · 孤独'), happy=cat('情绪 · 明亮');
+  const nearTree=cat('关系 · 依偎');
+  const px= nearTree? tx-58 : w*.5, py=h*.8;
+  const ps=36;
+  x.strokeStyle='#4A3B30'; x.lineWidth=4; x.lineCap='round';
+  if(sit){
+    x.beginPath(); x.arc(px,py-ps*1.6,ps*.32,0,7); x.stroke();
+    x.beginPath(); x.moveTo(px,py-ps*1.3); x.lineTo(px,py-ps*.5); x.stroke();
+    x.beginPath(); x.moveTo(px,py-ps*.5); x.lineTo(px-ps*.55,py); x.stroke();
+    x.beginPath(); x.moveTo(px,py-ps*.5); x.lineTo(px+ps*.55,py); x.stroke();
+  }else{
+    x.beginPath(); x.arc(px,py-ps*1.7,ps*.32,0,7); x.stroke();
+    x.beginPath(); x.moveTo(px,py-ps*1.38); x.lineTo(px,py-ps*.55); x.stroke();
+    if(walk){
+      x.beginPath(); x.moveTo(px,py-ps*.55); x.lineTo(px-ps*.42,py); x.stroke();
+      x.beginPath(); x.moveTo(px,py-ps*.55); x.lineTo(px+ps*.4,py-ps*.14); x.stroke();
+    }else{
+      x.beginPath(); x.moveTo(px,py-ps*.55); x.lineTo(px-ps*.36,py); x.stroke();
+      x.beginPath(); x.moveTo(px,py-ps*.55); x.lineTo(px+ps*.36,py); x.stroke();
+    }
+    x.beginPath(); x.moveTo(px,py-ps*1.2); x.lineTo(px-ps*.42,py-ps*.78); x.stroke();
+    x.beginPath(); x.moveTo(px,py-ps*1.2); x.lineTo(px+ps*.42,lone?py-ps*.9:py-ps*.78); x.stroke();
+  }
+  if(happy){ x.strokeStyle='#4A3B30'; x.lineWidth=2;
+    x.beginPath(); x.arc(px,py-ps*1.68,ps*.13,.2*Math.PI,.8*Math.PI); x.stroke(); }
+  x.fillStyle='rgba(60,45,30,.7)'; x.font='22px "LXGW WenKai Screen", serif';
+  x.fillText('意象速写 · 本地绘制（AI 绘图未连接）', 26, h-24);
+}
+/* —— 本地 HTP 解读 —— */
+function buildLocalHTP(desc,hits){
+  const sec=cat=>{
+    const hs=hits.filter(h=>h.cat===cat);
+    if(!hs.length) return `你这次没有提到太多关于${cat==='house'?'房子':cat==='tree'?'树':'人'}的细节——有时候"没说"也是一种信息：也许它太寻常，也许它还需要一点时间才愿意被看见。`;
+    return hs.map(h=>`「${h.t}」——${h.m}`).join('\n');
+  };
+  const energy=hits.find(h=>h.t==='生命力 · 疲惫');
+  const lush=hits.find(h=>h.t==='生命力 · 茂盛');
+  const rest=hits.find(h=>h.t==='姿态 · 休憩');
+  const lone=hits.find(h=>h.t==='情绪 · 孤独');
+  const tags=[...new Set(hits.map(h=>h.t.split(' · ')[1]||h.t))].slice(0,5);
+  const overall=[
+    '把房子、树和人放在一起看：',
+    lush?'你的画面里有明显的生长气息——内心的能量虽然可能被疲惫稀释，但根没有断。':energy?'树的状态在提醒你最近的消耗——这不是能力问题，是充电与放电失衡了，该给自己安排一场真正的休息。':'你的画面安静而含蓄，藏着一种向内的力量。',
+    hits.some(h=>h.t==='门 · 关闭')||hits.some(h=>h.t==='窗 · 有帘')
+      ?'门窗的细节显示出你温和而清晰的边界感——你不是不开放，只是开放需要先确认安全。':'门窗的意象显示出你对外部世界仍保有连接的意愿。',
+    lone?'画面里那一点孤独感值得被认真对待——它指向"渴望被看见"，而这不是弱点。':rest?'选择休息的人，往往是内心开始学着对自己温柔的信号。':'画面里的人姿态平和，说明你与自己的关系暂时是稳的。'
+  ].join('');
+  const advice=[];
+  if(energy) advice.push('这周给自己安排一次真正的休息：不看手机、不觉得愧疚的那种');
+  if(rest) advice.push('把"休息"写进日程表，像对待一件正经事一样对待它');
+  if(hits.some(h=>h.t==='门 · 关闭')) advice.push('向一位信任的人多说一句真话，试着把门推开一条缝');
+  if(lone) advice.push('给通讯录里一个安全的人发条消息："在想你"');
+  if(hits.some(h=>h.t==='开花 · 有')) advice.push('把你正在酝酿的那个想法，今天向前推进最小的一步');
+  if(!advice.length) advice.push('今晚睡前，把画面里最让你舒服的那个细节再回忆一遍——那是你的能量源');
+  advice.push('白天晒 15 分钟太阳，给身体一个"白天"的证据');
+  return {house:sec('house'), tree:sec('tree'), person:sec('person'), overall, tags, advice,
+    nurture:'这幅画没有好坏——它只是你，此刻诚实的模样。'};
+}
+/* —— HTP AI 解读 —— */
+const HTP_SYSTEM_PROMPT=`你是「心屿」心理小站的房树人（HTP，House-Tree-Person）投射测验解读师。用户在一段催眠引导下想象出一座房子、一棵树、一个人，并用文字描绘给你。你精通表达性艺术治疗与投射测验，说话温柔、专业、有画面感。
+
+解读原则：
+1. 投射测验没有标准答案，画面没有好坏。一切解读都要用「往往、常常、也许、可能」留有余地；先肯定画面本身，再谈含义；绝不贴病理标签，绝不说"你有心理疾病"。
+2. 解读必须紧扣用户原话的细节（用「」引用）：材质、门窗、烟囱、树的生命力、人的姿态情绪、人与房子树的相对位置。
+3. 象征框架：房子→内在自我、家庭与安全感的象征；树→生命力、能量与成长状态；人→自我意象与人际状态；三者的相对位置→用户与安全感、与自己的关系。
+4. 语气像一位深夜与你并肩看画的老朋友，温暖而有洞见，不说教，不堆砌术语。
+
+输出格式：只输出一个 JSON 对象，不要任何多余文字（不要 markdown 代码块）：
+{"scene":"用于生成这幅画的中文绘图提示词。写成一幅水彩插画的描述：包含房子的样式材质门窗烟囱细节、树的样子与状态、人的姿态表情、人与树与房子的相对位置、光线氛围与整体色调。80~140字。只描述画面本身，不要出现任何分析性词汇。","house":"关于房子的解读，70~120字","tree":"关于树的解读，70~120字","person":"关于人的解读，70~120字","overall":"整体人格侧写：结合三者谈能量状态、防御方式、人际关系与自我认知，140~220字","tags":["关键词1","关键词2","关键词3","关键词4"],"advice":["贴合画面意象的具体建议1，不超过45字","建议2","建议3"],"nurture":"给这幅画主人的一句温柔寄语，不超过35字"}`;
+function setHtpBadge(on,label){
+  const b=document.getElementById('htpBadge');
+  b.classList.remove('on','off');
+  b.classList.add(on?'on':'off');
+  document.getElementById('htpBadgeText').textContent=label;
+}
+function buildHTPMessages(desc,hits){
+  const score=S.quiz.answers.reduce((a,b)=>a+(b||0),0);
+  const L=['【本地关键词匹配（程序分析，供参考）】',
+    hits.length?hits.map(h=>h.cat+'·'+h.t+'（原文线索：'+h.words.join('/')+'）').join('；'):'无明显关键词（请完全依靠用户的原始描述推断）',
+    'PHQ-9 背景：'+score+'/27（仅供感知用户近期状态，不要直接讨论分数）'];
+  return [{role:'system',content:HTP_SYSTEM_PROMPT},
+    {role:'user',content:'【用户对房树人画面的描述】\n'+desc+'\n\n'+L.join('\n')}];
+}
+async function analyzeHTP(){
+  const epoch=++htpEpoch;
+  const desc=htpTA.value.trim();
+  if(desc.length<6){ htpTA.focus();
+    htpTA.placeholder='再多描绘一点点细节吧：材质、颜色、门窗、树的样子、人的动作……'; return; }
+  const hits=htpAnalyze(desc);
+  S.htp={done:false,tags:null,img:null,desc,hits,ai:null,imgUrl:null,aiOk:false,err:null};
+  htpGoState('loading');
+  goScene('scene-htp', 97, '房树人 · 解读中');
+  document.getElementById('htpLoadText').textContent='正在读你画里的房子…';
+  let ai=null, aiOk=false, err=null;
+  try{
+    const raw=await callAI(buildHTPMessages(desc,hits));
+    if(epoch!==htpEpoch)return;
+    const m=raw.match(/\{[\s\S]*\}/);
+    if(m){
+      const o=JSON.parse(m[0]);
+      if(o.overall||o.house){
+        ai={scene:o.scene||null,house:o.house||'',tree:o.tree||'',person:o.person||'',
+            overall:o.overall||'',tags:Array.isArray(o.tags)?o.tags.slice(0,6):[],
+            advice:Array.isArray(o.advice)?o.advice.filter(x=>typeof x==='string').slice(0,4):[],
+            nurture:o.nurture||null};
+        aiOk=true;
+      }
+    }
+    if(!aiOk){ ai=buildLocalHTP(desc,hits); err='模型未按格式返回'; }
+  }catch(e){
+    if(epoch!==htpEpoch)return;
+    err=e&&e.name==='AbortError'?'请求超时':(e&&e.message||'网络错误');
+    ai=buildLocalHTP(desc,hits);
+  }
+  S.htp.ai=ai; S.htp.aiOk=aiOk; S.htp.err=err;
+  document.getElementById('htpLoadText').textContent='正在把画面画出来…';
+  const prompt=(ai&&ai.scene)?ai.scene:(desc+'，水彩插画风格，柔和暖光，宁静氛围，手绘质感');
+  let imgUrl=null;
+  try{
+    imgUrl=await callImage(prompt);
+    if(epoch!==htpEpoch)return;
+  }catch(e2){ if(epoch!==htpEpoch)return; }
+  S.htp.imgUrl=imgUrl;
+  showHTPResult();
+}
+document.getElementById('btnHtpGo').onclick=analyzeHTP;
+document.getElementById('btnHtpRetype').onclick=analyzeHTP;
+function showHTPResult(){
+  const D=S.htp, ai=D.ai, hits=D.hits;
+  const holder=document.getElementById('htpImageHolder');
+  if(D.imgUrl){
+    holder.innerHTML='<canvas id="htpImgCanvas" style="display:none"></canvas>'+
+      `<img src="${D.imgUrl}" alt="你的房树人画面"><div class="cap">AI 根据你的描述绘制 · ${AI_CONFIG.imageModel}</div>`;
+  }else{
+    holder.innerHTML='<canvas id="htpImgCanvas" style="display:none"></canvas>';
+    drawHTPFallback(D.desc,hits);
+    document.getElementById('htpImgCanvas').style.display='block';
+    const cap=document.createElement('div'); cap.className='cap';
+    cap.textContent='意象速写 · 本地绘制（AI 绘图未连接，画面为程序根据关键词生成）';
+    holder.appendChild(cap);
+  }
+  S.htp.img=D.imgUrl||'local';
+  const chips=[];
+  hits.forEach(h=>chips.push(`<b class="grn">${h.cat==='house'?'房':h.cat==='tree'?'树':'人'}</b> · ${h.t}`));
+  (ai.tags||[]).forEach(t=>chips.push(`<b>人格</b> · ${t}`));
+  document.getElementById('htpChips').innerHTML=chips.map(c=>`<div class="chip show">${c}</div>`).join('');
+  document.getElementById('htpHouse').textContent=ai.house||'—';
+  document.getElementById('htpTree').textContent=ai.tree||'—';
+  document.getElementById('htpPerson').textContent=ai.person||'—';
+  document.getElementById('htpOverall').textContent=ai.overall||'—';
+  document.getElementById('htpTags').innerHTML=(ai.tags||[]).map(t=>`<span class="tag-pill">${t}</span>`).join('');
+  document.getElementById('htpAdvice').innerHTML=(ai.advice||[]).map(a=>`<li>${a}</li>`).join('');
+  document.getElementById('htpNurture').textContent=ai.nurture||'';
+  setHtpBadge(D.aiOk, D.aiOk?'GLM · AI 解读':(D.err?('本地解读 · AI 未连（'+D.err+'）'):'本地解读'));
+  htpGoState('result');
+  goScene('scene-htp', 98, '房树人 · 解读');
+  S.htp.done=true; S.htp.tags=ai.tags||[];
+  document.getElementById('htpResult').scrollIntoView({behavior:'smooth'});
+  chime(true);
+}
+document.getElementById('btnHtpSave').onclick=()=>{
+  const img=document.querySelector('#htpImageHolder img');
+  const c=document.getElementById('htpImgCanvas');
+  if(img){ window.open(img.src,'_blank'); }
+  else if(c&&c.style.display!=='none'){
+    const a=document.createElement('a'); a.download='心屿房树人.png';
+    a.href=c.toDataURL('image/png'); a.click();
+  }
+};
+document.getElementById('btnHtpCopy').onclick=()=>{
+  const D=S.htp; if(!D.ai)return;
+  const ai=D.ai;
+  const txt=['【心屿 · 房树人解读报告】','时间：'+new Date().toLocaleString('zh-CN'),'',
+    '你的描述：'+D.desc,'',
+    '—— 画面 ——',(D.imgUrl?'AI 绘图链接：'+D.imgUrl:'本地意象速写'),'',
+    '—— 房子 ——',ai.house,'','—— 树 ——',ai.tree,'','—— 人 ——',ai.person,'',
+    '—— 人格侧写 ——',(ai.tags||[]).join('、'),ai.overall,'',
+    '—— 建议 ——',(ai.advice||[]).map((x,i)=>(i+1)+') '+x).join('\n'),'',
+    '寄语：'+(ai.nurture||''),'',
+    '※ 房树人解读仅供自我探索参考，不构成心理诊断。'].join('\n');
+  doCopy(txt, document.getElementById('btnHtpCopy'));
+};
+document.getElementById('btnHtpEnd').onclick=enterEnd;
 
 /* ================= 终点 ================= */
 function enterEnd(){
+  htpStopAudio();
   ffOn=false; FF=[];
   goScene('scene-end', 100, '旅程终点');
   const score=S.quiz.answers.reduce((a,b)=>a+b,0);
@@ -1468,8 +2113,12 @@ function enterEnd(){
   document.getElementById('endQuote').textContent =
     S.ff.fortune? `「${S.ff.fortune}」` : '「情绪是天气，不是气候。」';
   const parts=[`PHQ-9 得分 ${score} 分（${lv.tag}）`];
-  if(S.echo.logs.length) parts.push(`回声室替你接住了 ${S.echo.logs.length} 件心事`);
+  if(S.echo.logs.length){
+    const aiN=S.echo.logs.filter(l=>l.ai).length;
+    parts.push(`回声室替你接住了 ${S.echo.logs.length} 件心事`+(aiN?`（其中 ${aiN} 封由 AI 执笔）`:''));
+  }
   if(S.ff.released) parts.push('你的那句话已经化成萤火，交给了夜空');
+  if(S.htp.done) parts.push('在房树人花园里，你被读出了：'+((S.htp.tags||[]).slice(0,4).join('、')||'一幅属于你的画面'));
   document.getElementById('endSummary').textContent =
     '今晚的旅程：'+parts.join('；')+'。'+
     (score>=15? ' 请记得，尽快让专业的人加入你的旅程——你值得被全力帮助。'
@@ -1485,22 +2134,29 @@ document.getElementById('btnCopyAll').onclick=function(){
     `② 游戏：寻光 ${G1_DURATION} 秒点亮 ${S.g1.stars} 颗星；词语共鸣（暖 ${S.g2.pos} / 沉 ${S.g2.neg}）`];
   if(S.echo.logs.length){
     lines.push('③ 回声室：'+S.echo.logs.map((l,i)=>
-      `第${i+1}件（主题：${l.topic}；情绪：${l.cats}${l.dis.length? '；陷阱：'+l.dis.join('/'):''}）`).join('；'));
+      `第${i+1}件（主题：${l.topic}；情绪：${l.cats}${l.dis.length? '；陷阱：'+l.dis.join('/'):''}；${l.ai?'AI 回应':'本地回应'}）`).join('；'));
   }
   if(S.ff.fortune) lines.push('④ 萤火签：'+S.ff.fortune);
+  if(S.htp.done&&S.htp.ai)
+    lines.push('⑤ 房树人：关键词 '+(S.htp.ai.tags||[]).join('、'),
+      '   侧写：'+S.htp.ai.overall,
+      '   建议：'+(S.htp.ai.advice||[]).map((x,i)=>(i+1)+') '+x).join('\n   '));
   lines.push('','※ 本报告仅供自我觉察参考，不构成医学诊断。','※ 心理援助热线：12356（24小时）');
   doCopy(lines.join('\n'), this);
 };
 document.getElementById('btnRestart2').onclick=fullRestart;
 function fullRestart(){
+  echoEpoch++; htpEpoch++;
+  if(aiCtrl){aiCtrl.abort(); aiCtrl=null;}
+  htpStopAudio();
   ffOn=false; FF=[];
   S.g1={stars:0,gaps:[],hits:0,clicks:0};
   S.g2={answers:[],pos:0,neg:0,linger:0};
   S.quiz={answers:[null,null,null,null,null,null,null,null,null], idx:0};
   S.echo={logs:[], last:null}; S.ff={fortune:null, released:false};
+  S.htp={done:false,tags:null,img:null};
   goScene('scene-intro', 0, '自我觉察之旅');
 }
 </script>
 </body>
 </html>
-
