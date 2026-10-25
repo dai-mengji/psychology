@@ -18,19 +18,6 @@
     background:var(--paper);color:var(--ink);overflow:hidden}
   body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.4 0 0 0 0 0.36 0 0 0 0 0.28 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E")}
-  /* ============ 外置催眠音频播放器（body 顶部） ============ */
-  #extAudioWrap{position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:120;
-    background:rgba(255,253,248,.94);border:1px solid var(--line);border-radius:14px;
-    padding:8px 10px 6px;box-shadow:0 10px 26px rgba(80,66,40,.18);
-    max-width:424px;width:calc(100vw - 24px);transition:box-shadow .35s}
-  body.on-dark #extAudioWrap{background:rgba(16,24,36,.92);border-color:rgba(255,217,142,.25)}
-  #extAudioWrap audio{display:block;width:100%;max-width:400px}
-  #extAudioWrap.pulse{box-shadow:0 0 0 5px rgba(194,104,59,.28),0 10px 26px rgba(80,66,40,.24)}
-  #extAudioWrap.min audio{display:none}
-  #extAudioWrap.min{padding:6px 10px}
-  #extAudioMin{position:absolute;top:-10px;right:-10px;width:26px;height:26px;border-radius:50%;
-    border:1px solid var(--line);background:var(--card);cursor:pointer;font-size:13px;
-    color:var(--ink-soft);line-height:1;box-shadow:0 4px 10px rgba(80,66,40,.2)}
   #journey{position:fixed;top:0;left:0;right:0;height:3px;background:rgba(0,0,0,.06);z-index:60}
   #journey i{display:block;height:100%;width:0;background:var(--accent);transition:width .9s cubic-bezier(.22,.9,.3,1)}
   header{position:fixed;top:3px;left:0;right:0;z-index:50;display:flex;justify-content:space-between;
@@ -271,6 +258,7 @@
     border-top:1px dashed #D8C295;padding-top:12px}
   .scatter-ch{position:fixed;z-index:40;display:inline-block;will-change:transform,opacity;
     color:#F2E9D4;font-size:16.5px;letter-spacing:1px;white-space:pre}
+
   /* ============ 房树人花园 ============ */
   .htp-aurora{position:relative;height:280px;border-radius:24px;overflow:hidden;
     background:linear-gradient(160deg,#0E1F1C,#12291F 55%,#0B1A16);margin:26px 0 18px;
@@ -287,6 +275,21 @@
     animation:orbA 11s ease-in-out infinite alternate-reverse}
   @keyframes orbA{from{transform:translate(0,0) scale(1)}to{transform:translate(56px,-28px) scale(1.22)}}
   @keyframes orbB{from{transform:translate(0,0) scale(1.08)}to{transform:translate(-64px,18px) scale(.9)}}
+  .htp-syms{display:flex;gap:12px;margin:24px 0;flex-wrap:wrap}
+  .htp-sym{flex:1;min-width:150px;text-align:center;padding:20px 14px}
+  .htp-sym .ico{font-size:30px;margin-bottom:8px}
+  .htp-sym b{display:block;font-size:16px;letter-spacing:2px;margin-bottom:8px;color:var(--green)}
+  .htp-sym p{font-size:13.5px;color:var(--ink-soft);line-height:1.9;margin:0}
+  .htp-steps{counter-reset:st;list-style:none;text-align:left;margin:8px 0 0}
+  .htp-steps li{counter-increment:st;position:relative;padding:9px 0 9px 44px;
+    font-size:15px;line-height:1.9;color:#4A443A}
+  .htp-steps li::before{content:counter(st);position:absolute;left:0;top:9px;width:28px;height:28px;
+    border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;
+    justify-content:center;font-size:14px}
+  .htp-audiobox{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:18px 16px 12px;display:inline-block;box-shadow:0 14px 34px rgba(80,66,40,.08);
+    max-width:440px;width:100%;animation:qIn .5s ease both}
+  .htp-audiotip{font-size:12.5px;color:var(--ink-soft);margin:10px 0 4px;letter-spacing:1px}
   .htp-img{margin:22px 0 6px;text-align:center}
   .htp-img img,#htpImgCanvas{width:100%;max-width:520px;height:auto;border-radius:18px;
     box-shadow:0 18px 44px rgba(80,66,40,.22);border:1px solid var(--line);display:block;margin:0 auto}
@@ -309,11 +312,6 @@
 </style>
 </head>
 <body>
-<!-- 🔊 用户自备催眠音频播放器：请将 audio.m4a 与本网页放在同一目录 -->
-<div id="extAudioWrap">
-  <button id="extAudioMin" title="收起 / 展开">−</button>
-  <audio controls src="audio.m4a" style="width: 100%; max-width:400px;"></audio>
-</div>
 <div id="journey"><i></i></div>
 <header>
   <div class="logo">心 屿</div>
@@ -580,37 +578,55 @@
     </div>
   </section>
 
-  <!-- ⑨ 房树人花园 -->
+  <!-- ⑨ 房树人花园（音频只在这一页） -->
   <section class="scene" id="scene-htp">
     <div class="wrap">
+      <!-- 9.1 项目介绍 -->
       <div id="htpIntro">
         <div class="kicker">房 树 人 · H T P · 潜 意 识 花 园</div>
         <h2>一座房子，一棵树，一个人</h2>
-        <p class="sub">「房树人」是经典的心理投射测验：当你放松下来，意识让位给想象，<br>你「看见」的房子、树和人，往往是内心世界的一幅自画像。<br>接下来，请戴上耳机，播放<b>页面上方的催眠音频（audio.m4a）</b>，<br>让它带你走进林间小屋。听完之后，把你看到的写下来，<br>AI 会先把画面画出来，再为你解读这张「心灵的自画像」。</p>
-        <div class="card" style="margin-top:22px;text-align:left">
-          <p style="font-size:14.5px;line-height:2.1;color:var(--ink-soft)">
-            🎧 建议使用耳机，找一个不被打扰的地方<br>
-            📁 请确认 <b>audio.m4a</b> 文件与本网页在同一文件夹，页面上方的播放器可以正常播放<br>
-            🌙 播放时请闭上眼睛，跟着声音走——看见什么就是什么，不必修饰，不必分析
-          </p>
+        <p class="sub">「房树人」（House-Tree-Person，HTP）是心理学经典的<b>投射测验</b>：当你放松下来、意识让位给想象，你「看见」的房子、树和人，往往是潜意识递给你的一幅<b>自画像</b>。它没有标准答案，也没有好坏——它只是帮你，看见平时看不见的自己。</p>
+
+        <div class="htp-syms">
+          <div class="card htp-sym"><div class="ico">🏠</div><b>房子</b><p>你的内在居所——<br>安全感、家庭、<br>你保护自己的方式</p></div>
+          <div class="card htp-sym"><div class="ico">🌳</div><b>树</b><p>你的生命力——<br>能量状态、成长、<br>根扎得有多深</p></div>
+          <div class="card htp-sym"><div class="ico">🚶</div><b>人</b><p>你的自我意象——<br>你与自己的关系、<br>此刻真实的心境</p></div>
         </div>
+
+        <div class="card" style="text-align:left">
+          <h3 style="font-size:16px;letter-spacing:3px;color:var(--green);margin-bottom:6px">怎么进行？</h3>
+          <ol class="htp-steps">
+            <li><b>聆听催眠音频</b>——点击下方按钮唤出音频，戴上耳机，跟着声音走进林间小屋（约 4 分钟）</li>
+            <li><b>写下你看到的画面</b>——房子什么样？树什么样？人是谁、在做什么？细节越多越好</li>
+            <li><b>AI 画出这幅画</b>——根据你的描述，生成一幅属于你的水彩画面</li>
+            <li><b>获得解读与建议</b>——AI 从房子、树、人三个维度分析人格，并给出贴合画面的建议</li>
+          </ol>
+        </div>
+
         <div style="margin-top:26px;display:flex;gap:16px;align-items:center;flex-wrap:wrap">
-          <button class="btn accent" id="btnHtpStart">🎧 戴上耳机，开始潜意识引导</button>
-          <button class="link" id="btnHtpSkipAudio">跳过音频，直接进入书写 →</button>
+          <button class="btn accent" id="btnHtpAudio">🎧 点击唤出催眠音频</button>
+          <button class="link" id="btnHtpSkipAudio">跳过引导，直接写下画面 →</button>
         </div>
+        <p class="disclaimer" style="margin-top:20px">房树人解读仅供自我探索参考，不构成心理诊断；<br>真正的诊断，请交给专业人士。</p>
       </div>
 
+      <!-- 9.2 音频聆听（点击上方按钮后才会出现） -->
       <div id="htpAudio" style="display:none;text-align:center">
-        <div class="kicker">引 导 进 行 中</div>
+        <div class="kicker">潜 意 识 引 导 · 约 4 分 钟</div>
         <div class="htp-aurora"><div class="h-orb a"></div><div class="h-orb b"></div><div class="h-orb c"></div></div>
-        <h2>请播放页面上方的催眠音频</h2>
-        <p class="sub">点击屏幕最上方的播放器 ▶，让它带你走过林间小路——<br>房子、树和人，会随着声音慢慢浮现。<br>现在可以闭上眼睛，完全交给它。</p>
-        <div style="margin-top:14px">
-          <button class="btn" id="btnHtpPlayExt">🔊 播放催眠音频（页面上方）</button>
+        <h2>戴上耳机，交给声音</h2>
+        <p class="sub">点击 ▶ 播放，它会带你走过林间小路——<br>房子、树和人，会随着声音慢慢浮现。<br>听的时候可以闭上眼睛，看见什么就是什么。</p>
+        <div class="htp-audiobox">
+          <audio id="htpAudioEl" controls src="audio.m4a" style="width: 100%; max-width:400px;"></audio>
+          <p class="htp-audiotip">📁 请确认 audio.m4a 文件与本网页在同一文件夹 · 🔊 建议佩戴耳机</p>
         </div>
-        <div style="margin-top:18px"><button class="link" id="btnHtpStop">我听完了，写下看到的画面 →</button></div>
+        <div style="margin-top:18px">
+          <button class="btn" id="btnHtpPlay">▶ 开始播放</button>
+        </div>
+        <div style="margin-top:16px"><button class="link" id="btnHtpStop">我听完了，写下看到的画面 →</button></div>
       </div>
 
+      <!-- 9.3 画面记录 -->
       <div id="htpDescribe" style="display:none">
         <div class="kicker">画 面 记 录</div>
         <h2>你看见了什么？</h2>
@@ -632,6 +648,7 @@
         </div>
       </div>
 
+      <!-- 9.4 解读中 -->
       <div id="htpLoading" style="display:none;text-align:center">
         <div class="kicker">解 读 中</div>
         <h2>AI 正在看你的画</h2>
@@ -641,6 +658,7 @@
         </div>
       </div>
 
+      <!-- 9.5 解读结果 -->
       <div id="htpResult" style="display:none">
         <div class="letter-head">
           <span>你的房树人 · 潜意识自画像</span>
@@ -718,22 +736,14 @@ const S = {
 const rnd = arr => arr[Math.floor(Math.random()*arr.length)];
 const G1_DURATION = 5;
 
-/* ================= 外置催眠音频播放器 ================= */
-const extAudioEl=document.querySelector('#extAudioWrap audio');
-const extWrap=document.getElementById('extAudioWrap');
-document.getElementById('extAudioMin').onclick=()=>{
-  const min=extWrap.classList.toggle('min');
-  document.getElementById('extAudioMin').textContent = min ? '🎧' : '−';
-};
-function pulseExtAudio(){
-  extWrap.classList.remove('min');
-  extWrap.classList.add('pulse');
-  setTimeout(()=>extWrap.classList.remove('pulse'),1800);
-}
-function htpStopAudio(){ if(extAudioEl){ try{extAudioEl.pause();}catch(e){} } }
+/* 房树人音频（元素只存在于房树人页的聆听状态里） */
+const htpAudioEl=document.getElementById('htpAudioEl');
+function htpStopAudio(){ if(htpAudioEl){ try{htpAudioEl.pause();}catch(e){} } }
 
 const scenes = document.querySelectorAll('.scene');
 function goScene(id, progress, label){
+  /* 离开房树人页 → 自动暂停音频，保证其他页面没有声音 */
+  if(id!=='scene-htp') htpStopAudio();
   scenes.forEach(s=>s.classList.toggle('active', s.id===id));
   document.getElementById('journey').firstElementChild.style.width = progress+'%';
   if(label) document.getElementById('stepLabel').textContent = label;
@@ -1762,9 +1772,9 @@ document.getElementById('btnToEnd').onclick=enterHTP;
 
 /* ================================================================
    ⑨ 房树人花园 · HTP
-   音频：由 body 顶部的外置播放器播放用户的 audio.m4a
-   解读：GLM 投射分析（失败→本地 HTP 词典）
-   绘图：CogView（失败→本地意象速写 canvas）
+   · 音频元素只存在于本页「聆听」状态，其他页面完全没有
+   · 介绍页 → 点击「🎧 唤出催眠音频」按钮 → 出现播放器
+   · 离开本页时 goScene 会自动暂停音频
 ================================================================ */
 let htpEpoch=0;
 function htpGoState(st){
@@ -1773,23 +1783,28 @@ function htpGoState(st){
   });
 }
 function enterHTP(){
+  htpStopAudio();
   goScene('scene-htp', 92, '房树人 · 潜意识花园');
   htpGoState('intro');
 }
-document.getElementById('btnHtpStart').onclick=()=>{
+/* 🎧 音频按钮：点击后才出现催眠音频播放器 */
+document.getElementById('btnHtpAudio').onclick=()=>{
   htpGoState('audio');
-  goScene('scene-htp', 94, '房树人 · 引导中');
-  pulseExtAudio();
+  goScene('scene-htp', 94, '房树人 · 聆听引导');
   chime(true);
+  document.getElementById('scene-htp').scrollTop=0;
 };
-document.getElementById('btnHtpPlayExt').onclick=()=>{
-  pulseExtAudio();
-  if(extAudioEl){ extAudioEl.play().catch(()=>{}); }
+document.getElementById('btnHtpPlay').onclick=()=>{
+  if(htpAudioEl){ htpAudioEl.play().catch(()=>{}); }
 };
 document.getElementById('btnHtpStop').onclick=()=>{ htpStopAudio(); htpGoState('describe'); };
 document.getElementById('btnHtpSkipAudio').onclick=()=>{ htpStopAudio(); htpGoState('describe'); };
 document.getElementById('btnHtpSkipAll').onclick=()=>{ htpStopAudio(); enterEnd(); };
-document.getElementById('btnHtpReplay').onclick=()=>{ htpGoState('audio'); pulseExtAudio(); };
+document.getElementById('btnHtpReplay').onclick=()=>{
+  htpStopAudio();
+  htpGoState('audio');
+  document.getElementById('scene-htp').scrollTop=0;
+};
 const htpTA=document.getElementById('htpText');
 document.querySelectorAll('#htpChipsIn button').forEach(b=>{
   b.onclick=()=>{ htpTA.value=(htpTA.value?htpTA.value.replace(/\s*$/,'')+'。':'')+b.textContent;
